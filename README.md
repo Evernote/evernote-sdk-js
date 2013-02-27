@@ -12,6 +12,8 @@ Please check out the [Evernote Developers portal page](http://dev.evernote.com/d
 Installing
 ----------
 
+Get the minified version of the SDK [here](https://github.com/evernote/evernote-sdk-js/evernote-sdk-js/production/evernote-sdk-minified.js);
+
 ### Use OAuth for authentication
 
 We recommend using the jsOAuth library for OAuth. It can be downloaded [here](https://github.com/bytespider/jsOAuth).
