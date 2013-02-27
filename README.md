@@ -12,7 +12,7 @@ Please check out the [Evernote Developers portal page](http://dev.evernote.com/d
 Installing
 ----------
 
-Get the minified version of the SDK [here](https://github.com/evernote/evernote-sdk-js/evernote-sdk-js/production/evernote-sdk-minified.js);
+Get the minified version of the SDK [here](https://github.com/evernote/evernote-sdk-js/blob/master/evernote-sdk-js/production/evernote-sdk-minified.js).
 
 ### Use OAuth for authentication
 
@@ -22,7 +22,8 @@ Details on the OAuth process are available [here](http://dev.evernote.com/start/
 
 Here are the basic steps for OAuth using the jsOAuth library.
 
-    var hostName = "http://sandbox.evernote.com"; (Change this to http://www.evernote.com, when you are ready to activate on production)
+(Change this to http://www.evernote.com, when you are ready to activate on production).
+    var hostName = "http://sandbox.evernote.com"; 
 
 Step 1:
     var options,oauth;
