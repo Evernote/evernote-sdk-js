@@ -18,11 +18,11 @@
  */
 
 
-Thrift.BinaryProtocol = function(trans, strictRead, strictWrite) {
+Thrift.BinaryProtocol = function (trans, strictRead, strictWrite) {
     this.transport = this.trans = trans;
     this.strictRead = (strictRead !== undefined ? strictRead : false);
     this.strictWrite = (strictWrite !== undefined ? strictWrite : true);
-}
+};
 
 Thrift.BinaryParser = {
     fromByte: function (b) {
@@ -54,7 +54,7 @@ Thrift.BinaryParser = {
         if (n < 0) bits = this.twosCompliment(bits);
 
         var buffer = new ArrayBuffer(8);
-        dataview = new DataView(buffer);
+        var dataview = new DataView(buffer);
         for (var i = 0; i < 8; i++) {
             var uint8 = parseInt(bits.substr(8 * i, 8), 2);
             dataview.setUint8(i, uint8);
@@ -64,7 +64,7 @@ Thrift.BinaryParser = {
     },
 
     twosCompliment: function (bits) {
-        // Convert to two's compliment using string manipulation because bitwise operator is limted to 32 bit numbers
+        // Convert to two's compliment using string manipulation because bitwise operator is limited to 32 bit numbers
         var smallestOne = bits.lastIndexOf('1');
         var left = bits.substring(0, smallestOne).
             replace(/1/g, 'x').
@@ -88,8 +88,7 @@ Thrift.BinaryParser = {
 
         for (i = 0; i < len; i++) {
             bytes[i] = utf8.charCodeAt(i);
-        };
-
+        }
         return bytes.buffer;
     },
 
@@ -153,9 +152,9 @@ Thrift.BinaryParser = {
 (function(p) {
     var BinaryParser = Thrift.BinaryParser;
 
-    p.flush = function() {
+    p.flush = function () {
         return this.trans.flush();
-    }
+    };
     
     // NastyHaxx. JavaScript forces hex constants to be
     // positive, converting this into a long. If we hardcode the int value
@@ -167,7 +166,7 @@ Thrift.BinaryParser = {
 
     var Type = Thrift.Type;
     
-    p.writeMessageBegin = function(name, type, seqid) {
+    p.writeMessageBegin = function (name, type, seqid) {
         if (this.strictWrite) {
             this.writeI32(VERSION_1 | type);
             this.writeString(name);
@@ -177,142 +176,142 @@ Thrift.BinaryParser = {
             this.writeByte(type);
             this.writeI32(seqid);
         }
-    }
+    };
     
-    p.writeMessageEnd = function() {
-    }
+    p.writeMessageEnd = function () {
+    };
     
-    p.writeStructBegin = function(name) {
-    }
+    p.writeStructBegin = function (name) {
+    };
     
-    p.writeStructEnd = function() {
-    }
+    p.writeStructEnd = function () {
+    };
     
-    p.writeFieldBegin = function(name, type, id) {
+    p.writeFieldBegin = function (name, type, id) {
         this.writeByte(type);
         this.writeI16(id);
-    }
+    };
     
-    p.writeFieldEnd = function() {
-    }
+    p.writeFieldEnd = function () {
+    };
     
-    p.writeFieldStop = function() {
+    p.writeFieldStop = function () {
         this.writeByte(Type.STOP);
-    }
+    };
     
-    p.writeMapBegin = function(ktype, vtype, size) {
+    p.writeMapBegin = function (ktype, vtype, size) {
         this.writeByte(ktype);
         this.writeByte(vtype);
         this.writeI32(size);
-    }
+    };
     
-    p.writeMapEnd = function() {
-    }
+    p.writeMapEnd = function () {
+    };
     
-    p.writeListBegin = function(etype, size) {
+    p.writeListBegin = function (etype, size) {
         this.writeByte(etype);
         this.writeI32(size);
-    }
+    };
     
-    p.writeListEnd = function() {
-    }
+    p.writeListEnd = function () {
+    };
     
-    p.writeSetBegin = function(etype, size) {
+    p.writeSetBegin = function (etype, size) {
         console.log('write set', etype, size);
         this.writeByte(etype);
         this.writeI32(size);
-    }
+    };
     
-    p.writeSetEnd = function() {
-    }
+    p.writeSetEnd = function () {
+    };
     
-    p.writeBool = function(bool) {
+    p.writeBool = function (bool) {
         if (bool) {
             this.writeByte(1);
         } else {
             this.writeByte(0);
         }
-    }
+    };
     
-    p.writeByte = function(b) {
+    p.writeByte = function (b) {
         this.trans.write(BinaryParser.fromByte(b));
-    }
+    };
 
     p.writeBinary = function (bytes) {
         this.writeI32(bytes.byteLength);
         this.trans.write(bytes);
-    }
+    };
     
-    p.writeI16 = function(i16) {
+    p.writeI16 = function (i16) {
         this.trans.write(BinaryParser.fromShort(i16));
-    }
+    };
     
-    p.writeI32 = function(i32) {
+    p.writeI32 = function (i32) {
         this.trans.write(BinaryParser.fromInt(i32));
-    }
+    };
     
-    p.writeI64 = function(i64) {
+    p.writeI64 = function (i64) {
         this.trans.write(BinaryParser.fromLong(i64));
-    }
+    };
     
-    p.writeDouble = function(dub) {
+    p.writeDouble = function (dub) {
         this.trans.write(BinaryParser.fromDouble(dub));
-    }
+    };
     
-    p.writeString = function(str) {
+    p.writeString = function (str) {
         var bytes = BinaryParser.fromString(str);
         this.writeI32(bytes.byteLength);
         this.trans.write(bytes);
-    }
+    };
     
-    p.readMessageBegin = function() {
+    p.readMessageBegin = function () {
         var sz = this.readI32().value;
         var type, name, seqid;
-    
+
         if (sz < 0) {
             // sz written at server: -2147418110 == 0x80010002
             var version = sz & VERSION_MASK;
             if (version != VERSION_1) {
                 console.log("BAD: " + version);
-                throw TProtocolException(BAD_VERSION, "Bad version in readMessageBegin: " + sz);
+                throw Error("Bad version in readMessageBegin: " + sz);
             }
             type = sz & TYPE_MASK;
             name = this.readString().value;
             seqid = this.readI32().value;
         } else {
             if (this.strictRead) {
-                throw TProtocolException(BAD_VERSION, "No protocol version header");
+                throw Error("No protocol version header");
             }
             name = this.trans.read(sz);
             type = this.readByte().value;
             seqid = this.readI32().value;
         }
         return {fname: name, mtype: type, rseqid: seqid};
-    }
+    };
     
-    p.readMessageEnd = function() {
-    }
+    p.readMessageEnd = function () {
+    };
     
-    p.readStructBegin = function() {
+    p.readStructBegin = function () {
         return {fname: ''}; // Where is this return value used? Can it be removed?
-    }
+    };
     
-    p.readStructEnd = function() {
-    }
+    p.readStructEnd = function () {
+    };
     
-    p.readFieldBegin = function() {
+    p.readFieldBegin = function () {
         var type = this.readByte().value;
         if (type == Type.STOP) {
             return {fname: null, ftype: type, fid: 0};
         }
         var id = this.readI16().value;
         return {fname: null, ftype: type, fid: id};
-    }
+    };
     
-    p.readFieldEnd = function() {
-    }
+    p.readFieldEnd = function () {
+    };
     
-    p.readMapBegin = function() {
+    p.readMapBegin = function () {
         // Add variables required by thrift generated js code but not needed for BinaryHttpTransport
         this.rstack = [];
         this.rpos = [1];
@@ -321,85 +320,85 @@ Thrift.BinaryParser = {
         var vtype = this.readByte().value;
         var size = this.readI32().value;
         return {ktype: ktype, vtype: vtype, size: size};
-    }
+    };
     
-    p.readMapEnd = function() {
-    }
+    p.readMapEnd = function () {
+    };
     
-    p.readListBegin = function() {
+    p.readListBegin = function () {
         var etype = this.readByte().value;
         var size = this.readI32().value;
         return {etype: etype, size: size};
-    }
+    };
     
-    p.readListEnd = function() {
-    }
+    p.readListEnd = function () {
+    };
     
-    p.readSetBegin = function() {
+    p.readSetBegin = function () {
         var etype = this.readByte().value;
         var size = this.readI32().value;
         return {etype: etype, size: size};
-    }
+    };
     
-    p.readSetEnd = function() {
-    }
+    p.readSetEnd = function () {
+    };
     
-    p.readBool = function() {
+    p.readBool = function () {
         var b = this.readByte().value;
         if (b == 0) {
             return { value: false };
         }
         return { value: true };
-    }
+    };
     
     // ThriftJS expects values to be wrapped in an object with a prop named "value"
-    p.readByte = function() {
+    p.readByte = function () {
         var dataview = this.trans.read(1);
         var b = BinaryParser.toByte(dataview);
-        return { value: b }; 
-    }
+        return { value: b };
+    };
 
-    p.readI16 = function() {
+    p.readI16 = function () {
         var dataview = this.trans.read(2);
         var n = BinaryParser.toShort(dataview);
         return { value: n };
-    }
+    };
     
-    p.readI32 = function() {
+    p.readI32 = function () {
         var dataview = this.trans.read(4);
         var n = BinaryParser.toInt(dataview);
         return { value: n };
-    }
+    };
     
-    p.readI64 = function() {
+    p.readI64 = function () {
         var dataview = this.trans.read(8);
         var n = BinaryParser.toLong(dataview);
         return { value: n };
-    }
+    };
     
-    p.readDouble = function() {
+    p.readDouble = function () {
         var dataview = this.trans.read(8);
         var n = BinaryParser.toDouble(dataview);
         return { value: n };
-    }
+    };
     
-    p.readBinary = function() {
+    p.readBinary = function () {
         var len = this.readI32().value;
         var dataview = this.trans.read(len);
         var bytes = BinaryParser.toBytes(dataview);
         return { value: bytes };
-    }
+    };
     
-    p.readString = function() {
+    p.readString = function () {
         var len = this.readI32().value;
         var dataview = this.trans.read(len);
         var s = BinaryParser.toString(dataview);
         return { value: s };
-    }
+    };
     
-    p.getTransport = function() {
+    p.getTransport = function () {
         return this.trans;
-    }
+    };
     
     p.skip = function(type) {
         // console.log("skip: " + type);
