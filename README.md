@@ -69,7 +69,7 @@ Once you get the authentication token, note store URL and user store URL from th
     var noteStoreProtocol = new Thrift.BinaryProtocol(noteStoreTransport);
     var noteStore = new NoteStoreClient(noteStoreProtocol);
 
-    noteStore.listNotebooks(authToken, function (notebooks) {
+    noteStore.listNotebooks(authenticationToken, function (notebooks) {
     		console.log(notebooks);
     	},
     	function onerror(error) {
