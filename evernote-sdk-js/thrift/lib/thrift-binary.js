@@ -544,7 +544,7 @@ Thrift.BinaryHttpTransport = function(url) {
             onerror(evt);
         };
 
-        xhr.send(postData.buffer);
+        xhr.send(postData);
 	};
 
 })(Thrift.BinaryHttpTransport.prototype);
