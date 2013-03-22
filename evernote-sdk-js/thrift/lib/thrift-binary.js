@@ -238,10 +238,17 @@ Thrift.BinaryParser = {
     };
 
     p.writeBinary = function (bytes) {
+      if(typeof bytes === "string") {
+        bytes = BinaryParser.fromString(bytes);
+      }
+      if (bytes.byteLength) {
         this.writeI32(bytes.byteLength);
-        this.trans.write(bytes);
-    };
-    
+      } else {
+        throw Error("Cannot read length of binary data");
+      }
+      this.trans.write(bytes);
+    }; 
+
     p.writeI16 = function (i16) {
         this.trans.write(BinaryParser.fromShort(i16));
     };
