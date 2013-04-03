@@ -1,0 +1,13 @@
+{
+  "author": "Kentaro Suzuki",
+  "name": "evernote-sdk-nodejs",
+  "description": "Evernote SDK for Node.js",
+  "version": "1.23.0",
+  "repository": {
+    "url": "https://github.com/evernote/evernote-sdk-js"
+  },
+  "main": "index",
+  "engines": {
+    "node": "*"
+  }
+}
