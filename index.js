@@ -4,11 +4,12 @@ var path = require('path');
 
 var evernote = {
   console: console,
+  require: require,
+  Buffer: Buffer,
   ArrayBuffer: ArrayBuffer,
   DataView: DataView,
   Uint8Array: Uint8Array,
   Int8Array: Int8Array,
-  XMLHttpRequest: require("./evernote-sdk-js/vendor/xmlhttprequest/xmlhttprequest").XMLHttpRequest
 };
 
 var filenames = ['./evernote-sdk-js/thrift/lib/thrift.js',
@@ -26,5 +27,9 @@ for (var i = 0; i < filenames.length; i++) {
   var filedata = fs.readFileSync(filename);
   vm.runInNewContext(filedata, evernote);
 }
+
+evernote.Thrift.NodeBinaryHttpTransport = require(
+  './evernote-sdk-js/thrift/lib/thrift-node-binary.js'
+).NodeBinaryHttpTransport;
 
 exports.Evernote = evernote;

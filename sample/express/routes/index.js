@@ -11,7 +11,7 @@ var authorize_path = "/OAuth.action";
 exports.index = function(req, res) {
   if(req.session.oauth_access_token) {
     token = req.session.oauth_access_token;
-    transport = new Evernote.Thrift.BinaryHttpTransport(req.session.edam_noteStoreUrl);
+    transport = new Evernote.Thrift.NodeBinaryHttpTransport(req.session.edam_noteStoreUrl);
     protocol = new Evernote.Thrift.BinaryProtocol(transport);
     note_store = new Evernote.NoteStoreClient(protocol);
     note_store.listNotebooks(token, function(notebooks){
