@@ -77,6 +77,37 @@ Once you get the authentication token, note store URL and user store URL from th
     	}
     );
 
+Use with Node
+-------------
+
+### Install
+
+You can install the module using npm.
+```sh
+npm install evernote
+```
+
+### Example
+
+You can find sample app with express under 'sample/express'. Please note that you have to use `NodeBinaryHttpTransport` instead of `BinaryHttpTransport`.
+
+```javascript
+var Evernote = require('evernote').Evernote
+var noteStoreURL = <note store url>;
+var authenticationToken = <authentication token>;
+var noteStoreTransport = new Evernote.Thrift.NodeBinaryHttpTransport(noteStoreURL);
+var noteStoreProtocol = new Evernote.Thrift.BinaryProtocol(noteStoreTransport);
+var noteStore = new NoteStoreClient(noteStoreProtocol);
+
+noteStore.listNotebooks(authenticationToken, function (notebooks) {
+    console.log(notebooks);
+  },
+  function onerror(error) {
+    console.log(error);
+  }
+);
+```
+
 FAQ
 ---
 
