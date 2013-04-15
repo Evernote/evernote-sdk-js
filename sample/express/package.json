@@ -11,6 +11,6 @@
     "jade": "*",
     "less-middleware": "*",
     "oauth": "*",
-    "evernote-sdk-nodejs"
+    "evernote": "*"
   }
 }
