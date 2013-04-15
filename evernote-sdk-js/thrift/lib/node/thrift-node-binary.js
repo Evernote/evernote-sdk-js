@@ -75,7 +75,7 @@ exports.NodeBinaryHttpTransport = function(url) {
     var callback = args.length > 0 ? args.pop() : onerror;
     if (typeof callback !== 'function') callback = onerror;
 
-    purl = Url.parse(this.url);
+    var purl = Url.parse(this.url);
     var options = {
       hostname: purl['host'],
       port: purl['protocol'] == 'https' ? 443 : 80,
@@ -86,7 +86,7 @@ exports.NodeBinaryHttpTransport = function(url) {
         'Accept': 'application/x-thrift'
       }
     };
-    doRequest = (purl['protocol'] == 'https' ? https : http).request
+    var doRequest = (purl['protocol'] == 'https' ? https : http).request
 
     var req = doRequest(options, function(res) {
       var data = [], dataLength = 0;

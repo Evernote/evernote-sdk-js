@@ -1,5 +1,5 @@
 var OAuth = require('oauth').OAuth,
-    Evernote = require('evernote-sdk-nodejs').Evernote;
+    Evernote = require('evernote').Evernote;
 
 var config = require('../config.json');
 var base_url = config.SANDBOX ? 'https://sandbox.evernote.com' : 'https://www.evernote.com';
@@ -10,10 +10,10 @@ var authorize_path = "/OAuth.action";
 // home page
 exports.index = function(req, res) {
   if(req.session.oauth_access_token) {
-    token = req.session.oauth_access_token;
-    transport = new Evernote.Thrift.NodeBinaryHttpTransport(req.session.edam_noteStoreUrl);
-    protocol = new Evernote.Thrift.BinaryProtocol(transport);
-    note_store = new Evernote.NoteStoreClient(protocol);
+    var token = req.session.oauth_access_token;
+    var transport = new Evernote.Thrift.NodeBinaryHttpTransport(req.session.edam_noteStoreUrl);
+    var protocol = new Evernote.Thrift.BinaryProtocol(transport);
+    var note_store = new Evernote.NoteStoreClient(protocol);
     note_store.listNotebooks(token, function(notebooks){
       req.session.notebooks = notebooks;
       res.render('index');

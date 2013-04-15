@@ -1,6 +1,6 @@
 {
   "author": "Evernote",
-  "name": "evernote-sdk-nodejs",
+  "name": "evernote",
   "description": "Evernote SDK for Node.js",
   "version": "1.23.0",
   "repository": {

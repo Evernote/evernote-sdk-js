@@ -23,13 +23,13 @@ var filenames = ['./evernote-sdk-js/thrift/lib/thrift.js',
     './evernote-sdk-js/generated/NoteStore.js'
     ];
 for (var i = 0; i < filenames.length; i++) {
-  filename = path.resolve(path.dirname(module.filename), filenames[i]);
+  var filename = path.resolve(path.dirname(module.filename), filenames[i]);
   var filedata = fs.readFileSync(filename);
   vm.runInNewContext(filedata, evernote);
 }
 
 evernote.Thrift.NodeBinaryHttpTransport = require(
-  './evernote-sdk-js/thrift/lib/thrift-node-binary.js'
+  './evernote-sdk-js/thrift/lib/node/thrift-node-binary.js'
 ).NodeBinaryHttpTransport;
 
 exports.Evernote = evernote;
