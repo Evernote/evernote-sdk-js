@@ -102,7 +102,11 @@ exports.NodeBinaryHttpTransport = function(url) {
           pos += data[i].length;
         }
         self.received = bufferToArrayBuffer(buffer);
-        callback(recv_method.call(client));
+        try {
+          callback(recv_method.call(client));
+        } catch(e) {
+          onerror(e);
+        }
       });
     });
 
