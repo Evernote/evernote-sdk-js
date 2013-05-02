@@ -22,7 +22,8 @@ EDAMErrorCode = {
 'TOO_FEW' : 15,
 'TOO_MANY' : 16,
 'UNSUPPORTED_OPERATION' : 17,
-'TAKEN_DOWN' : 18
+'TAKEN_DOWN' : 18,
+'RATE_LIMIT_REACHED' : 19
 };
 EDAMUserException = function(args) {
   this.errorCode = null;
@@ -94,12 +95,16 @@ EDAMUserException.prototype.write = function(output) {
 EDAMSystemException = function(args) {
   this.errorCode = null;
   this.message = null;
+  this.rateLimitDuration = null;
   if (args) {
     if (args.errorCode !== undefined) {
       this.errorCode = args.errorCode;
     }
     if (args.message !== undefined) {
       this.message = args.message;
+    }
+    if (args.rateLimitDuration !== undefined) {
+      this.rateLimitDuration = args.rateLimitDuration;
     }
   }
 };
@@ -132,6 +137,13 @@ EDAMSystemException.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
+      case 3:
+      if (ftype == Thrift.Type.I32) {
+        this.rateLimitDuration = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
       default:
         input.skip(ftype);
     }
@@ -151,6 +163,11 @@ EDAMSystemException.prototype.write = function(output) {
   if (this.message !== null && this.message !== undefined) {
     output.writeFieldBegin('message', Thrift.Type.STRING, 2);
     output.writeString(this.message);
+    output.writeFieldEnd();
+  }
+  if (this.rateLimitDuration !== null && this.rateLimitDuration !== undefined) {
+    output.writeFieldBegin('rateLimitDuration', Thrift.Type.I32, 3);
+    output.writeI32(this.rateLimitDuration);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
