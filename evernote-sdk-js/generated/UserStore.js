@@ -10,7 +10,7 @@
 UserStore_checkVersion_args = function(args) {
   this.clientName = null;
   this.edamVersionMajor = 1;
-  this.edamVersionMinor = 23;
+  this.edamVersionMinor = 24;
   if (args) {
     if (args.clientName !== undefined) {
       this.clientName = args.clientName;
@@ -648,6 +648,135 @@ UserStore_authenticateLongSession_result.prototype.write = function(output) {
     this.success.write(output);
     output.writeFieldEnd();
   }
+  if (this.userException !== null && this.userException !== undefined) {
+    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
+    this.userException.write(output);
+    output.writeFieldEnd();
+  }
+  if (this.systemException !== null && this.systemException !== undefined) {
+    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
+    this.systemException.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+UserStore_revokeLongSession_args = function(args) {
+  this.authenticationToken = null;
+  if (args) {
+    if (args.authenticationToken !== undefined) {
+      this.authenticationToken = args.authenticationToken;
+    }
+  }
+};
+UserStore_revokeLongSession_args.prototype = {};
+UserStore_revokeLongSession_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRING) {
+        this.authenticationToken = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 0:
+        input.skip(ftype);
+        break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+UserStore_revokeLongSession_args.prototype.write = function(output) {
+  output.writeStructBegin('UserStore_revokeLongSession_args');
+  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
+    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
+    output.writeString(this.authenticationToken);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+UserStore_revokeLongSession_result = function(args) {
+  this.userException = null;
+  this.systemException = null;
+  if (args instanceof EDAMUserException) {
+    this.userException = args;
+    return;
+  }
+  if (args instanceof EDAMSystemException) {
+    this.systemException = args;
+    return;
+  }
+  if (args) {
+    if (args.userException !== undefined) {
+      this.userException = args.userException;
+    }
+    if (args.systemException !== undefined) {
+      this.systemException = args.systemException;
+    }
+  }
+};
+UserStore_revokeLongSession_result.prototype = {};
+UserStore_revokeLongSession_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.userException = new EDAMUserException();
+        this.userException.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.systemException = new EDAMSystemException();
+        this.systemException.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+UserStore_revokeLongSession_result.prototype.write = function(output) {
+  output.writeStructBegin('UserStore_revokeLongSession_result');
   if (this.userException !== null && this.userException !== undefined) {
     output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
     this.userException.write(output);
@@ -1746,6 +1875,49 @@ UserStoreClient.prototype.recv_authenticateLongSession = function() {
     return result.success;
   }
   throw 'authenticateLongSession failed: unknown result';
+};
+UserStoreClient.prototype.revokeLongSession = function(authenticationToken, callback) {
+  if (callback === undefined) {
+    this.send_revokeLongSession(authenticationToken);
+    this.recv_revokeLongSession();
+  } else {
+    var postData = this.send_revokeLongSession(authenticationToken, true);
+    return this.output.getTransport()
+      .send(this, postData, arguments, this.recv_revokeLongSession);
+  }
+};
+
+UserStoreClient.prototype.send_revokeLongSession = function(authenticationToken, callback) {
+  this.output.writeMessageBegin('revokeLongSession', Thrift.MessageType.CALL, this.seqid);
+  var args = new UserStore_revokeLongSession_args();
+  args.authenticationToken = authenticationToken;
+  args.write(this.output);
+  this.output.writeMessageEnd();
+  return this.output.getTransport().flush(callback);
+};
+
+UserStoreClient.prototype.recv_revokeLongSession = function() {
+  var ret = this.input.readMessageBegin();
+  var fname = ret.fname;
+  var mtype = ret.mtype;
+  var rseqid = ret.rseqid;
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(this.input);
+    this.input.readMessageEnd();
+    throw x;
+  }
+  var result = new UserStore_revokeLongSession_result();
+  result.read(this.input);
+  this.input.readMessageEnd();
+
+  if (null !== result.userException) {
+    throw result.userException;
+  }
+  if (null !== result.systemException) {
+    throw result.systemException;
+  }
+  return;
 };
 UserStoreClient.prototype.authenticateToBusiness = function(authenticationToken, callback) {
   if (callback === undefined) {

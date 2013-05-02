@@ -5,7 +5,7 @@
 //
 
 EDAM_VERSION_MAJOR = 1;
-EDAM_VERSION_MINOR = 23;
+EDAM_VERSION_MINOR = 24;
 PublicUserInfo = function(args) {
   this.userId = null;
   this.shardId = null;

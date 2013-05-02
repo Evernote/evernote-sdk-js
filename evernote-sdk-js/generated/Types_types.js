@@ -52,6 +52,10 @@ SharedNotebookInstanceRestrictions = {
 'ONLY_JOINED_OR_PREVIEW' : 1,
 'NO_SHARED_NOTEBOOKS' : 2
 };
+ReminderEmailConfig = {
+'DO_NOT_SEND' : 1,
+'SEND_DAILY_EMAIL' : 2
+};
 CLASSIFICATION_RECIPE_USER_NON_RECIPE = '000';
 CLASSIFICATION_RECIPE_USER_RECIPE = '001';
 CLASSIFICATION_RECIPE_SERVICE_RECIPE = '002';
@@ -165,12 +169,13 @@ UserAttributes = function(args) {
   this.twitterId = null;
   this.groupName = null;
   this.recognitionLanguage = null;
-  this.customerProfileId = null;
   this.referralProof = null;
   this.educationalDiscount = null;
   this.businessAddress = null;
   this.hideSponsorBilling = null;
   this.taxExempt = null;
+  this.useEmailAutoFiling = null;
+  this.reminderEmailConfig = null;
   if (args) {
     if (args.defaultLocationName !== undefined) {
       this.defaultLocationName = args.defaultLocationName;
@@ -244,9 +249,6 @@ UserAttributes = function(args) {
     if (args.recognitionLanguage !== undefined) {
       this.recognitionLanguage = args.recognitionLanguage;
     }
-    if (args.customerProfileId !== undefined) {
-      this.customerProfileId = args.customerProfileId;
-    }
     if (args.referralProof !== undefined) {
       this.referralProof = args.referralProof;
     }
@@ -261,6 +263,12 @@ UserAttributes = function(args) {
     }
     if (args.taxExempt !== undefined) {
       this.taxExempt = args.taxExempt;
+    }
+    if (args.useEmailAutoFiling !== undefined) {
+      this.useEmailAutoFiling = args.useEmailAutoFiling;
+    }
+    if (args.reminderEmailConfig !== undefined) {
+      this.reminderEmailConfig = args.reminderEmailConfig;
     }
   }
 };
@@ -472,13 +480,6 @@ UserAttributes.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
-      case 27:
-      if (ftype == Thrift.Type.I64) {
-        this.customerProfileId = input.readI64().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
       case 28:
       if (ftype == Thrift.Type.STRING) {
         this.referralProof = input.readString().value;
@@ -510,6 +511,20 @@ UserAttributes.prototype.read = function(input) {
       case 32:
       if (ftype == Thrift.Type.BOOL) {
         this.taxExempt = input.readBool().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 33:
+      if (ftype == Thrift.Type.BOOL) {
+        this.useEmailAutoFiling = input.readBool().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 34:
+      if (ftype == Thrift.Type.I32) {
+        this.reminderEmailConfig = input.readI32().value;
       } else {
         input.skip(ftype);
       }
@@ -663,11 +678,6 @@ UserAttributes.prototype.write = function(output) {
     output.writeString(this.recognitionLanguage);
     output.writeFieldEnd();
   }
-  if (this.customerProfileId !== null && this.customerProfileId !== undefined) {
-    output.writeFieldBegin('customerProfileId', Thrift.Type.I64, 27);
-    output.writeI64(this.customerProfileId);
-    output.writeFieldEnd();
-  }
   if (this.referralProof !== null && this.referralProof !== undefined) {
     output.writeFieldBegin('referralProof', Thrift.Type.STRING, 28);
     output.writeString(this.referralProof);
@@ -691,6 +701,16 @@ UserAttributes.prototype.write = function(output) {
   if (this.taxExempt !== null && this.taxExempt !== undefined) {
     output.writeFieldBegin('taxExempt', Thrift.Type.BOOL, 32);
     output.writeBool(this.taxExempt);
+    output.writeFieldEnd();
+  }
+  if (this.useEmailAutoFiling !== null && this.useEmailAutoFiling !== undefined) {
+    output.writeFieldBegin('useEmailAutoFiling', Thrift.Type.BOOL, 33);
+    output.writeBool(this.useEmailAutoFiling);
+    output.writeFieldEnd();
+  }
+  if (this.reminderEmailConfig !== null && this.reminderEmailConfig !== undefined) {
+    output.writeFieldBegin('reminderEmailConfig', Thrift.Type.I32, 34);
+    output.writeI32(this.reminderEmailConfig);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -2371,6 +2391,9 @@ NoteAttributes = function(args) {
   this.sourceURL = null;
   this.sourceApplication = null;
   this.shareDate = null;
+  this.reminderOrder = null;
+  this.reminderDoneTime = null;
+  this.reminderTime = null;
   this.placeName = null;
   this.contentClass = null;
   this.applicationData = null;
@@ -2403,6 +2426,15 @@ NoteAttributes = function(args) {
     }
     if (args.shareDate !== undefined) {
       this.shareDate = args.shareDate;
+    }
+    if (args.reminderOrder !== undefined) {
+      this.reminderOrder = args.reminderOrder;
+    }
+    if (args.reminderDoneTime !== undefined) {
+      this.reminderDoneTime = args.reminderDoneTime;
+    }
+    if (args.reminderTime !== undefined) {
+      this.reminderTime = args.reminderTime;
     }
     if (args.placeName !== undefined) {
       this.placeName = args.placeName;
@@ -2494,6 +2526,27 @@ NoteAttributes.prototype.read = function(input) {
       case 17:
       if (ftype == Thrift.Type.I64) {
         this.shareDate = input.readI64().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 18:
+      if (ftype == Thrift.Type.I64) {
+        this.reminderOrder = input.readI64().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 19:
+      if (ftype == Thrift.Type.I64) {
+        this.reminderDoneTime = input.readI64().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 20:
+      if (ftype == Thrift.Type.I64) {
+        this.reminderTime = input.readI64().value;
       } else {
         input.skip(ftype);
       }
@@ -2610,6 +2663,21 @@ NoteAttributes.prototype.write = function(output) {
   if (this.shareDate !== null && this.shareDate !== undefined) {
     output.writeFieldBegin('shareDate', Thrift.Type.I64, 17);
     output.writeI64(this.shareDate);
+    output.writeFieldEnd();
+  }
+  if (this.reminderOrder !== null && this.reminderOrder !== undefined) {
+    output.writeFieldBegin('reminderOrder', Thrift.Type.I64, 18);
+    output.writeI64(this.reminderOrder);
+    output.writeFieldEnd();
+  }
+  if (this.reminderDoneTime !== null && this.reminderDoneTime !== undefined) {
+    output.writeFieldBegin('reminderDoneTime', Thrift.Type.I64, 19);
+    output.writeI64(this.reminderDoneTime);
+    output.writeFieldEnd();
+  }
+  if (this.reminderTime !== null && this.reminderTime !== undefined) {
+    output.writeFieldBegin('reminderTime', Thrift.Type.I64, 20);
+    output.writeI64(this.reminderTime);
     output.writeFieldEnd();
   }
   if (this.placeName !== null && this.placeName !== undefined) {

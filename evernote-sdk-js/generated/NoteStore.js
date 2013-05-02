@@ -1199,19 +1199,19 @@ NoteStore_listNotebooks_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size238 = 0;
-        var _rtmp3242;
+        var _size220 = 0;
+        var _rtmp3224;
         this.success = [];
-        var _etype241 = 0;
-        _rtmp3242 = input.readListBegin();
-        _etype241 = _rtmp3242.etype;
-        _size238 = _rtmp3242.size;
-        for (var _i243 = 0; _i243 < _size238; ++_i243)
+        var _etype223 = 0;
+        _rtmp3224 = input.readListBegin();
+        _etype223 = _rtmp3224.etype;
+        _size220 = _rtmp3224.size;
+        for (var _i225 = 0; _i225 < _size220; ++_i225)
         {
-          var elem244 = null;
-          elem244 = new Notebook();
-          elem244.read(input);
-          this.success.push(elem244);
+          var elem226 = null;
+          elem226 = new Notebook();
+          elem226.read(input);
+          this.success.push(elem226);
         }
         input.readListEnd();
       } else {
@@ -1248,12 +1248,12 @@ NoteStore_listNotebooks_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter245 in this.success)
+    for (var iter227 in this.success)
     {
-      if (this.success.hasOwnProperty(iter245))
+      if (this.success.hasOwnProperty(iter227))
       {
-        iter245 = this.success[iter245];
-        iter245.write(output);
+        iter227 = this.success[iter227];
+        iter227.write(output);
       }
     }
     output.writeListEnd();
@@ -2212,19 +2212,19 @@ NoteStore_listTags_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size246 = 0;
-        var _rtmp3250;
+        var _size228 = 0;
+        var _rtmp3232;
         this.success = [];
-        var _etype249 = 0;
-        _rtmp3250 = input.readListBegin();
-        _etype249 = _rtmp3250.etype;
-        _size246 = _rtmp3250.size;
-        for (var _i251 = 0; _i251 < _size246; ++_i251)
+        var _etype231 = 0;
+        _rtmp3232 = input.readListBegin();
+        _etype231 = _rtmp3232.etype;
+        _size228 = _rtmp3232.size;
+        for (var _i233 = 0; _i233 < _size228; ++_i233)
         {
-          var elem252 = null;
-          elem252 = new Tag();
-          elem252.read(input);
-          this.success.push(elem252);
+          var elem234 = null;
+          elem234 = new Tag();
+          elem234.read(input);
+          this.success.push(elem234);
         }
         input.readListEnd();
       } else {
@@ -2261,12 +2261,12 @@ NoteStore_listTags_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter253 in this.success)
+    for (var iter235 in this.success)
     {
-      if (this.success.hasOwnProperty(iter253))
+      if (this.success.hasOwnProperty(iter235))
       {
-        iter253 = this.success[iter253];
-        iter253.write(output);
+        iter235 = this.success[iter235];
+        iter235.write(output);
       }
     }
     output.writeListEnd();
@@ -2401,19 +2401,19 @@ NoteStore_listTagsByNotebook_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size254 = 0;
-        var _rtmp3258;
+        var _size236 = 0;
+        var _rtmp3240;
         this.success = [];
-        var _etype257 = 0;
-        _rtmp3258 = input.readListBegin();
-        _etype257 = _rtmp3258.etype;
-        _size254 = _rtmp3258.size;
-        for (var _i259 = 0; _i259 < _size254; ++_i259)
+        var _etype239 = 0;
+        _rtmp3240 = input.readListBegin();
+        _etype239 = _rtmp3240.etype;
+        _size236 = _rtmp3240.size;
+        for (var _i241 = 0; _i241 < _size236; ++_i241)
         {
-          var elem260 = null;
-          elem260 = new Tag();
-          elem260.read(input);
-          this.success.push(elem260);
+          var elem242 = null;
+          elem242 = new Tag();
+          elem242.read(input);
+          this.success.push(elem242);
         }
         input.readListEnd();
       } else {
@@ -2458,12 +2458,12 @@ NoteStore_listTagsByNotebook_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter261 in this.success)
+    for (var iter243 in this.success)
     {
-      if (this.success.hasOwnProperty(iter261))
+      if (this.success.hasOwnProperty(iter243))
       {
-        iter261 = this.success[iter261];
-        iter261.write(output);
+        iter243 = this.success[iter243];
+        iter243.write(output);
       }
     }
     output.writeListEnd();
@@ -3465,19 +3465,19 @@ NoteStore_listSearches_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size262 = 0;
-        var _rtmp3266;
+        var _size244 = 0;
+        var _rtmp3248;
         this.success = [];
-        var _etype265 = 0;
-        _rtmp3266 = input.readListBegin();
-        _etype265 = _rtmp3266.etype;
-        _size262 = _rtmp3266.size;
-        for (var _i267 = 0; _i267 < _size262; ++_i267)
+        var _etype247 = 0;
+        _rtmp3248 = input.readListBegin();
+        _etype247 = _rtmp3248.etype;
+        _size244 = _rtmp3248.size;
+        for (var _i249 = 0; _i249 < _size244; ++_i249)
         {
-          var elem268 = null;
-          elem268 = new SavedSearch();
-          elem268.read(input);
-          this.success.push(elem268);
+          var elem250 = null;
+          elem250 = new SavedSearch();
+          elem250.read(input);
+          this.success.push(elem250);
         }
         input.readListEnd();
       } else {
@@ -3514,12 +3514,12 @@ NoteStore_listSearches_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter269 in this.success)
+    for (var iter251 in this.success)
     {
-      if (this.success.hasOwnProperty(iter269))
+      if (this.success.hasOwnProperty(iter251))
       {
-        iter269 = this.success[iter269];
-        iter269.write(output);
+        iter251 = this.success[iter251];
+        iter251.write(output);
       }
     }
     output.writeListEnd();
@@ -5319,399 +5319,6 @@ NoteStore_getNote_result.prototype.write = function(output) {
   return;
 };
 
-NoteStore_getPreferences_args = function(args) {
-  this.authenticationToken = null;
-  this.preferenceNames = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.preferenceNames !== undefined) {
-      this.preferenceNames = args.preferenceNames;
-    }
-  }
-};
-NoteStore_getPreferences_args.prototype = {};
-NoteStore_getPreferences_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.LIST) {
-        var _size270 = 0;
-        var _rtmp3274;
-        this.preferenceNames = [];
-        var _etype273 = 0;
-        _rtmp3274 = input.readListBegin();
-        _etype273 = _rtmp3274.etype;
-        _size270 = _rtmp3274.size;
-        for (var _i275 = 0; _i275 < _size270; ++_i275)
-        {
-          var elem276 = null;
-          elem276 = input.readString().value;
-          this.preferenceNames.push(elem276);
-        }
-        input.readListEnd();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getPreferences_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getPreferences_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.preferenceNames !== null && this.preferenceNames !== undefined) {
-    output.writeFieldBegin('preferenceNames', Thrift.Type.LIST, 2);
-    output.writeListBegin(Thrift.Type.STRING, this.preferenceNames.length);
-    for (var iter277 in this.preferenceNames)
-    {
-      if (this.preferenceNames.hasOwnProperty(iter277))
-      {
-        iter277 = this.preferenceNames[iter277];
-        output.writeString(iter277);
-      }
-    }
-    output.writeListEnd();
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getPreferences_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_getPreferences_result.prototype = {};
-NoteStore_getPreferences_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new Preferences();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getPreferences_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getPreferences_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_updatePreferences_args = function(args) {
-  this.authenticationToken = null;
-  this.preferencesToUpdate = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.preferencesToUpdate !== undefined) {
-      this.preferencesToUpdate = args.preferencesToUpdate;
-    }
-  }
-};
-NoteStore_updatePreferences_args.prototype = {};
-NoteStore_updatePreferences_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.MAP) {
-        var _size278 = 0;
-        var _rtmp3282;
-        this.preferencesToUpdate = {};
-        var _ktype279 = 0;
-        var _vtype280 = 0;
-        _rtmp3282 = input.readMapBegin();
-        _ktype279 = _rtmp3282.ktype;
-        _vtype280 = _rtmp3282.vtype;
-        _size278 = _rtmp3282.size;
-        for (var _i283 = 0; _i283 < _size278; ++_i283)
-        {
-          if (_i283 > 0 ) {
-            if (input.rstack.length > input.rpos[input.rpos.length -1] + 1) {
-              input.rstack.pop();
-            }
-          }
-          var key284 = null;
-          var val285 = null;
-          key284 = input.readString().value;
-          var _size286 = 0;
-          var _rtmp3290;
-          val285 = [];
-          var _etype289 = 0;
-          _rtmp3290 = input.readListBegin();
-          _etype289 = _rtmp3290.etype;
-          _size286 = _rtmp3290.size;
-          for (var _i291 = 0; _i291 < _size286; ++_i291)
-          {
-            var elem292 = null;
-            elem292 = input.readString().value;
-            val285.push(elem292);
-          }
-          input.readListEnd();
-          this.preferencesToUpdate[key284] = val285;
-        }
-        input.readMapEnd();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_updatePreferences_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_updatePreferences_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.preferencesToUpdate !== null && this.preferencesToUpdate !== undefined) {
-    output.writeFieldBegin('preferencesToUpdate', Thrift.Type.MAP, 2);
-    output.writeMapBegin(Thrift.Type.STRING, Thrift.Type.LIST, Thrift.objectLength(this.preferencesToUpdate));
-    for (var kiter293 in this.preferencesToUpdate)
-    {
-      if (this.preferencesToUpdate.hasOwnProperty(kiter293))
-      {
-        var viter294 = this.preferencesToUpdate[kiter293];
-        output.writeString(kiter293);
-        output.writeListBegin(Thrift.Type.STRING, viter294.length);
-        for (var iter295 in viter294)
-        {
-          if (viter294.hasOwnProperty(iter295))
-          {
-            iter295 = viter294[iter295];
-            output.writeString(iter295);
-          }
-        }
-        output.writeListEnd();
-      }
-    }
-    output.writeMapEnd();
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_updatePreferences_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_updatePreferences_result.prototype = {};
-NoteStore_updatePreferences_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.I32) {
-        this.success = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_updatePreferences_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_updatePreferences_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.I32, 0);
-    output.writeI32(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
 NoteStore_getNoteApplicationData_args = function(args) {
   this.authenticationToken = null;
   this.guid = null;
@@ -7176,18 +6783,18 @@ NoteStore_getNoteTagNames_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size296 = 0;
-        var _rtmp3300;
+        var _size252 = 0;
+        var _rtmp3256;
         this.success = [];
-        var _etype299 = 0;
-        _rtmp3300 = input.readListBegin();
-        _etype299 = _rtmp3300.etype;
-        _size296 = _rtmp3300.size;
-        for (var _i301 = 0; _i301 < _size296; ++_i301)
+        var _etype255 = 0;
+        _rtmp3256 = input.readListBegin();
+        _etype255 = _rtmp3256.etype;
+        _size252 = _rtmp3256.size;
+        for (var _i257 = 0; _i257 < _size252; ++_i257)
         {
-          var elem302 = null;
-          elem302 = input.readString().value;
-          this.success.push(elem302);
+          var elem258 = null;
+          elem258 = input.readString().value;
+          this.success.push(elem258);
         }
         input.readListEnd();
       } else {
@@ -7232,12 +6839,12 @@ NoteStore_getNoteTagNames_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.STRING, this.success.length);
-    for (var iter303 in this.success)
+    for (var iter259 in this.success)
     {
-      if (this.success.hasOwnProperty(iter303))
+      if (this.success.hasOwnProperty(iter259))
       {
-        iter303 = this.success[iter303];
-        output.writeString(iter303);
+        iter259 = this.success[iter259];
+        output.writeString(iter259);
       }
     }
     output.writeListEnd();
@@ -8018,18 +7625,18 @@ NoteStore_expungeNotes_args.prototype.read = function(input) {
       break;
       case 2:
       if (ftype == Thrift.Type.LIST) {
-        var _size304 = 0;
-        var _rtmp3308;
+        var _size260 = 0;
+        var _rtmp3264;
         this.noteGuids = [];
-        var _etype307 = 0;
-        _rtmp3308 = input.readListBegin();
-        _etype307 = _rtmp3308.etype;
-        _size304 = _rtmp3308.size;
-        for (var _i309 = 0; _i309 < _size304; ++_i309)
+        var _etype263 = 0;
+        _rtmp3264 = input.readListBegin();
+        _etype263 = _rtmp3264.etype;
+        _size260 = _rtmp3264.size;
+        for (var _i265 = 0; _i265 < _size260; ++_i265)
         {
-          var elem310 = null;
-          elem310 = input.readString().value;
-          this.noteGuids.push(elem310);
+          var elem266 = null;
+          elem266 = input.readString().value;
+          this.noteGuids.push(elem266);
         }
         input.readListEnd();
       } else {
@@ -8055,12 +7662,12 @@ NoteStore_expungeNotes_args.prototype.write = function(output) {
   if (this.noteGuids !== null && this.noteGuids !== undefined) {
     output.writeFieldBegin('noteGuids', Thrift.Type.LIST, 2);
     output.writeListBegin(Thrift.Type.STRING, this.noteGuids.length);
-    for (var iter311 in this.noteGuids)
+    for (var iter267 in this.noteGuids)
     {
-      if (this.noteGuids.hasOwnProperty(iter311))
+      if (this.noteGuids.hasOwnProperty(iter267))
       {
-        iter311 = this.noteGuids[iter311];
-        output.writeString(iter311);
+        iter267 = this.noteGuids[iter267];
+        output.writeString(iter267);
       }
     }
     output.writeListEnd();
@@ -8639,19 +8246,19 @@ NoteStore_listNoteVersions_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size312 = 0;
-        var _rtmp3316;
+        var _size268 = 0;
+        var _rtmp3272;
         this.success = [];
-        var _etype315 = 0;
-        _rtmp3316 = input.readListBegin();
-        _etype315 = _rtmp3316.etype;
-        _size312 = _rtmp3316.size;
-        for (var _i317 = 0; _i317 < _size312; ++_i317)
+        var _etype271 = 0;
+        _rtmp3272 = input.readListBegin();
+        _etype271 = _rtmp3272.etype;
+        _size268 = _rtmp3272.size;
+        for (var _i273 = 0; _i273 < _size268; ++_i273)
         {
-          var elem318 = null;
-          elem318 = new NoteVersionId();
-          elem318.read(input);
-          this.success.push(elem318);
+          var elem274 = null;
+          elem274 = new NoteVersionId();
+          elem274.read(input);
+          this.success.push(elem274);
         }
         input.readListEnd();
       } else {
@@ -8696,12 +8303,12 @@ NoteStore_listNoteVersions_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter319 in this.success)
+    for (var iter275 in this.success)
     {
-      if (this.success.hasOwnProperty(iter319))
+      if (this.success.hasOwnProperty(iter275))
       {
-        iter319 = this.success[iter319];
-        iter319.write(output);
+        iter275 = this.success[iter275];
+        iter275.write(output);
       }
     }
     output.writeListEnd();
@@ -11714,18 +11321,18 @@ NoteStore_sendMessageToSharedNotebookMembers_args.prototype.read = function(inpu
       break;
       case 4:
       if (ftype == Thrift.Type.LIST) {
-        var _size320 = 0;
-        var _rtmp3324;
+        var _size276 = 0;
+        var _rtmp3280;
         this.recipients = [];
-        var _etype323 = 0;
-        _rtmp3324 = input.readListBegin();
-        _etype323 = _rtmp3324.etype;
-        _size320 = _rtmp3324.size;
-        for (var _i325 = 0; _i325 < _size320; ++_i325)
+        var _etype279 = 0;
+        _rtmp3280 = input.readListBegin();
+        _etype279 = _rtmp3280.etype;
+        _size276 = _rtmp3280.size;
+        for (var _i281 = 0; _i281 < _size276; ++_i281)
         {
-          var elem326 = null;
-          elem326 = input.readString().value;
-          this.recipients.push(elem326);
+          var elem282 = null;
+          elem282 = input.readString().value;
+          this.recipients.push(elem282);
         }
         input.readListEnd();
       } else {
@@ -11761,12 +11368,12 @@ NoteStore_sendMessageToSharedNotebookMembers_args.prototype.write = function(out
   if (this.recipients !== null && this.recipients !== undefined) {
     output.writeFieldBegin('recipients', Thrift.Type.LIST, 4);
     output.writeListBegin(Thrift.Type.STRING, this.recipients.length);
-    for (var iter327 in this.recipients)
+    for (var iter283 in this.recipients)
     {
-      if (this.recipients.hasOwnProperty(iter327))
+      if (this.recipients.hasOwnProperty(iter283))
       {
-        iter327 = this.recipients[iter327];
-        output.writeString(iter327);
+        iter283 = this.recipients[iter283];
+        output.writeString(iter283);
       }
     }
     output.writeListEnd();
@@ -11991,19 +11598,19 @@ NoteStore_listSharedNotebooks_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size328 = 0;
-        var _rtmp3332;
+        var _size284 = 0;
+        var _rtmp3288;
         this.success = [];
-        var _etype331 = 0;
-        _rtmp3332 = input.readListBegin();
-        _etype331 = _rtmp3332.etype;
-        _size328 = _rtmp3332.size;
-        for (var _i333 = 0; _i333 < _size328; ++_i333)
+        var _etype287 = 0;
+        _rtmp3288 = input.readListBegin();
+        _etype287 = _rtmp3288.etype;
+        _size284 = _rtmp3288.size;
+        for (var _i289 = 0; _i289 < _size284; ++_i289)
         {
-          var elem334 = null;
-          elem334 = new SharedNotebook();
-          elem334.read(input);
-          this.success.push(elem334);
+          var elem290 = null;
+          elem290 = new SharedNotebook();
+          elem290.read(input);
+          this.success.push(elem290);
         }
         input.readListEnd();
       } else {
@@ -12048,12 +11655,12 @@ NoteStore_listSharedNotebooks_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter335 in this.success)
+    for (var iter291 in this.success)
     {
-      if (this.success.hasOwnProperty(iter335))
+      if (this.success.hasOwnProperty(iter291))
       {
-        iter335 = this.success[iter335];
-        iter335.write(output);
+        iter291 = this.success[iter291];
+        iter291.write(output);
       }
     }
     output.writeListEnd();
@@ -12114,18 +11721,18 @@ NoteStore_expungeSharedNotebooks_args.prototype.read = function(input) {
       break;
       case 2:
       if (ftype == Thrift.Type.LIST) {
-        var _size336 = 0;
-        var _rtmp3340;
+        var _size292 = 0;
+        var _rtmp3296;
         this.sharedNotebookIds = [];
-        var _etype339 = 0;
-        _rtmp3340 = input.readListBegin();
-        _etype339 = _rtmp3340.etype;
-        _size336 = _rtmp3340.size;
-        for (var _i341 = 0; _i341 < _size336; ++_i341)
+        var _etype295 = 0;
+        _rtmp3296 = input.readListBegin();
+        _etype295 = _rtmp3296.etype;
+        _size292 = _rtmp3296.size;
+        for (var _i297 = 0; _i297 < _size292; ++_i297)
         {
-          var elem342 = null;
-          elem342 = input.readI64().value;
-          this.sharedNotebookIds.push(elem342);
+          var elem298 = null;
+          elem298 = input.readI64().value;
+          this.sharedNotebookIds.push(elem298);
         }
         input.readListEnd();
       } else {
@@ -12151,12 +11758,12 @@ NoteStore_expungeSharedNotebooks_args.prototype.write = function(output) {
   if (this.sharedNotebookIds !== null && this.sharedNotebookIds !== undefined) {
     output.writeFieldBegin('sharedNotebookIds', Thrift.Type.LIST, 2);
     output.writeListBegin(Thrift.Type.I64, this.sharedNotebookIds.length);
-    for (var iter343 in this.sharedNotebookIds)
+    for (var iter299 in this.sharedNotebookIds)
     {
-      if (this.sharedNotebookIds.hasOwnProperty(iter343))
+      if (this.sharedNotebookIds.hasOwnProperty(iter299))
       {
-        iter343 = this.sharedNotebookIds[iter343];
-        output.writeI64(iter343);
+        iter299 = this.sharedNotebookIds[iter299];
+        output.writeI64(iter299);
       }
     }
     output.writeListEnd();
@@ -12742,19 +12349,19 @@ NoteStore_listLinkedNotebooks_result.prototype.read = function(input) {
     {
       case 0:
       if (ftype == Thrift.Type.LIST) {
-        var _size344 = 0;
-        var _rtmp3348;
+        var _size300 = 0;
+        var _rtmp3304;
         this.success = [];
-        var _etype347 = 0;
-        _rtmp3348 = input.readListBegin();
-        _etype347 = _rtmp3348.etype;
-        _size344 = _rtmp3348.size;
-        for (var _i349 = 0; _i349 < _size344; ++_i349)
+        var _etype303 = 0;
+        _rtmp3304 = input.readListBegin();
+        _etype303 = _rtmp3304.etype;
+        _size300 = _rtmp3304.size;
+        for (var _i305 = 0; _i305 < _size300; ++_i305)
         {
-          var elem350 = null;
-          elem350 = new LinkedNotebook();
-          elem350.read(input);
-          this.success.push(elem350);
+          var elem306 = null;
+          elem306 = new LinkedNotebook();
+          elem306.read(input);
+          this.success.push(elem306);
         }
         input.readListEnd();
       } else {
@@ -12799,12 +12406,12 @@ NoteStore_listLinkedNotebooks_result.prototype.write = function(output) {
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.LIST, 0);
     output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter351 in this.success)
+    for (var iter307 in this.success)
     {
-      if (this.success.hasOwnProperty(iter351))
+      if (this.success.hasOwnProperty(iter307))
       {
-        iter351 = this.success[iter351];
-        iter351.write(output);
+        iter307 = this.success[iter307];
+        iter307.write(output);
       }
     }
     output.writeListEnd();
@@ -15675,100 +15282,6 @@ NoteStoreClient.prototype.recv_getNote = function() {
     return result.success;
   }
   throw 'getNote failed: unknown result';
-};
-NoteStoreClient.prototype.getPreferences = function(authenticationToken, preferenceNames, callback) {
-  if (callback === undefined) {
-    this.send_getPreferences(authenticationToken, preferenceNames);
-    return this.recv_getPreferences();
-  } else {
-    var postData = this.send_getPreferences(authenticationToken, preferenceNames, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getPreferences);
-  }
-};
-
-NoteStoreClient.prototype.send_getPreferences = function(authenticationToken, preferenceNames, callback) {
-  this.output.writeMessageBegin('getPreferences', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getPreferences_args();
-  args.authenticationToken = authenticationToken;
-  args.preferenceNames = preferenceNames;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getPreferences = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getPreferences_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getPreferences failed: unknown result';
-};
-NoteStoreClient.prototype.updatePreferences = function(authenticationToken, preferencesToUpdate, callback) {
-  if (callback === undefined) {
-    this.send_updatePreferences(authenticationToken, preferencesToUpdate);
-    return this.recv_updatePreferences();
-  } else {
-    var postData = this.send_updatePreferences(authenticationToken, preferencesToUpdate, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_updatePreferences);
-  }
-};
-
-NoteStoreClient.prototype.send_updatePreferences = function(authenticationToken, preferencesToUpdate, callback) {
-  this.output.writeMessageBegin('updatePreferences', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_updatePreferences_args();
-  args.authenticationToken = authenticationToken;
-  args.preferencesToUpdate = preferencesToUpdate;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_updatePreferences = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_updatePreferences_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'updatePreferences failed: unknown result';
 };
 NoteStoreClient.prototype.getNoteApplicationData = function(authenticationToken, guid, callback) {
   if (callback === undefined) {
