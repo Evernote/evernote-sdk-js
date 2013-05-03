@@ -1,4 +1,4 @@
-Evernote SDK for JavaScript version 0.0.1
+Evernote SDK for JavaScript version 0.0.3
 ==================================
 Evernote API version 1.24
 
