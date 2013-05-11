@@ -13,5 +13,8 @@
   },
   "engines": {
     "node": "*"
+  },
+  "dependencies": {
+    "oauth": "*"
   }
 }

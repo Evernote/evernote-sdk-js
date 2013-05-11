@@ -28,6 +28,16 @@ exports.NodeBinaryHttpTransport = function(url) {
   this.buffer = [];
   this.received = null;
   this.offset = 0;
+  this.headers = {
+    'Content-Type': 'application/x-thrift',
+    'Accept': 'application/x-thrift'
+  };
+
+  this.addHeaders = function(headers) {
+    for (k in headers) {
+      self.headers[k] = headers[k];
+    }
+  };
 
 	this.open = function () {
 	};
@@ -37,54 +47,59 @@ exports.NodeBinaryHttpTransport = function(url) {
 
   this.read = function (len) {
     var view = new DataView(this.received, this.offset, len);
-    this.offset += len;
+    self.offset += len;
     return view;
   };
 
 	this.write = function (bytes) {
-    this.buffer.push(bytes);
+    self.buffer.push(bytes);
 	};
 
   this.flush = function (async) {
     if (!async) throw 'Error in NodeBinaryHttpTransport.flush: Binary protocol does not support synchronous calls';
 
-    var size = this.buffer.reduce(function (size, bytes) {
+    var size = self.buffer.reduce(function (size, bytes) {
       return size + bytes.byteLength;
     }, 0);
 
     var ab = new ArrayBuffer(size);
     var allbytes = new Uint8Array(ab);
     var pos = 0;
-    this.buffer.forEach(function (bytes) {
+    self.buffer.forEach(function (bytes) {
       var view = null;
-      if (bytes.buffer) view = (bytes instanceof Uint8Array) ? bytes : new Uint8Array(bytes.buffer, bytes.byteOffset, bytes.byteLength);
-      else view = new Uint8Array(bytes);
+      if (bytes.buffer) {
+        if (bytes instanceof Uint8Array) {
+          view = bytes;
+        } else {
+          view = new Uint8Array(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+        }
+      } else {
+        view = new Uint8Array(bytes);
+      }
 
       allbytes.set(view, pos);
       pos += bytes.byteLength;
     });
 
-    this.buffer = [];
+    self.buffer = [];
 
     return ab
   };
 
   this.send = function (client, postData, args, recv_method) {
+    self.offset = 0;
     args = Array.prototype.slice.call(args, 0);
     var onerror = args.pop();
     var callback = args.length > 0 ? args.pop() : onerror;
     if (typeof callback !== 'function') callback = onerror;
 
-    var purl = Url.parse(this.url);
+    var purl = Url.parse(self.url);
     var options = {
       hostname: purl['host'],
       port: purl['protocol'] == 'https' ? 443 : 80,
       path: purl['path'],
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-thrift',
-        'Accept': 'application/x-thrift'
-      }
+      headers: self.headers
     };
     var doRequest = (purl['protocol'] == 'https' ? https : http).request
 
