@@ -7,6 +7,10 @@ block content
     a(href='http://expressjs.com/') Express
     |  framework to demonstrate the use of OAuth to authenticate to the Evernote web service.
   hr
+  - if(session.error)
+    h2 Error
+    p
+      = session.error
   h2 Authentication
   - if(session.oauth_access_token)
     a(href='/clear') Click here

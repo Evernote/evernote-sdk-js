@@ -18,27 +18,30 @@
  */
 
 var OAuth = require('oauth').OAuth,
+    pjson = require('../../../package.json'),
     Evernote = require('../../../base.js').Evernote;
 
 var Client = function(options) {
   this.consumerKey = options.consumerKey;
-  this.consumerSecret = options.consumerSecret
-    this.sandbox = typeof(options.sandbox) !== 'undefined' ? options.sandbox : true
-    if (this.sandbox) {
-      var defaultServiceHost = 'sandbox.evernote.com'
-    } else {
-      var defaultServiceHost = 'www.evernote.com'
-    }
-  this.serviceHost = options.serviceHost || defaultServiceHost
-    this.additionalHeaders = options.additionalHeaders || {}
-  this.token = options.token
-    this.secret = options.secret
+  this.consumerSecret = options.consumerSecret;
+  this.sandbox = typeof(options.sandbox) !== 'undefined' ? options.sandbox : true;
+  if (this.sandbox) {
+    var defaultServiceHost = 'sandbox.evernote.com';
+  } else {
+    var defaultServiceHost = 'www.evernote.com';
+  }
+  this.serviceHost = options.serviceHost || defaultServiceHost;
+  this.additionalHeaders = options.additionalHeaders || {};
+  this.token = options.token;
+  this.secret = options.secret;
 };
 
 Client.prototype.getRequestToken = function(callbackUrl, callback) {
   var self = this;
   var oauth = self.getOAuthClient(callbackUrl);
-  oauth.getOAuthRequestToken(callback(error, oauthToken, oauthTokenSecret, results));
+  oauth.getOAuthRequestToken(function(error, oauthToken, oauthTokenSecret, results) {
+    callback(error, oauthToken, oauthTokenSecret, results)
+  });
 };
 
 Client.prototype.getAuthorizeUrl = function(oauthToken) {
@@ -50,11 +53,10 @@ Client.prototype.getAccessToken = function(oauthToken, oauthTokenSecret, oauthVe
   var self = this;
   var oauth = self.getOAuthClient('');
   oauth.getOAuthAccessToken(oauthToken, oauthTokenSecret, oauthVerifier,
-      function(error, oauthAccessToken, oauthAccessTokenSecret, results) {
-        callback(error, oauthAccessToken, oauthAccessTokenSecret, results);
-        self.token = oauthAccessToken;
-      });
-  return self.token;
+    function(error, oauthAccessToken, oauthAccessTokenSecret, results) {
+      callback(error, oauthAccessToken, oauthAccessTokenSecret, results);
+      self.token = oauthAccessToken;
+    });
 };
 
 Client.prototype.getUserStore = function() {
@@ -67,45 +69,59 @@ Client.prototype.getUserStore = function() {
 Client.prototype.getNoteStore = function() {
   var self = this;
   return new Store(Evernote.NoteStoreClient, function(callback) {
-    self.getUserStore().getNoteStoreUrl(function(noteStoreUrl) {
-      callback(self.token, noteStoreUrl);
-    });
+    if (self.noteStoreUrl) {
+      callback(self.token, self.noteStoreUrl);
+    } else {
+      self.getUserStore().getNoteStoreUrl(function(noteStoreUrl) {
+        self.noteStoreUrl = noteStoreUrl;
+        callback(self.token, self.noteStoreUrl);
+      });
+    }
   });
 };
 
 Client.prototype.getSharedNoteStore = function(linkedNotebook) {
   var self = this;
   return new Store(Evernote.NoteStoreClient, function(callback) {
-    var noteStore = new Store(Evernote.NoteStoreClient, function(cb) {
-      cb(self.token, linkedNotebook.noteStoreUrl);
-    });
-    noteStore.authenticateToSharedNotebook(linkedNotebook.shareKey, function(sharedAuth) {
-      var sharedToken = sharedAuth.authenticationToken;
-      callback(sharedToken, linkedNotebook.noteStoreUrl);
-    });
+    if (self.sharedToken) {
+      callback(self.sharedToken, linkedNotebook.noteStoreUrl);
+    } else {
+      var noteStore = new Store(Evernote.NoteStoreClient, function(cb) {
+        cb(self.token, linkedNotebook.noteStoreUrl);
+      });
+      noteStore.authenticateToSharedNotebook(linkedNotebook.shareKey, function(sharedAuth) {
+        self.sharedToken = sharedAuth.authenticationToken;
+        callback(self.sharedToken, linkedNotebook.noteStoreUrl);
+      });
+    }
   });
 };
 
 Client.prototype.getBusinessNoteStore = function() {
   var self = this;
   return new Store(Evernote.NoteStoreClient, function(callback) {
-    self.getUserStore().authenticateToBusiness(function(bizAuth) {
-      var bizToken = bizAuth.authenticationToken;
-      var noteStoreUri = bizAuth.noteStoreUrl;
-      callback(bizToken, noteStoreUri);
-    });
+    if (self.bizToken && self.bizNoteStoreUrl) {
+      callback(self.bizToken, self.bizNoteStoreUrl);
+    } else {
+      self.getUserStore().authenticateToBusiness(function(bizAuth) {
+        self.bizToken = bizAuth.authenticationToken;
+        self.bizNoteStoreUri = bizAuth.noteStoreUrl;
+        callback(self.bizToken, self.bizNoteStoreUri);
+      });
+    }
   });
 };
 
 Client.prototype.getOAuthClient = function(callbackUrl) {
   var self = this;
-  var oauth = new OAuth(self.getEndpoint('oauth'),
-      self.getEndpoint('oauth'),
-      self.consumerKey,
-      self.consumerSecret,
-      "1.0",
-      callbackUrl,
-      "HMAC-SHA1");
+  return new OAuth(
+    self.getEndpoint('oauth'),
+    self.getEndpoint('oauth'),
+    self.consumerKey,
+    self.consumerSecret,
+    "1.0",
+    callbackUrl,
+    "HMAC-SHA1");
 };
 
 Client.prototype.getEndpoint = function(path) {
@@ -165,14 +181,10 @@ Store.prototype.getThriftClient = function(callback) {
     var transport = new Evernote.Thrift.NodeBinaryHttpTransport(url);
     transport.addHeaders(
       {'User-Agent':
-        this.userAgentId + ' / ' + self.getSdkVersion() + '; Node.js / ' + process.version});
+        self.userAgentId + ' / ' + pjson.version + '; Node.js / ' + process.version});
     var protocol = new Evernote.Thrift.BinaryProtocol(transport);
     callback(new self.clientClass(protocol), token);
   });
-};
-
-Store.prototype.getSdkVersion = function() {
-  return Evernote.EDAM_VERSION_MAJOR + '.' + Evernote.EDAM_VERSION_MINOR;
 };
 
 Store.prototype.getParamNames = function(func) {
