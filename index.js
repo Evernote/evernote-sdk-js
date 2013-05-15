@@ -18,4 +18,11 @@ evernote.Data.prototype.__defineSetter__('body', function(val) {
   }
 });
 
+BusinessUtils = require('./evernote-sdk-js/evernote/node/client.business-utils.js');
+evernote.Client.prototype.createNoteInBusinessNotebook = BusinessUtils.createNoteInBusinessNotebook;
+evernote.Client.prototype.listBusinessNotebooks = BusinessUtils.listBusinessNotebooks;
+evernote.Client.prototype.createBusinessNotebook = BusinessUtils.createBusinessNotebook;
+evernote.Client.prototype.getCorrespondingNotebook = BusinessUtils.getCorrespondingNotebook;
+evernote.User.prototype.isBusinessUser = BusinessUtils.isBusinessUser;
+
 exports.Evernote = evernote;

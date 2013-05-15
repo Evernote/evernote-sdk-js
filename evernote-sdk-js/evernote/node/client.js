@@ -106,6 +106,7 @@ Client.prototype.getBusinessNoteStore = function() {
       self.getUserStore().authenticateToBusiness(function(bizAuth) {
         self.bizToken = bizAuth.authenticationToken;
         self.bizNoteStoreUri = bizAuth.noteStoreUrl;
+        self.bizUser = bizAuth.user;
         callback(self.bizToken, self.bizNoteStoreUri);
       });
     }

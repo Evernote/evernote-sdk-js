@@ -5,8 +5,8 @@ var callbackUrl = "http://localhost:3000/oauth_callback";
 
 // home page
 exports.index = function(req, res) {
-  if(req.session.oauth_access_token) {
-    var token = req.session.oauth_access_token;
+  if(req.session.oauthAccessToken) {
+    var token = req.session.oauthAccessToken;
     var client = new Evernote.Client({
       token: token,
       sandbox: config.SANDBOX
@@ -29,18 +29,18 @@ exports.oauth = function(req, res) {
     sandbox: config.SANDBOX
   });
 
-  client.getRequestToken(callbackUrl, function(error, oauth_token, oauth_token_secret, results){
+  client.getRequestToken(callbackUrl, function(error, oauthToken, oauthTokenSecret, results){
     if(error) {
       req.session.error = JSON.stringify(error);
       res.redirect('/');
     }
     else { 
       // store the tokens in the session
-      req.session.oauth_token = oauth_token;
-      req.session.oauth_token_secret = oauth_token_secret;
+      req.session.oauthToken = oauthToken;
+      req.session.oauthTokenSecret = oauthTokenSecret;
 
       // redirect the user to authorize the token
-      res.redirect(client.getAuthorizeUrl(oauth_token));
+      res.redirect(client.getAuthorizeUrl(oauthToken));
     }
   });
 
@@ -55,23 +55,23 @@ exports.oauth_callback = function(req, res) {
   });
 
   client.getAccessToken(
-    req.session.oauth_token, 
-    req.session.oauth_token_secret, 
+    req.session.oauthToken, 
+    req.session.oauthTokenSecret, 
     req.param('oauth_verifier'), 
-    function(error, oauth_access_token, oauth_access_token_secret, results) {
+    function(error, oauthAccessToken, oauthAccessTokenSecret, results) {
       if(error) {
         console.log('error');
         console.log(error);
         res.redirect('/');
       } else {
         // store the access token in the session
-        req.session.oauth_access_token = oauth_access_token;
-        req.session.oauth_access_token_secret = oauth_access_token_secret;
-        req.session.edam_shard = results.edam_shard;
-        req.session.edam_userId = results.edam_userId;
-        req.session.edam_expires = results.edam_expires;
-        req.session.edam_noteStoreUrl = results.edam_noteStoreUrl;
-        req.session.edam_webApiUrlPrefix = results.edam_webApiUrlPrefix;
+        req.session.oauthAccessToken = oauthAccessToken;
+        req.session.oauthAccessTtokenSecret = oauthAccessTokenSecret;
+        req.session.edamShard = results.edam_shard;
+        req.session.edamUserId = results.edam_userId;
+        req.session.edamExpires = results.edam_expires;
+        req.session.edamNoteStoreUrl = results.edam_noteStoreUrl;
+        req.session.edamWebApiUrlPrefix = results.edam_webApiUrlPrefix;
         res.redirect('/');
       }
     });
