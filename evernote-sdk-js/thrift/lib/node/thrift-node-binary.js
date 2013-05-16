@@ -101,7 +101,7 @@ exports.NodeBinaryHttpTransport = function(url) {
       method: 'POST',
       headers: self.headers
     };
-    var doRequest = (purl['protocol'] == 'https' ? https : http).request
+    var doRequest = (purl['protocol'] == 'https' ? https : http).request;
 
     var req = doRequest(options, function(res) {
       var data = [], dataLength = 0;
