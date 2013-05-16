@@ -10,7 +10,6 @@
     "express": "3.1.0",
     "jade": "*",
     "less-middleware": "*",
-    "oauth": "*",
     "evernote": "*"
   }
 }
