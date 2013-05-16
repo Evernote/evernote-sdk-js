@@ -1,4 +1,4 @@
-Evernote SDK for JavaScript version 0.0.3
+Evernote SDK for JavaScript version 0.0.4
 ==================================
 Evernote API version 1.24
 
@@ -87,27 +87,129 @@ You can install the module using npm.
 ```sh
 npm install evernote
 ```
+### OAuth ###
+```javascript
+var client = new Evernote.Client.new({
+  consumerKey: 'YOUR API CONSUMER KEY',
+  consumerSecret: 'YOUR API CONSUMER SECRET',
+  sandbox: [true or false] // Optional (default: true)
+});
+client.getRequestToken('YOUR CALLBACK URL', function(error, oauthToken, oauthTokenSecret, results) {
+  // store tokens in the session
+  // and then redirect to client.getAuthorizeUrl(oauthToken)
+});
+```
+To obtain the access token
+```javascript
+client.getAccessToken(oauthToken, oauthTokenSecret, oauthVerifier, function(error, oauthAccessToken, oauthAccessTokenSecret, results) {
+  // store 'oauthAccessToken' somewhere
+)};
+```
+Now you can make other API calls
+```javascript
+var client = new Evernote.Client({token: oauthAccessToken});
+var noteStore = client.getNoteStore();
+notebooks = noteStore.listNotebooks(function(notebooks) {
+  // run this code
+});
+```
+
+You can see the actual OAuth sample code in `sample/express`.
+
+### UserStore ###
+Once you acquire token, you can use UserStore. For example, if you want to call UserStore.getUser:
+```javascript
+var client = new Evernote.Client(token: token);
+var userStore = client.getUserStore();
+userStore.getUser(function(user) {
+  // run this code
+});
+```
+You can omit authenticationToken in the arguments of UserStore/NoteStore functions.
+
+### NoteStore ###
+If you want to call NoteStore.listNotebooks:
+```javascript
+var noteStore = client.getNoteStore();
+noteStore.listNotebooks(function(notebooks) {
+  // run this code
+});
+```
+
+### NoteStore for linked notebooks ###
+If you want to get tags for linked notebooks:
+```javascript
+var linkedNotebook = noteStore.listLinkedNotebooks[0]; // any notebook
+var sharedNoteStore = client.sharedNoteStore(linkedNotebook);
+sharedNoteStore.getSharedNotebookByAuth(function(sharedNotebook) {
+  sharedNoteStore.listTagsByNotebook(sharedNotebook.notebookGuid, function(tags) {
+    // run this code
+  });
+});
+```
+
+### NoteStore for Business ###
+If you want to get the list of notebooks in your business account:
+```javascript
+userStore.getUser(function(user) {
+  if (user.isBusinessUser) {
+    client.getBusinessNoteStore().listNotebooks(function(notebooks) {
+      // run this code
+    });
+  }
+});
+```
+
+Utility methods for Business
+----------------------------
+This module provides some utility methods to deal with Evernote Business.
+
+### List business notebooks ###
+To list all business notebooks the user can access
+```javascript
+var client = new Evernote.Client({token: token})
+client.listBusinessNotebooks(function(businessNotebooks) {
+  // run this code
+});
+```
+
+### Create a business note ###
+To create a business note in a business notebook
+```javascript
+var note = new Evernote.Note();
+client.listBusinessNotebooks(function(notebooks) {
+  client.createNoteInBusinessNotebook(note, businessNotebooks[0], function(createdNote) {
+    // run this code
+  });
+});
+```
+
+### Create a business notebook ###
+To create a business notebook
+```javascript
+var notebook = new Evernote.Notebook();
+client.createBusinessNotebook(notebook, function(createdNotebook) {
+  // run this code
+});
+```
+
+### Get a notebook corresponding to the given business notebook ###
+```javascript
+client.listBusinessNotebooks(function(businessNotebooks) {
+  client.getCorrespondingNotebook(businessNotebooks[0], function(notebook) {
+    // run this code
+  });
+});
+```
+
+### Determine if the user is a part of a business ###
+```javascript
+user.isBusinessUser();
+```
 
 ### Example
 
-You can find sample app with express under 'sample/express'. Please note that you have to use `NodeBinaryHttpTransport` instead of `BinaryHttpTransport`.
-
-```javascript
-var Evernote = require('evernote').Evernote
-var noteStoreURL = <note store url>;
-var authenticationToken = <authentication token>;
-var noteStoreTransport = new Evernote.Thrift.NodeBinaryHttpTransport(noteStoreURL);
-var noteStoreProtocol = new Evernote.Thrift.BinaryProtocol(noteStoreTransport);
-var noteStore = new NoteStoreClient(noteStoreProtocol);
-
-noteStore.listNotebooks(authenticationToken, function (notebooks) {
-    console.log(notebooks);
-  },
-  function onerror(error) {
-    console.log(error);
-  }
-);
-```
+You can find a simple client app and a sample app with express under 'sample/express'. Please note that you have to use `NodeBinaryHttpTransport` instead of `BinaryHttpTransport`.
 
 FAQ
 ---

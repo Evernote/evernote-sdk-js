@@ -7,8 +7,12 @@ block content
     a(href='http://expressjs.com/') Express
     |  framework to demonstrate the use of OAuth to authenticate to the Evernote web service.
   hr
+  - if(session.error)
+    h2 Error
+    p
+      = session.error
   h2 Authentication
-  - if(session.oauth_access_token)
+  - if(session.oauthAccessToken)
     a(href='/clear') Click here
     |  to 
     | start over
@@ -28,22 +32,22 @@ block content
   ul
     li
       b NoteStore URL:  
-      = session.edam_noteStoreUrl
+      = session.edamNoteStoreUrl
     li
       b Web API URL prefix: 
-      = session.edam_noteStoreUrl
+      = session.edamNoteStoreUrl
   h3 Token Credentials:
   ul
     li
       b token:  
-      = session.oauth_access_token
+      = session.oauthAccessToken
     li
       b secret:  
-      = session.oauth_access_token_secret
+      = session.oauthAccessTokenSecret
     li
       b User ID:  
-      = session.edam_userId
+      = session.edamUserId
     li
       b Expires:  
-      = session.edam_expires
+      = session.edamExpires
     
