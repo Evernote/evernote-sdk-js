@@ -5,7 +5,7 @@
 //
 
 EDAM_VERSION_MAJOR = 1;
-EDAM_VERSION_MINOR = 24;
+EDAM_VERSION_MINOR = 25;
 PublicUserInfo = function(args) {
   this.userId = null;
   this.shardId = null;
@@ -144,6 +144,8 @@ AuthenticationResult = function(args) {
   this.publicUserInfo = null;
   this.noteStoreUrl = null;
   this.webApiUrlPrefix = null;
+  this.secondFactorRequired = null;
+  this.secondFactorDeliveryHint = null;
   if (args) {
     if (args.currentTime !== undefined) {
       this.currentTime = args.currentTime;
@@ -165,6 +167,12 @@ AuthenticationResult = function(args) {
     }
     if (args.webApiUrlPrefix !== undefined) {
       this.webApiUrlPrefix = args.webApiUrlPrefix;
+    }
+    if (args.secondFactorRequired !== undefined) {
+      this.secondFactorRequired = args.secondFactorRequired;
+    }
+    if (args.secondFactorDeliveryHint !== undefined) {
+      this.secondFactorDeliveryHint = args.secondFactorDeliveryHint;
     }
   }
 };
@@ -233,6 +241,20 @@ AuthenticationResult.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
+      case 8:
+      if (ftype == Thrift.Type.BOOL) {
+        this.secondFactorRequired = input.readBool().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 9:
+      if (ftype == Thrift.Type.STRING) {
+        this.secondFactorDeliveryHint = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
       default:
         input.skip(ftype);
     }
@@ -277,6 +299,16 @@ AuthenticationResult.prototype.write = function(output) {
   if (this.webApiUrlPrefix !== null && this.webApiUrlPrefix !== undefined) {
     output.writeFieldBegin('webApiUrlPrefix', Thrift.Type.STRING, 7);
     output.writeString(this.webApiUrlPrefix);
+    output.writeFieldEnd();
+  }
+  if (this.secondFactorRequired !== null && this.secondFactorRequired !== undefined) {
+    output.writeFieldBegin('secondFactorRequired', Thrift.Type.BOOL, 8);
+    output.writeBool(this.secondFactorRequired);
+    output.writeFieldEnd();
+  }
+  if (this.secondFactorDeliveryHint !== null && this.secondFactorDeliveryHint !== undefined) {
+    output.writeFieldBegin('secondFactorDeliveryHint', Thrift.Type.STRING, 9);
+    output.writeString(this.secondFactorDeliveryHint);
     output.writeFieldEnd();
   }
   output.writeFieldStop();

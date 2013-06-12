@@ -11264,6 +11264,202 @@ NoteStore_updateSharedNotebook_result.prototype.write = function(output) {
   return;
 };
 
+NoteStore_setSharedNotebookRecipientSettings_args = function(args) {
+  this.authenticationToken = null;
+  this.sharedNotebookId = null;
+  this.recipientSettings = null;
+  if (args) {
+    if (args.authenticationToken !== undefined) {
+      this.authenticationToken = args.authenticationToken;
+    }
+    if (args.sharedNotebookId !== undefined) {
+      this.sharedNotebookId = args.sharedNotebookId;
+    }
+    if (args.recipientSettings !== undefined) {
+      this.recipientSettings = args.recipientSettings;
+    }
+  }
+};
+NoteStore_setSharedNotebookRecipientSettings_args.prototype = {};
+NoteStore_setSharedNotebookRecipientSettings_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRING) {
+        this.authenticationToken = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.I64) {
+        this.sharedNotebookId = input.readI64().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.recipientSettings = new SharedNotebookRecipientSettings();
+        this.recipientSettings.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+NoteStore_setSharedNotebookRecipientSettings_args.prototype.write = function(output) {
+  output.writeStructBegin('NoteStore_setSharedNotebookRecipientSettings_args');
+  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
+    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
+    output.writeString(this.authenticationToken);
+    output.writeFieldEnd();
+  }
+  if (this.sharedNotebookId !== null && this.sharedNotebookId !== undefined) {
+    output.writeFieldBegin('sharedNotebookId', Thrift.Type.I64, 2);
+    output.writeI64(this.sharedNotebookId);
+    output.writeFieldEnd();
+  }
+  if (this.recipientSettings !== null && this.recipientSettings !== undefined) {
+    output.writeFieldBegin('recipientSettings', Thrift.Type.STRUCT, 3);
+    this.recipientSettings.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+NoteStore_setSharedNotebookRecipientSettings_result = function(args) {
+  this.success = null;
+  this.userException = null;
+  this.notFoundException = null;
+  this.systemException = null;
+  if (args instanceof EDAMUserException) {
+    this.userException = args;
+    return;
+  }
+  if (args instanceof EDAMNotFoundException) {
+    this.notFoundException = args;
+    return;
+  }
+  if (args instanceof EDAMSystemException) {
+    this.systemException = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined) {
+      this.success = args.success;
+    }
+    if (args.userException !== undefined) {
+      this.userException = args.userException;
+    }
+    if (args.notFoundException !== undefined) {
+      this.notFoundException = args.notFoundException;
+    }
+    if (args.systemException !== undefined) {
+      this.systemException = args.systemException;
+    }
+  }
+};
+NoteStore_setSharedNotebookRecipientSettings_result.prototype = {};
+NoteStore_setSharedNotebookRecipientSettings_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.I32) {
+        this.success = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.userException = new EDAMUserException();
+        this.userException.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.notFoundException = new EDAMNotFoundException();
+        this.notFoundException.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.systemException = new EDAMSystemException();
+        this.systemException.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+NoteStore_setSharedNotebookRecipientSettings_result.prototype.write = function(output) {
+  output.writeStructBegin('NoteStore_setSharedNotebookRecipientSettings_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.I32, 0);
+    output.writeI32(this.success);
+    output.writeFieldEnd();
+  }
+  if (this.userException !== null && this.userException !== undefined) {
+    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
+    this.userException.write(output);
+    output.writeFieldEnd();
+  }
+  if (this.notFoundException !== null && this.notFoundException !== undefined) {
+    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 2);
+    this.notFoundException.write(output);
+    output.writeFieldEnd();
+  }
+  if (this.systemException !== null && this.systemException !== undefined) {
+    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 3);
+    this.systemException.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
 NoteStore_sendMessageToSharedNotebookMembers_args = function(args) {
   this.authenticationToken = null;
   this.notebookGuid = null;
@@ -13472,12 +13668,16 @@ NoteStore_stopSharingNote_result.prototype.write = function(output) {
 NoteStore_authenticateToSharedNote_args = function(args) {
   this.guid = null;
   this.noteKey = null;
+  this.authenticationToken = null;
   if (args) {
     if (args.guid !== undefined) {
       this.guid = args.guid;
     }
     if (args.noteKey !== undefined) {
       this.noteKey = args.noteKey;
+    }
+    if (args.authenticationToken !== undefined) {
+      this.authenticationToken = args.authenticationToken;
     }
   }
 };
@@ -13509,6 +13709,13 @@ NoteStore_authenticateToSharedNote_args.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
+      case 3:
+      if (ftype == Thrift.Type.STRING) {
+        this.authenticationToken = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
       default:
         input.skip(ftype);
     }
@@ -13528,6 +13735,11 @@ NoteStore_authenticateToSharedNote_args.prototype.write = function(output) {
   if (this.noteKey !== null && this.noteKey !== undefined) {
     output.writeFieldBegin('noteKey', Thrift.Type.STRING, 2);
     output.writeString(this.noteKey);
+    output.writeFieldEnd();
+  }
+  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
+    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 3);
+    output.writeString(this.authenticationToken);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -16849,6 +17061,57 @@ NoteStoreClient.prototype.recv_updateSharedNotebook = function() {
   }
   throw 'updateSharedNotebook failed: unknown result';
 };
+NoteStoreClient.prototype.setSharedNotebookRecipientSettings = function(authenticationToken, sharedNotebookId, recipientSettings, callback) {
+  if (callback === undefined) {
+    this.send_setSharedNotebookRecipientSettings(authenticationToken, sharedNotebookId, recipientSettings);
+    return this.recv_setSharedNotebookRecipientSettings();
+  } else {
+    var postData = this.send_setSharedNotebookRecipientSettings(authenticationToken, sharedNotebookId, recipientSettings, true);
+    return this.output.getTransport()
+      .send(this, postData, arguments, this.recv_setSharedNotebookRecipientSettings);
+  }
+};
+
+NoteStoreClient.prototype.send_setSharedNotebookRecipientSettings = function(authenticationToken, sharedNotebookId, recipientSettings, callback) {
+  this.output.writeMessageBegin('setSharedNotebookRecipientSettings', Thrift.MessageType.CALL, this.seqid);
+  var args = new NoteStore_setSharedNotebookRecipientSettings_args();
+  args.authenticationToken = authenticationToken;
+  args.sharedNotebookId = sharedNotebookId;
+  args.recipientSettings = recipientSettings;
+  args.write(this.output);
+  this.output.writeMessageEnd();
+  return this.output.getTransport().flush(callback);
+};
+
+NoteStoreClient.prototype.recv_setSharedNotebookRecipientSettings = function() {
+  var ret = this.input.readMessageBegin();
+  var fname = ret.fname;
+  var mtype = ret.mtype;
+  var rseqid = ret.rseqid;
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(this.input);
+    this.input.readMessageEnd();
+    throw x;
+  }
+  var result = new NoteStore_setSharedNotebookRecipientSettings_result();
+  result.read(this.input);
+  this.input.readMessageEnd();
+
+  if (null !== result.userException) {
+    throw result.userException;
+  }
+  if (null !== result.notFoundException) {
+    throw result.notFoundException;
+  }
+  if (null !== result.systemException) {
+    throw result.systemException;
+  }
+  if (null !== result.success) {
+    return result.success;
+  }
+  throw 'setSharedNotebookRecipientSettings failed: unknown result';
+};
 NoteStoreClient.prototype.sendMessageToSharedNotebookMembers = function(authenticationToken, notebookGuid, messageText, recipients, callback) {
   if (callback === undefined) {
     this.send_sendMessageToSharedNotebookMembers(authenticationToken, notebookGuid, messageText, recipients);
@@ -17442,22 +17705,23 @@ NoteStoreClient.prototype.recv_stopSharingNote = function() {
   }
   return;
 };
-NoteStoreClient.prototype.authenticateToSharedNote = function(guid, noteKey, callback) {
+NoteStoreClient.prototype.authenticateToSharedNote = function(guid, noteKey, authenticationToken, callback) {
   if (callback === undefined) {
-    this.send_authenticateToSharedNote(guid, noteKey);
+    this.send_authenticateToSharedNote(guid, noteKey, authenticationToken);
     return this.recv_authenticateToSharedNote();
   } else {
-    var postData = this.send_authenticateToSharedNote(guid, noteKey, true);
+    var postData = this.send_authenticateToSharedNote(guid, noteKey, authenticationToken, true);
     return this.output.getTransport()
       .send(this, postData, arguments, this.recv_authenticateToSharedNote);
   }
 };
 
-NoteStoreClient.prototype.send_authenticateToSharedNote = function(guid, noteKey, callback) {
+NoteStoreClient.prototype.send_authenticateToSharedNote = function(guid, noteKey, authenticationToken, callback) {
   this.output.writeMessageBegin('authenticateToSharedNote', Thrift.MessageType.CALL, this.seqid);
   var args = new NoteStore_authenticateToSharedNote_args();
   args.guid = guid;
   args.noteKey = noteKey;
+  args.authenticationToken = authenticationToken;
   args.write(this.output);
   this.output.writeMessageEnd();
   return this.output.getTransport().flush(callback);

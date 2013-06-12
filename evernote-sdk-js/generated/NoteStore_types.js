@@ -2363,6 +2363,7 @@ RelatedQuery = function(args) {
   this.noteGuid = null;
   this.plainText = null;
   this.filter = null;
+  this.referenceUri = null;
   if (args) {
     if (args.noteGuid !== undefined) {
       this.noteGuid = args.noteGuid;
@@ -2372,6 +2373,9 @@ RelatedQuery = function(args) {
     }
     if (args.filter !== undefined) {
       this.filter = args.filter;
+    }
+    if (args.referenceUri !== undefined) {
+      this.referenceUri = args.referenceUri;
     }
   }
 };
@@ -2411,6 +2415,13 @@ RelatedQuery.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
+      case 4:
+      if (ftype == Thrift.Type.STRING) {
+        this.referenceUri = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
       default:
         input.skip(ftype);
     }
@@ -2435,6 +2446,11 @@ RelatedQuery.prototype.write = function(output) {
   if (this.filter !== null && this.filter !== undefined) {
     output.writeFieldBegin('filter', Thrift.Type.STRUCT, 3);
     this.filter.write(output);
+    output.writeFieldEnd();
+  }
+  if (this.referenceUri !== null && this.referenceUri !== undefined) {
+    output.writeFieldBegin('referenceUri', Thrift.Type.STRING, 4);
+    output.writeString(this.referenceUri);
     output.writeFieldEnd();
   }
   output.writeFieldStop();

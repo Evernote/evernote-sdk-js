@@ -10,7 +10,7 @@
 UserStore_checkVersion_args = function(args) {
   this.clientName = null;
   this.edamVersionMajor = 1;
-  this.edamVersionMinor = 24;
+  this.edamVersionMinor = 25;
   if (args) {
     if (args.clientName !== undefined) {
       this.clientName = args.clientName;
@@ -254,6 +254,7 @@ UserStore_authenticate_args = function(args) {
   this.password = null;
   this.consumerKey = null;
   this.consumerSecret = null;
+  this.supportsTwoFactor = null;
   if (args) {
     if (args.username !== undefined) {
       this.username = args.username;
@@ -266,6 +267,9 @@ UserStore_authenticate_args = function(args) {
     }
     if (args.consumerSecret !== undefined) {
       this.consumerSecret = args.consumerSecret;
+    }
+    if (args.supportsTwoFactor !== undefined) {
+      this.supportsTwoFactor = args.supportsTwoFactor;
     }
   }
 };
@@ -311,6 +315,13 @@ UserStore_authenticate_args.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
+      case 5:
+      if (ftype == Thrift.Type.BOOL) {
+        this.supportsTwoFactor = input.readBool().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
       default:
         input.skip(ftype);
     }
@@ -340,6 +351,11 @@ UserStore_authenticate_args.prototype.write = function(output) {
   if (this.consumerSecret !== null && this.consumerSecret !== undefined) {
     output.writeFieldBegin('consumerSecret', Thrift.Type.STRING, 4);
     output.writeString(this.consumerSecret);
+    output.writeFieldEnd();
+  }
+  if (this.supportsTwoFactor !== null && this.supportsTwoFactor !== undefined) {
+    output.writeFieldBegin('supportsTwoFactor', Thrift.Type.BOOL, 5);
+    output.writeBool(this.supportsTwoFactor);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -447,6 +463,7 @@ UserStore_authenticateLongSession_args = function(args) {
   this.consumerSecret = null;
   this.deviceIdentifier = null;
   this.deviceDescription = null;
+  this.supportsTwoFactor = null;
   if (args) {
     if (args.username !== undefined) {
       this.username = args.username;
@@ -465,6 +482,9 @@ UserStore_authenticateLongSession_args = function(args) {
     }
     if (args.deviceDescription !== undefined) {
       this.deviceDescription = args.deviceDescription;
+    }
+    if (args.supportsTwoFactor !== undefined) {
+      this.supportsTwoFactor = args.supportsTwoFactor;
     }
   }
 };
@@ -524,6 +544,13 @@ UserStore_authenticateLongSession_args.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
+      case 7:
+      if (ftype == Thrift.Type.BOOL) {
+        this.supportsTwoFactor = input.readBool().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
       default:
         input.skip(ftype);
     }
@@ -563,6 +590,11 @@ UserStore_authenticateLongSession_args.prototype.write = function(output) {
   if (this.deviceDescription !== null && this.deviceDescription !== undefined) {
     output.writeFieldBegin('deviceDescription', Thrift.Type.STRING, 6);
     output.writeString(this.deviceDescription);
+    output.writeFieldEnd();
+  }
+  if (this.supportsTwoFactor !== null && this.supportsTwoFactor !== undefined) {
+    output.writeFieldBegin('supportsTwoFactor', Thrift.Type.BOOL, 7);
+    output.writeBool(this.supportsTwoFactor);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -643,6 +675,197 @@ UserStore_authenticateLongSession_result.prototype.read = function(input) {
 
 UserStore_authenticateLongSession_result.prototype.write = function(output) {
   output.writeStructBegin('UserStore_authenticateLongSession_result');
+  if (this.success !== null && this.success !== undefined) {
+    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
+    this.success.write(output);
+    output.writeFieldEnd();
+  }
+  if (this.userException !== null && this.userException !== undefined) {
+    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
+    this.userException.write(output);
+    output.writeFieldEnd();
+  }
+  if (this.systemException !== null && this.systemException !== undefined) {
+    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
+    this.systemException.write(output);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+UserStore_completeTwoFactorAuthentication_args = function(args) {
+  this.authenticationToken = null;
+  this.oneTimeCode = null;
+  this.deviceIdentifier = null;
+  this.deviceDescription = null;
+  if (args) {
+    if (args.authenticationToken !== undefined) {
+      this.authenticationToken = args.authenticationToken;
+    }
+    if (args.oneTimeCode !== undefined) {
+      this.oneTimeCode = args.oneTimeCode;
+    }
+    if (args.deviceIdentifier !== undefined) {
+      this.deviceIdentifier = args.deviceIdentifier;
+    }
+    if (args.deviceDescription !== undefined) {
+      this.deviceDescription = args.deviceDescription;
+    }
+  }
+};
+UserStore_completeTwoFactorAuthentication_args.prototype = {};
+UserStore_completeTwoFactorAuthentication_args.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.STRING) {
+        this.authenticationToken = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRING) {
+        this.oneTimeCode = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 3:
+      if (ftype == Thrift.Type.STRING) {
+        this.deviceIdentifier = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 4:
+      if (ftype == Thrift.Type.STRING) {
+        this.deviceDescription = input.readString().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+UserStore_completeTwoFactorAuthentication_args.prototype.write = function(output) {
+  output.writeStructBegin('UserStore_completeTwoFactorAuthentication_args');
+  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
+    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
+    output.writeString(this.authenticationToken);
+    output.writeFieldEnd();
+  }
+  if (this.oneTimeCode !== null && this.oneTimeCode !== undefined) {
+    output.writeFieldBegin('oneTimeCode', Thrift.Type.STRING, 2);
+    output.writeString(this.oneTimeCode);
+    output.writeFieldEnd();
+  }
+  if (this.deviceIdentifier !== null && this.deviceIdentifier !== undefined) {
+    output.writeFieldBegin('deviceIdentifier', Thrift.Type.STRING, 3);
+    output.writeString(this.deviceIdentifier);
+    output.writeFieldEnd();
+  }
+  if (this.deviceDescription !== null && this.deviceDescription !== undefined) {
+    output.writeFieldBegin('deviceDescription', Thrift.Type.STRING, 4);
+    output.writeString(this.deviceDescription);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
+UserStore_completeTwoFactorAuthentication_result = function(args) {
+  this.success = null;
+  this.userException = null;
+  this.systemException = null;
+  if (args instanceof EDAMUserException) {
+    this.userException = args;
+    return;
+  }
+  if (args instanceof EDAMSystemException) {
+    this.systemException = args;
+    return;
+  }
+  if (args) {
+    if (args.success !== undefined) {
+      this.success = args.success;
+    }
+    if (args.userException !== undefined) {
+      this.userException = args.userException;
+    }
+    if (args.systemException !== undefined) {
+      this.systemException = args.systemException;
+    }
+  }
+};
+UserStore_completeTwoFactorAuthentication_result.prototype = {};
+UserStore_completeTwoFactorAuthentication_result.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.success = new AuthenticationResult();
+        this.success.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 1:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.userException = new EDAMUserException();
+        this.userException.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.systemException = new EDAMSystemException();
+        this.systemException.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+UserStore_completeTwoFactorAuthentication_result.prototype.write = function(output) {
+  output.writeStructBegin('UserStore_completeTwoFactorAuthentication_result');
   if (this.success !== null && this.success !== undefined) {
     output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
     this.success.write(output);
@@ -1776,24 +1999,25 @@ UserStoreClient.prototype.recv_getBootstrapInfo = function() {
   }
   throw 'getBootstrapInfo failed: unknown result';
 };
-UserStoreClient.prototype.authenticate = function(username, password, consumerKey, consumerSecret, callback) {
+UserStoreClient.prototype.authenticate = function(username, password, consumerKey, consumerSecret, supportsTwoFactor, callback) {
   if (callback === undefined) {
-    this.send_authenticate(username, password, consumerKey, consumerSecret);
+    this.send_authenticate(username, password, consumerKey, consumerSecret, supportsTwoFactor);
     return this.recv_authenticate();
   } else {
-    var postData = this.send_authenticate(username, password, consumerKey, consumerSecret, true);
+    var postData = this.send_authenticate(username, password, consumerKey, consumerSecret, supportsTwoFactor, true);
     return this.output.getTransport()
       .send(this, postData, arguments, this.recv_authenticate);
   }
 };
 
-UserStoreClient.prototype.send_authenticate = function(username, password, consumerKey, consumerSecret, callback) {
+UserStoreClient.prototype.send_authenticate = function(username, password, consumerKey, consumerSecret, supportsTwoFactor, callback) {
   this.output.writeMessageBegin('authenticate', Thrift.MessageType.CALL, this.seqid);
   var args = new UserStore_authenticate_args();
   args.username = username;
   args.password = password;
   args.consumerKey = consumerKey;
   args.consumerSecret = consumerSecret;
+  args.supportsTwoFactor = supportsTwoFactor;
   args.write(this.output);
   this.output.writeMessageEnd();
   return this.output.getTransport().flush(callback);
@@ -1825,18 +2049,18 @@ UserStoreClient.prototype.recv_authenticate = function() {
   }
   throw 'authenticate failed: unknown result';
 };
-UserStoreClient.prototype.authenticateLongSession = function(username, password, consumerKey, consumerSecret, deviceIdentifier, deviceDescription, callback) {
+UserStoreClient.prototype.authenticateLongSession = function(username, password, consumerKey, consumerSecret, deviceIdentifier, deviceDescription, supportsTwoFactor, callback) {
   if (callback === undefined) {
-    this.send_authenticateLongSession(username, password, consumerKey, consumerSecret, deviceIdentifier, deviceDescription);
+    this.send_authenticateLongSession(username, password, consumerKey, consumerSecret, deviceIdentifier, deviceDescription, supportsTwoFactor);
     return this.recv_authenticateLongSession();
   } else {
-    var postData = this.send_authenticateLongSession(username, password, consumerKey, consumerSecret, deviceIdentifier, deviceDescription, true);
+    var postData = this.send_authenticateLongSession(username, password, consumerKey, consumerSecret, deviceIdentifier, deviceDescription, supportsTwoFactor, true);
     return this.output.getTransport()
       .send(this, postData, arguments, this.recv_authenticateLongSession);
   }
 };
 
-UserStoreClient.prototype.send_authenticateLongSession = function(username, password, consumerKey, consumerSecret, deviceIdentifier, deviceDescription, callback) {
+UserStoreClient.prototype.send_authenticateLongSession = function(username, password, consumerKey, consumerSecret, deviceIdentifier, deviceDescription, supportsTwoFactor, callback) {
   this.output.writeMessageBegin('authenticateLongSession', Thrift.MessageType.CALL, this.seqid);
   var args = new UserStore_authenticateLongSession_args();
   args.username = username;
@@ -1845,6 +2069,7 @@ UserStoreClient.prototype.send_authenticateLongSession = function(username, pass
   args.consumerSecret = consumerSecret;
   args.deviceIdentifier = deviceIdentifier;
   args.deviceDescription = deviceDescription;
+  args.supportsTwoFactor = supportsTwoFactor;
   args.write(this.output);
   this.output.writeMessageEnd();
   return this.output.getTransport().flush(callback);
@@ -1875,6 +2100,55 @@ UserStoreClient.prototype.recv_authenticateLongSession = function() {
     return result.success;
   }
   throw 'authenticateLongSession failed: unknown result';
+};
+UserStoreClient.prototype.completeTwoFactorAuthentication = function(authenticationToken, oneTimeCode, deviceIdentifier, deviceDescription, callback) {
+  if (callback === undefined) {
+    this.send_completeTwoFactorAuthentication(authenticationToken, oneTimeCode, deviceIdentifier, deviceDescription);
+    return this.recv_completeTwoFactorAuthentication();
+  } else {
+    var postData = this.send_completeTwoFactorAuthentication(authenticationToken, oneTimeCode, deviceIdentifier, deviceDescription, true);
+    return this.output.getTransport()
+      .send(this, postData, arguments, this.recv_completeTwoFactorAuthentication);
+  }
+};
+
+UserStoreClient.prototype.send_completeTwoFactorAuthentication = function(authenticationToken, oneTimeCode, deviceIdentifier, deviceDescription, callback) {
+  this.output.writeMessageBegin('completeTwoFactorAuthentication', Thrift.MessageType.CALL, this.seqid);
+  var args = new UserStore_completeTwoFactorAuthentication_args();
+  args.authenticationToken = authenticationToken;
+  args.oneTimeCode = oneTimeCode;
+  args.deviceIdentifier = deviceIdentifier;
+  args.deviceDescription = deviceDescription;
+  args.write(this.output);
+  this.output.writeMessageEnd();
+  return this.output.getTransport().flush(callback);
+};
+
+UserStoreClient.prototype.recv_completeTwoFactorAuthentication = function() {
+  var ret = this.input.readMessageBegin();
+  var fname = ret.fname;
+  var mtype = ret.mtype;
+  var rseqid = ret.rseqid;
+  if (mtype == Thrift.MessageType.EXCEPTION) {
+    var x = new Thrift.TApplicationException();
+    x.read(this.input);
+    this.input.readMessageEnd();
+    throw x;
+  }
+  var result = new UserStore_completeTwoFactorAuthentication_result();
+  result.read(this.input);
+  this.input.readMessageEnd();
+
+  if (null !== result.userException) {
+    throw result.userException;
+  }
+  if (null !== result.systemException) {
+    throw result.systemException;
+  }
+  if (null !== result.success) {
+    return result.success;
+  }
+  throw 'completeTwoFactorAuthentication failed: unknown result';
 };
 UserStoreClient.prototype.revokeLongSession = function(authenticationToken, callback) {
   if (callback === undefined) {

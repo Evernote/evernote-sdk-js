@@ -2399,6 +2399,8 @@ NoteAttributes = function(args) {
   this.applicationData = null;
   this.lastEditedBy = null;
   this.classifications = null;
+  this.creatorId = null;
+  this.lastEditorId = null;
   if (args) {
     if (args.subjectDate !== undefined) {
       this.subjectDate = args.subjectDate;
@@ -2450,6 +2452,12 @@ NoteAttributes = function(args) {
     }
     if (args.classifications !== undefined) {
       this.classifications = args.classifications;
+    }
+    if (args.creatorId !== undefined) {
+      this.creatorId = args.creatorId;
+    }
+    if (args.lastEditorId !== undefined) {
+      this.lastEditorId = args.lastEditorId;
     }
   }
 };
@@ -2609,6 +2617,20 @@ NoteAttributes.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
+      case 27:
+      if (ftype == Thrift.Type.I32) {
+        this.creatorId = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 28:
+      if (ftype == Thrift.Type.I32) {
+        this.lastEditorId = input.readI32().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
       default:
         input.skip(ftype);
     }
@@ -2713,6 +2735,16 @@ NoteAttributes.prototype.write = function(output) {
       }
     }
     output.writeMapEnd();
+    output.writeFieldEnd();
+  }
+  if (this.creatorId !== null && this.creatorId !== undefined) {
+    output.writeFieldBegin('creatorId', Thrift.Type.I32, 27);
+    output.writeI32(this.creatorId);
+    output.writeFieldEnd();
+  }
+  if (this.lastEditorId !== null && this.lastEditorId !== undefined) {
+    output.writeFieldBegin('lastEditorId', Thrift.Type.I32, 28);
+    output.writeI32(this.lastEditorId);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
@@ -3455,6 +3487,72 @@ SavedSearch.prototype.write = function(output) {
   return;
 };
 
+SharedNotebookRecipientSettings = function(args) {
+  this.reminderNotifyEmail = null;
+  this.reminderNotifyInApp = null;
+  if (args) {
+    if (args.reminderNotifyEmail !== undefined) {
+      this.reminderNotifyEmail = args.reminderNotifyEmail;
+    }
+    if (args.reminderNotifyInApp !== undefined) {
+      this.reminderNotifyInApp = args.reminderNotifyInApp;
+    }
+  }
+};
+SharedNotebookRecipientSettings.prototype = {};
+SharedNotebookRecipientSettings.prototype.read = function(input) {
+  input.readStructBegin();
+  while (true)
+  {
+    var ret = input.readFieldBegin();
+    var fname = ret.fname;
+    var ftype = ret.ftype;
+    var fid = ret.fid;
+    if (ftype == Thrift.Type.STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+      if (ftype == Thrift.Type.BOOL) {
+        this.reminderNotifyEmail = input.readBool().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      case 2:
+      if (ftype == Thrift.Type.BOOL) {
+        this.reminderNotifyInApp = input.readBool().value;
+      } else {
+        input.skip(ftype);
+      }
+      break;
+      default:
+        input.skip(ftype);
+    }
+    input.readFieldEnd();
+  }
+  input.readStructEnd();
+  return;
+};
+
+SharedNotebookRecipientSettings.prototype.write = function(output) {
+  output.writeStructBegin('SharedNotebookRecipientSettings');
+  if (this.reminderNotifyEmail !== null && this.reminderNotifyEmail !== undefined) {
+    output.writeFieldBegin('reminderNotifyEmail', Thrift.Type.BOOL, 1);
+    output.writeBool(this.reminderNotifyEmail);
+    output.writeFieldEnd();
+  }
+  if (this.reminderNotifyInApp !== null && this.reminderNotifyInApp !== undefined) {
+    output.writeFieldBegin('reminderNotifyInApp', Thrift.Type.BOOL, 2);
+    output.writeBool(this.reminderNotifyInApp);
+    output.writeFieldEnd();
+  }
+  output.writeFieldStop();
+  output.writeStructEnd();
+  return;
+};
+
 SharedNotebook = function(args) {
   this.id = null;
   this.userId = null;
@@ -3468,6 +3566,7 @@ SharedNotebook = function(args) {
   this.username = null;
   this.privilege = null;
   this.allowPreview = null;
+  this.recipientSettings = null;
   if (args) {
     if (args.id !== undefined) {
       this.id = args.id;
@@ -3504,6 +3603,9 @@ SharedNotebook = function(args) {
     }
     if (args.allowPreview !== undefined) {
       this.allowPreview = args.allowPreview;
+    }
+    if (args.recipientSettings !== undefined) {
+      this.recipientSettings = args.recipientSettings;
     }
   }
 };
@@ -3605,6 +3707,14 @@ SharedNotebook.prototype.read = function(input) {
         input.skip(ftype);
       }
       break;
+      case 13:
+      if (ftype == Thrift.Type.STRUCT) {
+        this.recipientSettings = new SharedNotebookRecipientSettings();
+        this.recipientSettings.read(input);
+      } else {
+        input.skip(ftype);
+      }
+      break;
       default:
         input.skip(ftype);
     }
@@ -3674,6 +3784,11 @@ SharedNotebook.prototype.write = function(output) {
   if (this.allowPreview !== null && this.allowPreview !== undefined) {
     output.writeFieldBegin('allowPreview', Thrift.Type.BOOL, 12);
     output.writeBool(this.allowPreview);
+    output.writeFieldEnd();
+  }
+  if (this.recipientSettings !== null && this.recipientSettings !== undefined) {
+    output.writeFieldBegin('recipientSettings', Thrift.Type.STRUCT, 13);
+    this.recipientSettings.write(output);
     output.writeFieldEnd();
   }
   output.writeFieldStop();
