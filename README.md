@@ -24,9 +24,11 @@ Details on the OAuth process are available [here](http://dev.evernote.com/start/
 Here are the basic steps for OAuth using the jsOAuth library.
 
 (Change this to http://www.evernote.com, when you are ready to activate on production).
+    
     var hostName = "http://sandbox.evernote.com"; 
 
 Step 1:
+
     var options,oauth;
      options = {
         consumerKey: <your consumer key>,
@@ -38,6 +40,7 @@ Step 1:
     oauth.request({'method': 'GET', 'url': hostName + '/oauth', 'success': success, 'failure': failure});
 
 Step 2:
+
    In the callback `success`, get the `oauth_token` and the `oauth_token_secret`.
    Redirect the user for authorization to :  evernoteHostName + '/OAuth.action?oauth_token=' + <token from step 1>
 
