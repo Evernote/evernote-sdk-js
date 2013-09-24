@@ -42,7 +42,7 @@ Step 1:
 Step 2:
 
    In the callback `success`, get the `oauth_token` and the `oauth_token_secret`.
-   Redirect the user for authorization to :  evernoteHostName + '/OAuth.action?oauth_token=' + <token from step 1>
+   Redirect the user for authorization to :  `evernoteHostName + '/OAuth.action?oauth_token=' + <token from step 1>`
 
 Step 3:
 
