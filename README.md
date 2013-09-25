@@ -106,7 +106,7 @@ To obtain the access token
 ```javascript
 client.getAccessToken(oauthToken, oauthTokenSecret, oauthVerifier, function(error, oauthAccessToken, oauthAccessTokenSecret, results) {
   // store 'oauthAccessToken' somewhere
-)};
+});
 ```
 Now you can make other API calls
 ```javascript
