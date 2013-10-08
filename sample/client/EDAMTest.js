@@ -33,22 +33,22 @@ var client = new Evernote.Client({token: authToken, sandbox: true});
 var userStore = client.getUserStore();
 
 userStore.checkVersion(
-    "Evernote EDAMTest (Node.js)",
-    Evernote.EDAM_VERSION_MAJOR,
-    Evernote.EDAM_VERSION_MINOR,
-    function(versionOk) {
-      console.log("Is my Evernote API version up to date? " + versionOk);
-      console.log();
-      if (!versionOk) {
-        process.exit(1);
-      }
+  "Evernote EDAMTest (Node.js)",
+  Evernote.EDAM_VERSION_MAJOR,
+  Evernote.EDAM_VERSION_MINOR,
+  function(err, versionOk) {
+    console.log("Is my Evernote API version up to date? " + versionOk);
+    console.log();
+    if (!versionOk) {
+      process.exit(1);
     }
-    );
+  }
+);
 
 var noteStore = client.getNoteStore();
 
 // List all of the notebooks in the user's account
-var notebooks = noteStore.listNotebooks(function(notebooks) {
+var notebooks = noteStore.listNotebooks(function(err, notebooks) {
   console.log("Found " + notebooks.length + " notebooks:");
   for (var i in notebooks) {
     console.log("  * " + notebooks[i].name);
@@ -98,7 +98,7 @@ note.content += '</en-note>';
 // Finally, send the new note to Evernote using the createNote method
 // The new Note object that is returned will contain server-generated
 // attributes such as the new note's unique GUID.
-noteStore.createNote(note, function(createdNote) {
+noteStore.createNote(note, function(err, createdNote) {
   console.log();
   console.log("Creating a new note in the default notebook");
   console.log();

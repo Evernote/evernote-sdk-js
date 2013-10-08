@@ -1,4 +1,4 @@
-Evernote SDK for JavaScript version 0.0.6
+Evernote SDK for JavaScript
 ==================================
 Evernote API version 1.25
 
@@ -54,7 +54,7 @@ In your callback url, get the `oauth_verifier` and the `oauth_token` from the qu
 Now get the final token.
 
     oauth.request({'method': 'GET', 'url': hostName + '/oauth',
-                                            'success': success, 'failure': failure});
+                   'success': success, 'failure': failure});
 
 Step 4:
 
@@ -109,7 +109,7 @@ Now you can make other API calls
 ```javascript
 var client = new Evernote.Client({token: oauthAccessToken});
 var noteStore = client.getNoteStore();
-notebooks = noteStore.listNotebooks(function(notebooks) {
+notebooks = noteStore.listNotebooks(function(err, notebooks) {
   // run this code
 });
 ```
@@ -121,7 +121,7 @@ Once you acquire token, you can use UserStore. For example, if you want to call 
 ```javascript
 var client = new Evernote.Client(token: token);
 var userStore = client.getUserStore();
-userStore.getUser(function(user) {
+userStore.getUser(function(err, user) {
   // run this code
 });
 ```
@@ -131,7 +131,7 @@ You can omit authenticationToken in the arguments of UserStore/NoteStore functio
 If you want to call NoteStore.listNotebooks:
 ```javascript
 var noteStore = client.getNoteStore();
-noteStore.listNotebooks(function(notebooks) {
+noteStore.listNotebooks(function(err, notebooks) {
   // run this code
 });
 ```
@@ -141,8 +141,8 @@ If you want to get tags for linked notebooks:
 ```javascript
 var linkedNotebook = noteStore.listLinkedNotebooks[0]; // any notebook
 var sharedNoteStore = client.sharedNoteStore(linkedNotebook);
-sharedNoteStore.getSharedNotebookByAuth(function(sharedNotebook) {
-  sharedNoteStore.listTagsByNotebook(sharedNotebook.notebookGuid, function(tags) {
+sharedNoteStore.getSharedNotebookByAuth(function(err, sharedNotebook) {
+  sharedNoteStore.listTagsByNotebook(err2, sharedNotebook.notebookGuid, function(tags) {
     // run this code
   });
 });
@@ -151,9 +151,9 @@ sharedNoteStore.getSharedNotebookByAuth(function(sharedNotebook) {
 ### NoteStore for Business ###
 If you want to get the list of notebooks in your business account:
 ```javascript
-userStore.getUser(function(user) {
+userStore.getUser(function(err, user) {
   if (user.isBusinessUser) {
-    client.getBusinessNoteStore().listNotebooks(function(notebooks) {
+    client.getBusinessNoteStore().listNotebooks(function(err, notebooks) {
       // run this code
     });
   }
@@ -168,7 +168,7 @@ This module provides some utility methods to deal with Evernote Business.
 To list all business notebooks the user can access
 ```javascript
 var client = new Evernote.Client({token: token})
-client.listBusinessNotebooks(function(businessNotebooks) {
+client.listBusinessNotebooks(function(err, businessNotebooks) {
   // run this code
 });
 ```
@@ -177,8 +177,8 @@ client.listBusinessNotebooks(function(businessNotebooks) {
 To create a business note in a business notebook
 ```javascript
 var note = new Evernote.Note();
-client.listBusinessNotebooks(function(notebooks) {
-  client.createNoteInBusinessNotebook(note, businessNotebooks[0], function(createdNote) {
+client.listBusinessNotebooks(function(err, notebooks) {
+  client.createNoteInBusinessNotebook(note, businessNotebooks[0], function(err, createdNote) {
     // run this code
   });
 });
@@ -188,15 +188,15 @@ client.listBusinessNotebooks(function(notebooks) {
 To create a business notebook
 ```javascript
 var notebook = new Evernote.Notebook();
-client.createBusinessNotebook(notebook, function(createdNotebook) {
+client.createBusinessNotebook(notebook, function(err, createdNotebook) {
   // run this code
 });
 ```
 
 ### Get a notebook corresponding to the given business notebook ###
 ```javascript
-client.listBusinessNotebooks(function(businessNotebooks) {
-  client.getCorrespondingNotebook(businessNotebooks[0], function(notebook) {
+client.listBusinessNotebooks(function(err, businessNotebooks) {
+  client.getCorrespondingNotebook(businessNotebooks[0], function(err, notebook) {
     // run this code
   });
 });
