@@ -21,10 +21,14 @@ exports.createNoteInBusinessNotebook = function(note, businessNotebook, callback
   var self = this;
   var sharedNoteStore = self.getSharedNoteStore(businessNotebook);
   sharedNoteStore.getSharedNotebookByAuth(function(err, sharedNotebook) {
-    note.notebookGuid = sharedNotebook.notebookGuid;
-    sharedNoteStore.createNote(note, function(err, createdNote) {
-      callback(err, createdNote);
-    });
+    if (err) {
+      callback(err);
+    } else {
+      note.notebookGuid = sharedNotebook.notebookGuid;
+      sharedNoteStore.createNote(note, function(err, createdNote) {
+        callback(err, createdNote);
+      });
+    }
   });
 };
 
@@ -43,25 +47,39 @@ exports.createBusinessNotebook = function(notebook, callback) {
   var self = this;
   var businessNoteStore = self.getBusinessNoteStore();
   businessNoteStore.createNotebook(notebook, function(err, businessNotebook) {
-    var sharedNotebook = businessNotebook.sharedNotebooks[0];
-    var linkedNotebook = new Evernote.LinkedNotebook();
-    linkedNotebook.shareKey = sharedNotebook.shareKey;
-    linkedNotebook.shareName = businessNotebook.name;
-    linkedNotebook.username = self.bizUser.username;
-    linkedNotebook.shardId = self.bizUser.shardId;
-    self.getNoteStore().createLinkedNotebook(linkedNotebook, function(err, createdLinkedNotebook) {
-      callback(err, createdLinkedNotebook);
-    });
+    if (err) {
+      callback(err);
+    } else {
+      var sharedNotebook = businessNotebook.sharedNotebooks[0];
+      var linkedNotebook = new Evernote.LinkedNotebook();
+      linkedNotebook.shareKey = sharedNotebook.shareKey;
+      linkedNotebook.shareName = businessNotebook.name;
+      linkedNotebook.username = self.bizUser.username;
+      linkedNotebook.shardId = self.bizUser.shardId;
+      self.getNoteStore().createLinkedNotebook(linkedNotebook,
+        function(err, createdLinkedNotebook) {
+          callback(err, createdLinkedNotebook);
+        }
+      );
+    }
   });
 };
 
 exports.getCorrespondingNotebook = function(businessNotebook, callback) {
   var self = this;
-  self.getSharedNoteStore(businessNotebook).getSharedNotebookByAuth(function(err, sharedNotebook) {
-    self.getBusinessNoteStore().getNotebook(sharedNotebook.notebookGuid, function(err, notebook) {
-      callback(err, notebook);
-    });
-  });
+  self.getSharedNoteStore(businessNotebook).getSharedNotebookByAuth(
+    function(err, sharedNotebook) {
+      if (err) {
+        callback(err);
+      } else {
+        self.getBusinessNoteStore().getNotebook(sharedNotebook.notebookGuid,
+          function(err, notebook) {
+            callback(err, notebook);
+          }
+        );
+      }
+    }
+  );
 };
 
 exports.isBusinessUser = function() {

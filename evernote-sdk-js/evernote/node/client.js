@@ -39,8 +39,8 @@ var Client = function(options) {
 Client.prototype.getRequestToken = function(callbackUrl, callback) {
   var self = this;
   var oauth = self.getOAuthClient(callbackUrl);
-  oauth.getOAuthRequestToken(function(error, oauthToken, oauthTokenSecret, results) {
-    callback(error, oauthToken, oauthTokenSecret, results)
+  oauth.getOAuthRequestToken(function(err, oauthToken, oauthTokenSecret, results) {
+    callback(err, oauthToken, oauthTokenSecret, results)
   });
 };
 
@@ -53,8 +53,8 @@ Client.prototype.getAccessToken = function(oauthToken, oauthTokenSecret, oauthVe
   var self = this;
   var oauth = self.getOAuthClient('');
   oauth.getOAuthAccessToken(oauthToken, oauthTokenSecret, oauthVerifier,
-    function(error, oauthAccessToken, oauthAccessTokenSecret, results) {
-      callback(error, oauthAccessToken, oauthAccessTokenSecret, results);
+    function(err, oauthAccessToken, oauthAccessTokenSecret, results) {
+      callback(err, oauthAccessToken, oauthAccessTokenSecret, results);
       self.token = oauthAccessToken;
     });
 };
