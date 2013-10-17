@@ -20,49 +20,66 @@
 exports.createNoteInBusinessNotebook = function(note, businessNotebook, callback) {
   var self = this;
   var sharedNoteStore = self.getSharedNoteStore(businessNotebook);
-  sharedNoteStore.getSharedNotebookByAuth(function(sharedNotebook) {
-    note.notebookGuid = sharedNotebook.notebookGuid;
-    sharedNoteStore.createNote(note, function(createdNote) {
-      callback(createdNote);
-    });
+  sharedNoteStore.getSharedNotebookByAuth(function(err, sharedNotebook) {
+    if (err) {
+      callback(err);
+    } else {
+      note.notebookGuid = sharedNotebook.notebookGuid;
+      sharedNoteStore.createNote(note, function(err, createdNote) {
+        callback(err, createdNote);
+      });
+    }
   });
 };
 
 exports.listBusinessNotebooks = function(callback) {
   var self = this;
-  self.getNoteStore().listLinkedNotebooks(function(linkedNotebooks) {
+  self.getNoteStore().listLinkedNotebooks(function(err, linkedNotebooks) {
     var businessNotebooks = [];
     for (i in linkedNotebooks) {
       if (linkedNotebooks[i].businessId) businessNotebooks.push(linkedNotebooks[i]);
     }
-    callback(businessNotebooks);
+    callback(err, businessNotebooks);
   });
 };
 
 exports.createBusinessNotebook = function(notebook, callback) {
   var self = this;
   var businessNoteStore = self.getBusinessNoteStore();
-  businessNoteStore.createNotebook(notebook, function(businessNotebook) {
-    console.log(businessNotebook);
-    var sharedNotebook = businessNotebook.sharedNotebooks[0];
-    var linkedNotebook = new Evernote.LinkedNotebook();
-    linkedNotebook.shareKey = sharedNotebook.shareKey;
-    linkedNotebook.shareName = businessNotebook.name;
-    linkedNotebook.username = self.bizUser.username;
-    linkedNotebook.shardId = self.bizUser.shardId;
-    self.getNoteStore().createLinkedNotebook(linkedNotebook, function(createdLinkedNotebook) {
-      callback(createdLinkedNotebook);
-    });
+  businessNoteStore.createNotebook(notebook, function(err, businessNotebook) {
+    if (err) {
+      callback(err);
+    } else {
+      var sharedNotebook = businessNotebook.sharedNotebooks[0];
+      var linkedNotebook = new Evernote.LinkedNotebook();
+      linkedNotebook.shareKey = sharedNotebook.shareKey;
+      linkedNotebook.shareName = businessNotebook.name;
+      linkedNotebook.username = self.bizUser.username;
+      linkedNotebook.shardId = self.bizUser.shardId;
+      self.getNoteStore().createLinkedNotebook(linkedNotebook,
+        function(err, createdLinkedNotebook) {
+          callback(err, createdLinkedNotebook);
+        }
+      );
+    }
   });
 };
 
 exports.getCorrespondingNotebook = function(businessNotebook, callback) {
   var self = this;
-  self.getSharedNoteStore(businessNotebook).getSharedNotebookByAuth(function(sharedNotebook) {
-    self.getBusinessNoteStore().getNotebook(sharedNotebook.notebookGuid, function(notebook) {
-      callback(notebook);
-    });
-  });
+  self.getSharedNoteStore(businessNotebook).getSharedNotebookByAuth(
+    function(err, sharedNotebook) {
+      if (err) {
+        callback(err);
+      } else {
+        self.getBusinessNoteStore().getNotebook(sharedNotebook.notebookGuid,
+          function(err, notebook) {
+            callback(err, notebook);
+          }
+        );
+      }
+    }
+  );
 };
 
 exports.isBusinessUser = function() {

@@ -11,8 +11,8 @@ exports.index = function(req, res) {
       token: token,
       sandbox: config.SANDBOX
     });
-    var note_store = client.getNoteStore();
-    note_store.listNotebooks(token, function(notebooks){
+    var noteStore = client.getNoteStore();
+    noteStore.listNotebooks(function(err, notebooks){
       req.session.notebooks = notebooks;
       res.render('index');
     });

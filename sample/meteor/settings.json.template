@@ -1,0 +1,6 @@
+{
+  "apiConsumerKey" : "YOUR API CONSUMER KEY",
+  "apiConsumerSecret" : "YOUR API CONSUMER SECRET",
+  "sandbox" : true,
+  "callbackUrl": "http://localhost:3000/callback"
+}
