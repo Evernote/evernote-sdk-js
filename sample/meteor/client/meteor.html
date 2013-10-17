@@ -1,0 +1,58 @@
+<head>
+  <title>Evernote Javascript SDK Meteor Demo</title>
+</head>
+
+<body>
+  {{renderPage}}
+</body>
+
+<template name="home">
+  <h1>Evernote Javascript SDK Meteor Demo</h1>
+  <p>
+    This application uses the <a href='http://www.meteor.com/'>Meteor</a> framework to demonstrate the use of OAuth to authenticate to the Evernote web service.
+  </p>
+  <hr/>
+  {{#if error_on}}
+    {{> error}}
+  {{/if}}
+  <h2>Authentication</h2>
+  {{#if loggedIn}}
+    {{> logout}}
+    <h2>Notebooks</h2>
+    {{#if notebooks}}
+      <ul>
+        {{#each notebooks}}
+          <li>{{name}}</li>
+        {{/each}}
+      </ul>
+    {{/if}}
+  {{else}}
+    {{> login}}
+  {{/if}}
+  <hr/>
+  <h2>Current status</h2>
+  <ul>
+    <li><b>NoteStore URL:</b> {{edamNoteStoreUrl}}</li>
+    <li><b>Web API URL prefix:</b> {{edamWebApiUrlPrefix}}</li>
+  </ul>
+  <h3>Token Credentials:</h3>
+  <ul>
+    <li><b>token:</b> {{oauthAccessToken}}</li>
+    <li><b>secret:</b> {{oauthAccessTokenSecret}}</li>
+    <li><b>User ID:</b> {{edamUserId}}</li>
+    <li><b>Expires:</b> {{edamExpires}}</li>
+  </ul>
+</template>
+
+<template name="error">
+  <h2>Error</h2>
+  <p>{{errorMessage}}</p>
+</template>
+
+<template name="login">
+  Click <a href='/login' class='login'>here</a> to connect Evernote.
+</template>
+
+<template name="logout">
+  Click <a href='/logout' class='logout'>here</a> to start over.
+</template>

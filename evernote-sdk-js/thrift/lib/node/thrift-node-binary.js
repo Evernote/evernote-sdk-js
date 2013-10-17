@@ -89,11 +89,14 @@ exports.NodeBinaryHttpTransport = function(url) {
   this.send = function (client, postData, args, recv_method) {
     self.offset = 0;
     args = Array.prototype.slice.call(args, 0);
-    var onerror = args.pop();
-    var callback = args.length > 0 ? args.pop() : onerror;
-    if (typeof callback !== 'function') callback = onerror;
+    var callback = args.pop();
 
-    var purl = Url.parse(self.url);
+    try {
+      var purl = Url.parse(self.url);
+    } catch (err) {
+      callback("Invalid endpoint URL: " + self.url);
+      return;
+    }
     var options = {
       hostname: purl['host'],
       port: purl['protocol'] == 'https' ? 443 : 80,
@@ -111,6 +114,12 @@ exports.NodeBinaryHttpTransport = function(url) {
       });
 
       res.on('end', function() {
+        if (res.headers['content-type'] != 'application/x-thrift') {
+          callback('Bad response content type from "' + self.url + '": '
+            + res.headers['content-type']);
+          return;
+        }
+
         var buffer = new Buffer(dataLength);
         for (var i = 0, len = data.length, pos = 0; i < len; i++) {
           data[i].copy(buffer, pos);
@@ -118,15 +127,15 @@ exports.NodeBinaryHttpTransport = function(url) {
         }
         self.received = bufferToArrayBuffer(buffer);
         try {
-          callback(recv_method.call(client));
+          callback(null, recv_method.call(client));
         } catch(e) {
-          onerror(e);
+          callback(e);
         }
       });
     });
 
     req.on('error', function(e) {
-      onerror(e);
+      callback(e);
     });
 
     req.write(arrayBufferToBuffer(postData));
