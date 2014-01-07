@@ -86,15 +86,16 @@ Client.prototype.getNoteStore = function(noteStoreUrl) {
 Client.prototype.getSharedNoteStore = function(linkedNotebook) {
   var self = this;
   return new Store(Evernote.NoteStoreClient, function(callback) {
-    if (self.sharedToken) {
-      callback(null, self.sharedToken, linkedNotebook.noteStoreUrl);
+    var thisStore = this;
+    if (thisStore.sharedToken) {
+      callback(null, thisStore.sharedToken, linkedNotebook.noteStoreUrl);
     } else {
       var noteStore = new Store(Evernote.NoteStoreClient, function(cb) {
         cb(null, self.token, linkedNotebook.noteStoreUrl);
       });
       noteStore.authenticateToSharedNotebook(linkedNotebook.shareKey, function(err, sharedAuth) {
-        self.sharedToken = sharedAuth.authenticationToken;
-        callback(err, self.sharedToken, linkedNotebook.noteStoreUrl);
+        thisStore.sharedToken = sharedAuth.authenticationToken;
+        callback(err, thisStore.sharedToken, linkedNotebook.noteStoreUrl);
       });
     }
   });
@@ -103,14 +104,15 @@ Client.prototype.getSharedNoteStore = function(linkedNotebook) {
 Client.prototype.getBusinessNoteStore = function() {
   var self = this;
   return new Store(Evernote.NoteStoreClient, function(callback) {
-    if (self.bizToken && self.bizNoteStoreUrl) {
-      callback(null, self.bizToken, self.bizNoteStoreUrl);
+    var thisStore = this;
+    if (thisStore.bizToken && thisStore.bizNoteStoreUrl) {
+      callback(null, thisStore.bizToken, thisStore.bizNoteStoreUrl);
     } else {
       self.getUserStore().authenticateToBusiness(function(err, bizAuth) {
-        self.bizToken = bizAuth.authenticationToken;
-        self.bizNoteStoreUri = bizAuth.noteStoreUrl;
-        self.bizUser = bizAuth.user;
-        callback(err, self.bizToken, self.bizNoteStoreUri);
+        thisStore.bizToken = bizAuth.authenticationToken;
+        thisStore.bizNoteStoreUri = bizAuth.noteStoreUrl;
+        thisStore.bizUser = bizAuth.user;
+        callback(err, thisStore.bizToken, store.bizNoteStoreUri);
       });
     }
   });
