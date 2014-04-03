@@ -112,7 +112,7 @@ Client.prototype.getBusinessNoteStore = function() {
         thisStore.bizToken = bizAuth.authenticationToken;
         thisStore.bizNoteStoreUri = bizAuth.noteStoreUrl;
         thisStore.bizUser = bizAuth.user;
-        callback(err, thisStore.bizToken, store.bizNoteStoreUri);
+        callback(err, thisStore.bizToken, thisStore.bizNoteStoreUri);
       });
     }
   });
