@@ -105,8 +105,8 @@ Client.prototype.getBusinessNoteStore = function() {
   var self = this;
   return new Store(Evernote.NoteStoreClient, function(callback) {
     var thisStore = this;
-    if (thisStore.bizToken && thisStore.bizNoteStoreUrl) {
-      callback(null, thisStore.bizToken, thisStore.bizNoteStoreUrl);
+    if (thisStore.bizToken && thisStore.bizNoteStoreUri) {
+      callback(null, thisStore.bizToken, thisStore.bizNoteStoreUri);
     } else {
       self.getUserStore().authenticateToBusiness(function(err, bizAuth) {
         thisStore.bizToken = bizAuth.authenticationToken;
