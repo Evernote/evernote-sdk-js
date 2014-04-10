@@ -1,4 +1,4 @@
-evernote = require('./base.js').Evernote;
+var evernote = require('./base.js').Evernote;
 evernote.Client = require('./evernote-sdk-js/evernote/node/client.js').Client;
 
 evernote.Data.prototype.__defineGetter__('body', function() {
@@ -18,7 +18,7 @@ evernote.Data.prototype.__defineSetter__('body', function(val) {
   }
 });
 
-BusinessUtils = require('./evernote-sdk-js/evernote/node/client.business-utils.js');
+var BusinessUtils = require('./evernote-sdk-js/evernote/node/client.business-utils.js');
 evernote.Client.prototype.createNoteInBusinessNotebook = BusinessUtils.createNoteInBusinessNotebook;
 evernote.Client.prototype.listBusinessNotebooks = BusinessUtils.listBusinessNotebooks;
 evernote.Client.prototype.createBusinessNotebook = BusinessUtils.createBusinessNotebook;
