@@ -297,6 +297,7 @@ Thrift.BinaryParser = {
     };
     
     p.readMessageEnd = function () {
+        this.transport.offset = 0;
     };
     
     p.readStructBegin = function () {
