@@ -87,7 +87,6 @@ exports.NodeBinaryHttpTransport = function(url) {
   };
 
   this.send = function (client, postData, args, recv_method) {
-    self.offset = 0;
     args = Array.prototype.slice.call(args, 0);
     var callback = args.pop();
 
@@ -119,6 +118,8 @@ exports.NodeBinaryHttpTransport = function(url) {
             + res.headers['content-type']);
           return;
         }
+
+        self.offset = 0;
 
         var buffer = new Buffer(dataLength);
         for (var i = 0, len = data.length, pos = 0; i < len; i++) {
