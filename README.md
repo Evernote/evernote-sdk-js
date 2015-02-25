@@ -92,7 +92,7 @@ npm install evernote
 ```
 ### OAuth ###
 ```javascript
-var client = new Evernote.Client.new({
+var client = new Evernote.Client({
   consumerKey: 'YOUR API CONSUMER KEY',
   consumerSecret: 'YOUR API CONSUMER SECRET',
   sandbox: [true or false] // Optional (default: true)
