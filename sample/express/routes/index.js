@@ -1,7 +1,11 @@
 var Evernote = require('evernote').Evernote;
 
 var config = require('../config.json');
-var callbackUrl = 'http://localhost:3000/oauth_callback';
+
+// Use localhost as your callback URL in case you're testing locally
+//var callbackUrl = 'http://localhost:3000/oauth_callback';
+
+var callbackUrl = 'http://express.dev.azk.io/oauth_callback';
 
 // home page
 exports.index = function(req, res) {
