@@ -1,18 +1,18 @@
 var Evernote = require('evernote').Evernote;
 
 var config = require('../config.json');
-var callbackUrl = "http://localhost:3000/oauth_callback";
+var callbackUrl = 'http://localhost:3000/oauth_callback';
 
 // home page
 exports.index = function(req, res) {
-  if(req.session.oauthAccessToken) {
+  if (req.session.oauthAccessToken) {
     var token = req.session.oauthAccessToken;
     var client = new Evernote.Client({
       token: token,
       sandbox: config.SANDBOX
     });
     var noteStore = client.getNoteStore();
-    noteStore.listNotebooks(function(err, notebooks){
+    noteStore.listNotebooks(function(err, notebooks) {
       req.session.notebooks = notebooks;
       res.render('index');
     });
@@ -29,12 +29,12 @@ exports.oauth = function(req, res) {
     sandbox: config.SANDBOX
   });
 
-  client.getRequestToken(callbackUrl, function(error, oauthToken, oauthTokenSecret, results){
-    if(error) {
+  client.getRequestToken(callbackUrl, function(error, oauthToken, oauthTokenSecret, results) {
+    if (error) {
       req.session.error = JSON.stringify(error);
       res.redirect('/');
     }
-    else { 
+    else {
       // store the tokens in the session
       req.session.oauthToken = oauthToken;
       req.session.oauthTokenSecret = oauthTokenSecret;
@@ -55,11 +55,11 @@ exports.oauth_callback = function(req, res) {
   });
 
   client.getAccessToken(
-    req.session.oauthToken, 
-    req.session.oauthTokenSecret, 
-    req.param('oauth_verifier'), 
+    req.session.oauthToken,
+    req.session.oauthTokenSecret,
+    req.param('oauth_verifier'),
     function(error, oauthAccessToken, oauthAccessTokenSecret, results) {
-      if(error) {
+      if (error) {
         console.log('error');
         console.log(error);
         res.redirect('/');
