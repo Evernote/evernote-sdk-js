@@ -1,11 +1,8 @@
 var Evernote = require('evernote').Evernote;
+require('dotenv').load();
 
-var config = require('../config.json');
-
-// Use localhost as your callback URL in case you're testing locally
-//var callbackUrl = 'http://localhost:3000/oauth_callback';
-
-var callbackUrl = 'http://express.dev.azk.io/oauth_callback';
+// Remember to set your APP_URL variable inside .env
+var callbackUrl = process.env.APP_URL + ':' + process.env.PORT + '/oauth_callback';
 
 // home page
 exports.index = function(req, res) {
@@ -13,7 +10,7 @@ exports.index = function(req, res) {
     var token = req.session.oauthAccessToken;
     var client = new Evernote.Client({
       token: token,
-      sandbox: config.SANDBOX
+      sandbox: process.env.SANDBOX
     });
     var noteStore = client.getNoteStore();
     noteStore.listNotebooks(function(err, notebooks) {
@@ -28,9 +25,9 @@ exports.index = function(req, res) {
 // OAuth
 exports.oauth = function(req, res) {
   var client = new Evernote.Client({
-    consumerKey: config.API_CONSUMER_KEY,
-    consumerSecret: config.API_CONSUMER_SECRET,
-    sandbox: config.SANDBOX
+    consumerKey: process.env.API_CONSUMER_KEY,
+    consumerSecret: process.env.API_CONSUMER_SECRET,
+    sandbox: process.env.SANDBOX
   });
 
   client.getRequestToken(callbackUrl, function(error, oauthToken, oauthTokenSecret, results) {
@@ -53,9 +50,9 @@ exports.oauth = function(req, res) {
 // OAuth callback
 exports.oauth_callback = function(req, res) {
   var client = new Evernote.Client({
-    consumerKey: config.API_CONSUMER_KEY,
-    consumerSecret: config.API_CONSUMER_SECRET,
-    sandbox: config.SANDBOX
+    consumerKey: process.env.API_CONSUMER_KEY,
+    consumerSecret: process.env.API_CONSUMER_SECRET,
+    sandbox: process.env.SANDBOX
   });
 
   client.getAccessToken(
