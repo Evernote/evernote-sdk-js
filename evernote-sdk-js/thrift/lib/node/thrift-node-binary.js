@@ -96,9 +96,13 @@ exports.NodeBinaryHttpTransport = function(url) {
       callback("Invalid endpoint URL: " + self.url);
       return;
     }
+    var port = purl['port'];
+    if (!port) {
+      port = purl['protocol'] === 'https' ? 443 : 80;
+    }
     var options = {
-      hostname: purl['host'],
-      port: purl['protocol'] == 'https' ? 443 : 80,
+      hostname: purl['hostname'],
+      port: port,
       path: purl['path'],
       method: 'POST',
       headers: self.headers
