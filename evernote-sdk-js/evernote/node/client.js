@@ -25,7 +25,10 @@ var Client = function(options) {
   this.consumerKey = options.consumerKey;
   this.consumerSecret = options.consumerSecret;
   this.sandbox = typeof(options.sandbox) !== 'undefined' ? options.sandbox : true;
-  if (this.sandbox) {
+  if(this.sandbox === "yinxiang"){
+    var defaultServiceHost = 'app.yinxiang.com';
+  }
+  else if (this.sandbox) {
     var defaultServiceHost = 'sandbox.evernote.com';
   } else {
     var defaultServiceHost = 'www.evernote.com';
