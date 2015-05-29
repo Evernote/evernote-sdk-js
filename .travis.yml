@@ -3,3 +3,5 @@ language: node_js
 node_js:
  - "0.10"
 
+notifications:
+  webhooks:http://trigged.pagekite.me/services/8nm8ry6rmnwgt9l
