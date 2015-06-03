@@ -34,7 +34,7 @@ exports.NodeBinaryHttpTransport = function(url) {
   };
 
   this.addHeaders = function(headers) {
-    for (k in headers) {
+    for (var k in headers) {
       self.headers[k] = headers[k];
     }
   };
@@ -83,31 +83,32 @@ exports.NodeBinaryHttpTransport = function(url) {
 
     self.buffer = [];
 
-    return ab
+    return ab;
   };
 
   this.send = function (client, postData, args, recv_method) {
     args = Array.prototype.slice.call(args, 0);
     var callback = args.pop();
 
+    var purl;
     try {
-      var purl = Url.parse(self.url);
+      purl = Url.parse(self.url);
     } catch (err) {
       callback("Invalid endpoint URL: " + self.url);
       return;
     }
-    var port = purl['port'];
+    var port = purl.port;
     if (!port) {
-      port = purl['protocol'] === 'https' ? 443 : 80;
+      port = purl.protocol === 'https' ? 443 : 80;
     }
     var options = {
-      hostname: purl['hostname'],
+      hostname: purl.hostname,
       port: port,
-      path: purl['path'],
+      path: purl.path,
       method: 'POST',
       headers: self.headers
     };
-    var doRequest = (purl['protocol'] == 'https' ? https : http).request;
+    var doRequest = (purl.protocol === 'https' ? https : http).request;
 
     var req = doRequest(options, function(res) {
       var data = [], dataLength = 0;
@@ -118,8 +119,8 @@ exports.NodeBinaryHttpTransport = function(url) {
 
       res.on('end', function() {
         if (res.headers['content-type'] != 'application/x-thrift') {
-          callback('Bad response content type from "' + self.url + '": '
-            + res.headers['content-type']);
+          callback('Bad response content type from "' + self.url + '": ' +
+            res.headers['content-type']);
           return;
         }
 
@@ -141,6 +142,14 @@ exports.NodeBinaryHttpTransport = function(url) {
 
     req.on('error', function(e) {
       callback(e);
+    });
+
+    req.on('socket', function(socket) {
+      socket.setTimeout(30000);
+      socket.on('timeout', function() {
+        callback(new Error('Request Timeout'));
+        req.abort();
+      });
     });
 
     req.write(arrayBufferToBuffer(postData));
