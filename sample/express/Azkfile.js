@@ -27,6 +27,10 @@ systems({
     envs: {
       // set instances variables
       NODE_ENV: "dev",
+      PORT: 3000,
     },
+    ports: {
+      http: '3000/tcp'
+    }
   },
 });
