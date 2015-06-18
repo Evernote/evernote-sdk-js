@@ -16,15 +16,14 @@ block content
   br
   br
   div.title-text
-    h2 Authentication
     - if(session.oauthAccessToken)
+      h2 Authentication
       a(href='/clear') Click here
       |  to
       | start over
     - else
-      a(href='/oauth') Click here
-      |  to
-      | connect Evernote
+      a(href='/oauth')
+        img#evernote-login.center(src='../images/login-with-evernote.png')
   br
   br
   - if(session.notebooks)
