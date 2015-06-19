@@ -2,7 +2,7 @@
   "author": "Evernote",
   "name": "evernote",
   "description": "Evernote SDK for Node.js",
-  "version": "1.25.8-beta",
+  "version": "1.25.8",
   "repository": {
     "url": "https://github.com/evernote/evernote-sdk-js"
   },

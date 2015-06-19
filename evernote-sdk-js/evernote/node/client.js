@@ -25,10 +25,11 @@ var Client = function(options) {
   this.consumerKey = options.consumerKey;
   this.consumerSecret = options.consumerSecret;
   this.sandbox = typeof(options.sandbox) !== 'undefined' ? options.sandbox : true;
+  var defaultServiceHost;
   if (this.sandbox) {
-    var defaultServiceHost = 'sandbox.evernote.com';
+    defaultServiceHost = 'sandbox.evernote.com';
   } else {
-    var defaultServiceHost = 'www.evernote.com';
+    defaultServiceHost = 'www.evernote.com';
   }
   this.serviceHost = options.serviceHost || defaultServiceHost;
   this.additionalHeaders = options.additionalHeaders || {};
@@ -40,7 +41,7 @@ Client.prototype.getRequestToken = function(callbackUrl, callback) {
   var self = this;
   var oauth = self.getOAuthClient(callbackUrl);
   oauth.getOAuthRequestToken(function(err, oauthToken, oauthTokenSecret, results) {
-    callback(err, oauthToken, oauthTokenSecret, results)
+    callback(err, oauthToken, oauthTokenSecret, results);
   });
 };
 
@@ -94,8 +95,11 @@ Client.prototype.getSharedNoteStore = function(linkedNotebook) {
         cb(null, self.token, linkedNotebook.noteStoreUrl);
       });
       noteStore.authenticateToSharedNotebook(linkedNotebook.shareKey, function(err, sharedAuth) {
+        if (err) {
+          return callback(err);
+        }
         thisStore.sharedToken = sharedAuth.authenticationToken;
-        callback(err, thisStore.sharedToken, linkedNotebook.noteStoreUrl);
+        callback(null, thisStore.sharedToken, linkedNotebook.noteStoreUrl);
       });
     }
   });
@@ -136,7 +140,7 @@ Client.prototype.getEndpoint = function(path) {
   if (path) {
     url += '/' + path;
   }
-  return url
+  return url;
 };
 
 var Store = function(clientClass, enInfoFunc) {
@@ -166,7 +170,7 @@ Store.prototype.createWrapperFunction = function(name) {
       }
       var orgFunc = client[name];
       var orgArgNames = self.getParamNames(orgFunc);
-      if (orgArgNames != null && orgArgs.length + 1 == orgArgNames.length) {
+      if (orgArgNames !== null && orgArgs.length + 1 == orgArgNames.length) {
         try {
           var newArgs = [];
           for (var i in orgArgNames) {
@@ -187,6 +191,9 @@ Store.prototype.createWrapperFunction = function(name) {
 Store.prototype.getThriftClient = function(callback) {
   var self = this;
   self.enInfoFunc(function(err, token, url) {
+    if (err) {
+      return callback(err);
+    }
     var m = token.match(/:A=([^:]+):/);
     if (m) {
       self.userAgentId = m[1];
@@ -198,7 +205,7 @@ Store.prototype.getThriftClient = function(callback) {
       {'User-Agent':
         self.userAgentId + ' / ' + pjson.version + '; Node.js / ' + process.version});
     var protocol = new Evernote.Thrift.BinaryProtocol(transport);
-    callback(err, new self.clientClass(protocol), token);
+    callback(null, new self.clientClass(protocol), token);
   });
 };
 
