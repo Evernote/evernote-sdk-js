@@ -1,7 +1,7 @@
 Meteor.startup(function() {
   var Evernote, Future;
-  Evernote = Meteor.require('evernote').Evernote;
-  Future = Meteor.require('fibers/future');
+  Evernote = Meteor.npmRequire('evernote').Evernote;
+  Future = Meteor.npmRequire('fibers/future');
   return Meteor.methods({
     'listNotebooks': function(token) {
       var client, f, noteStore;
@@ -10,6 +10,7 @@ Meteor.startup(function() {
         sandbox: Meteor.settings.sandbox
       });
       noteStore = client.getNoteStore();
+      //TODO refactor for Meteor.wrapAsync
       f = new Future();
       noteStore.listNotebooks(function(err, notebooks) {
         if (err) {
