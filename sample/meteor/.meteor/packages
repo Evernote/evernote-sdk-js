@@ -12,6 +12,6 @@ insecure
 # coffeescript
 less
 
-npm-container
 meteorhacks:npm
 iron:router
+
