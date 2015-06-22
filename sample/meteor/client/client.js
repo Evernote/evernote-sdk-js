@@ -1,8 +1,5 @@
 var callback, logout;
-callback = function() {
-  var pattern, verifier;
-  pattern = new RegExp(/oauth_verifier=([^&=\?]+)/);
-  verifier = this.querystring.match(pattern)[1];
+callback = function(verifier) {
   if (verifier.length === 0) {
     console.log("Missing OAuth verifier.");
     console.log(JSON.stringify(err));
@@ -52,7 +49,7 @@ Router.route('/', function () {
     this.render('home');
 });
 Router.route('/callback', function () {
-    callback();
+    callback(this.params.query.oauth_verifier);
     this.redirect('/');
 });
 Router.route('/logout', function () {
