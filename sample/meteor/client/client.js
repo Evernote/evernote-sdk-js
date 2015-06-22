@@ -27,7 +27,7 @@ callback = function() {
     Session.set('edamExpires', res['edamExpires']);
     Session.set('edamNoteStoreUrl', res['edamNoteStoreUrl']);
     Session.set('edamWebApiUrlPrefix', res['edamWebApiUrlPrefix']);
-    Meteor.Router.to('/');
+    Router.go('/');
     return Meteor.call("listNotebooks", Session.get('oauthAccessToken'), function(err, res) {
       if (err) {
         console.log(JSON.stringify(err));
@@ -46,12 +46,18 @@ logout = function() {
   Session.set('edamNoteStoreUrl', void 0);
   Session.set('edamWebApiUrlPrefix', void 0);
   Session.set('notebooks', void 0);
-  return Meteor.Router.to('/');
+  return Router.go('/');
 };
-Meteor.Router.add({
-  '/': 'home',
-  '/callback': callback,
-  '/logout': logout
+Router.route('/', function () {
+    this.render('home');
+});
+Router.route('/callback', function () {
+    callback();
+    this.redirect('/');
+});
+Router.route('/logout', function () {
+    logout();
+    this.redirect('/');
 });
 Template.home.helpers({
   'loggedIn': function() {
