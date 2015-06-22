@@ -6,11 +6,12 @@
 standard-app-packages
 autopublish
 insecure
-preserve-inputs
 
-npm
-router
-page-js-ie-support
-HTML5-History-API
-coffeescript
+# page-js-ie-support
+# HTML5-History-API
+# coffeescript
 less
+
+npm-container
+meteorhacks:npm
+iron:router
