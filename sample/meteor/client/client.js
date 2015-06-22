@@ -92,7 +92,7 @@ Template.home.events({
       }
       localStorage.setItem('oauthToken', res['oauthToken']);
       localStorage.setItem('oauthTokenSecret', res['oauthTokenSecret']);
-      return window.location = res['authorizeUrl'];
+      return window.location.replace(res['authorizeUrl']);
     });
     return false;
   },
