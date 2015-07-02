@@ -17,6 +17,8 @@
  * under the License.
  */
 
+var Evernote = require('../../../base.js').Evernote;
+
 exports.createNoteInBusinessNotebook = function(note, businessNotebook, callback) {
   var self = this;
   var sharedNoteStore = self.getSharedNoteStore(businessNotebook);
@@ -36,7 +38,7 @@ exports.listBusinessNotebooks = function(callback) {
   var self = this;
   self.getNoteStore().listLinkedNotebooks(function(err, linkedNotebooks) {
     var businessNotebooks = [];
-    for (i in linkedNotebooks) {
+    for (var i in linkedNotebooks) {
       if (linkedNotebooks[i].businessId) businessNotebooks.push(linkedNotebooks[i]);
     }
     callback(err, businessNotebooks);
@@ -54,8 +56,8 @@ exports.createBusinessNotebook = function(notebook, callback) {
       var linkedNotebook = new Evernote.LinkedNotebook();
       linkedNotebook.shareKey = sharedNotebook.shareKey;
       linkedNotebook.shareName = businessNotebook.name;
-      linkedNotebook.username = self.bizUser.username;
-      linkedNotebook.shardId = self.bizUser.shardId;
+      linkedNotebook.username = businessNoteStore.bizUser.username;
+      linkedNotebook.shardId = businessNoteStore.bizUser.shardId;
       self.getNoteStore().createLinkedNotebook(linkedNotebook,
         function(err, createdLinkedNotebook) {
           callback(err, createdLinkedNotebook);
