@@ -113,10 +113,13 @@ Client.prototype.getBusinessNoteStore = function() {
       callback(null, thisStore.bizToken, thisStore.bizNoteStoreUri);
     } else {
       self.getUserStore().authenticateToBusiness(function(err, bizAuth) {
+        if (err) {
+          return callback(err);
+        }
         thisStore.bizToken = bizAuth.authenticationToken;
         thisStore.bizNoteStoreUri = bizAuth.noteStoreUrl;
         thisStore.bizUser = bizAuth.user;
-        callback(err, thisStore.bizToken, thisStore.bizNoteStoreUri);
+        callback(null, thisStore.bizToken, thisStore.bizNoteStoreUri);
       });
     }
   });
