@@ -29,15 +29,17 @@ Here are the basic steps for OAuth using the jsOAuth library.
 
 Step 1:
 
-    var options,oauth;
-     options = {
-        consumerKey: <your consumer key>,
-        consumerSecret: <your consumer secret>,
-        callbackUrl : <your callback url>,
-        signatureMethod : "HMAC-SHA1",
-    };
-    oauth = OAuth(options);
-    oauth.request({'method': 'GET', 'url': hostName + '/oauth', 'success': success, 'failure': failure});
+````javascript
+var options,oauth;
+options = {
+    consumerKey: <your consumer key>,
+    consumerSecret: <your consumer secret>,
+    callbackUrl : <your callback url>,
+    signatureMethod : "HMAC-SHA1",
+};
+oauth = OAuth(options);
+oauth.request({'method': 'GET', 'url': hostName + '/oauth', 'success': success, 'failure': failure});
+````
 
 Step 2:
 
@@ -47,17 +49,19 @@ Step 2:
 Step 3:
 
 In your callback url, get the `oauth_verifier` and the `oauth_token` from the query string.
-
-    var verifier = <your verifier>;
-    var oauth_token = <your oauth token>;
-    var secret = <oauth secret from step 1>;
-    oauth.setVerifier(verifier);
-    oauth.setAccessToken([got_oauth,secret]);
+````javascript
+var verifier = <your verifier>;
+var oauth_token = <your oauth token>;
+var secret = <oauth secret from step 1>;
+oauth.setVerifier(verifier);
+oauth.setAccessToken([got_oauth,secret]);
+````
 
 Now get the final token.
-
-    oauth.request({'method': 'GET', 'url': hostName + '/oauth',
-                   'success': success, 'failure': failure});
+````javascript
+oauth.request({'method': 'GET', 'url': hostName + '/oauth',
+    'success': success, 'failure': failure});
+````
 
 Step 4:
 
@@ -66,20 +70,20 @@ Step 4:
 ### Example
 
 Once you get the authentication token, note store URL and user store URL from the OAuth step,
+    
+````javascript
+var noteStoreURL = <note store url>;
+var authenticationToken = <authentication token>;
+var noteStoreTransport = new Thrift.BinaryHttpTransport(noteStoreURL);
+var noteStoreProtocol = new Thrift.BinaryProtocol(noteStoreTransport);
+var noteStore = new NoteStoreClient(noteStoreProtocol);
 
-    var noteStoreURL = <note store url>;
-    var authenticationToken = <authentication token>;
-    var noteStoreTransport = new Thrift.BinaryHttpTransport(noteStoreURL);
-    var noteStoreProtocol = new Thrift.BinaryProtocol(noteStoreTransport);
-    var noteStore = new NoteStoreClient(noteStoreProtocol);
-
-    noteStore.listNotebooks(authenticationToken, function (notebooks) {
-    		console.log(notebooks);
-    	},
-    	function onerror(error) {
-    		console.log(error);
-    	}
-    );
+noteStore.listNotebooks(authenticationToken, function (notebooks) {
+	console.log(notebooks);
+}, function onerror(error) {
+    console.log(error);
+});
+````
 
 Use with Node
 -------------
