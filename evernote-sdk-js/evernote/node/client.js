@@ -25,9 +25,12 @@ var Client = function(options) {
   this.consumerKey = options.consumerKey;
   this.consumerSecret = options.consumerSecret;
   this.sandbox = typeof(options.sandbox) !== 'undefined' ? options.sandbox : true;
+  this.china = typeof(options.china) !== 'undefined' ? options.china : false;
   var defaultServiceHost;
   if (this.sandbox) {
     defaultServiceHost = 'sandbox.evernote.com';
+  } else if (this.china) {
+    defaultServiceHost = 'app.yinxiang.com';    
   } else {
     defaultServiceHost = 'www.evernote.com';
   }
