@@ -66,7 +66,7 @@ exports.oauth_callback = function(req, res) {
       } else {
         // store the access token in the session
         req.session.oauthAccessToken = oauthAccessToken;
-        req.session.oauthAccessTtokenSecret = oauthAccessTokenSecret;
+        req.session.oauthAccessTokenSecret = oauthAccessTokenSecret;
         req.session.edamShard = results.edam_shard;
         req.session.edamUserId = results.edam_userId;
         req.session.edamExpires = results.edam_expires;
