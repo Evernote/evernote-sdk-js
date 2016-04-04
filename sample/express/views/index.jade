@@ -1,53 +1,83 @@
 extends layout
 
 block content
-  h1 Evernote Node.js Express Demo
-  p
+  div.title-text
+    img#evernote-logo(src='../images/evernote-500px.png')
+  h1.title-text Node.js Express Demo
+  h4.title-text
     | This application uses the 
     a(href='http://expressjs.com/') Express
     |  framework to demonstrate the use of OAuth to authenticate to the Evernote web service.
-  hr
+
   - if(session.error)
     h2 Error
     p
       = session.error
-  h2 Authentication
-  - if(session.oauthAccessToken)
-    a(href='/clear') Click here
-    |  to 
-    | start over
-  - else
-    a(href='/oauth') Click here
-    |  to 
-    | connect Evernote
-
-  hr
+  br
+  br
+  div.title-text
+    - if(session.oauthAccessToken)
+      h2 Authentication
+      a(href='/clear') Click here
+      |  to
+      | start over
+    - else
+      a(href='/oauth')
+        img#evernote-login.center(src='../images/login-with-evernote.png')
+  br
+  br
   - if(session.notebooks)
     h2 Notebooks
     ul
       - for (var i = 0; i < session.notebooks.length; ++i)
         li= session.notebooks[i].name
-    hr
+  br
+  
+  - connectToEvernote = "Authenticate with Evernote to see this information"
   h2 Current status
-  ul
-    li
-      b NoteStore URL:  
-      = session.edamNoteStoreUrl
-    li
-      b Web API URL prefix: 
-      = session.edamNoteStoreUrl
-  h3 Token Credentials:
-  ul
-    li
-      b token:  
-      = session.oauthAccessToken
-    li
-      b secret:  
-      = session.oauthAccessTokenSecret
-    li
-      b User ID:  
-      = session.edamUserId
-    li
-      b Expires:  
-      = session.edamExpires
-    
+  - if(session.edamNoteStoreUrl)
+    ul
+      li
+        b NoteStore URL: 
+        = session.edamNoteStoreUrl
+      li
+        b Web API URL prefix: 
+        = session.edamNoteStoreUrl
+  - else
+    ul
+      li
+        b NoteStore URL: 
+        = connectToEvernote
+      li
+        b Web API URL prefix: 
+        = connectToEvernote
+  br
+  h2 Token Credentials:
+  - if(session.oauthAccessToken)
+    ul
+      li
+        b token: 
+        = session.oauthAccessToken
+      li
+        b secret: 
+        = session.oauthAccessTokenSecret
+      li
+        b User ID: 
+        = session.edamUserId
+      li
+        b Expires: 
+        = session.edamExpires
+  - else
+    ul
+      li
+        b token: 
+        = connectToEvernote
+      li
+        b secret: 
+        = connectToEvernote
+      li
+        b User ID: 
+        = connectToEvernote
+      li
+        b Expires: 
+        = connectToEvernote

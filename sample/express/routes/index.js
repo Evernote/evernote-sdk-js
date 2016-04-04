@@ -1,18 +1,24 @@
 var Evernote = require('evernote').Evernote;
+require('dotenv').load();
 
-var config = require('../config.json');
-var callbackUrl = "http://localhost:3000/oauth_callback";
+// Remember to set your APP_URL variable inside .env
+var callbackUrl;
+if(process.env.APP_URL.indexOf("azk.io") != -1) {
+  callbackUrl = process.env.APP_URL + ':' + '/oauth_callback';
+} else {
+  callbackUrl = process.env.APP_URL + ':' + process.env.PORT + '/oauth_callback';
+}
 
 // home page
 exports.index = function(req, res) {
-  if(req.session.oauthAccessToken) {
+  if (req.session.oauthAccessToken) {
     var token = req.session.oauthAccessToken;
     var client = new Evernote.Client({
       token: token,
-      sandbox: config.SANDBOX
+      sandbox: process.env.SANDBOX
     });
     var noteStore = client.getNoteStore();
-    noteStore.listNotebooks(function(err, notebooks){
+    noteStore.listNotebooks(function(err, notebooks) {
       req.session.notebooks = notebooks;
       res.render('index');
     });
@@ -24,17 +30,17 @@ exports.index = function(req, res) {
 // OAuth
 exports.oauth = function(req, res) {
   var client = new Evernote.Client({
-    consumerKey: config.API_CONSUMER_KEY,
-    consumerSecret: config.API_CONSUMER_SECRET,
-    sandbox: config.SANDBOX
+    consumerKey: process.env.API_CONSUMER_KEY,
+    consumerSecret: process.env.API_CONSUMER_SECRET,
+    sandbox: process.env.SANDBOX
   });
 
-  client.getRequestToken(callbackUrl, function(error, oauthToken, oauthTokenSecret, results){
-    if(error) {
+  client.getRequestToken(callbackUrl, function(error, oauthToken, oauthTokenSecret, results) {
+    if (error) {
       req.session.error = JSON.stringify(error);
       res.redirect('/');
     }
-    else { 
+    else {
       // store the tokens in the session
       req.session.oauthToken = oauthToken;
       req.session.oauthTokenSecret = oauthTokenSecret;
@@ -49,17 +55,17 @@ exports.oauth = function(req, res) {
 // OAuth callback
 exports.oauth_callback = function(req, res) {
   var client = new Evernote.Client({
-    consumerKey: config.API_CONSUMER_KEY,
-    consumerSecret: config.API_CONSUMER_SECRET,
-    sandbox: config.SANDBOX
+    consumerKey: process.env.API_CONSUMER_KEY,
+    consumerSecret: process.env.API_CONSUMER_SECRET,
+    sandbox: process.env.SANDBOX
   });
 
   client.getAccessToken(
-    req.session.oauthToken, 
-    req.session.oauthTokenSecret, 
-    req.param('oauth_verifier'), 
+    req.session.oauthToken,
+    req.session.oauthTokenSecret,
+    req.param('oauth_verifier'),
     function(error, oauthAccessToken, oauthAccessTokenSecret, results) {
-      if(error) {
+      if (error) {
         console.log('error');
         console.log(error);
         res.redirect('/');
