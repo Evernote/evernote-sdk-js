@@ -23,9 +23,9 @@ Details on the OAuth process are available [here](http://dev.evernote.com/start/
 
 Here are the basic steps for OAuth using the jsOAuth library.
 
-(Change this to http://www.evernote.com, when you are ready to activate on production).
+(Change this to https://www.evernote.com, when you are ready to activate on production).
     
-    var hostName = "http://sandbox.evernote.com"; 
+    var hostName = "https://sandbox.evernote.com"; 
 
 Step 1:
 
