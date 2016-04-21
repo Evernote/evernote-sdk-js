@@ -24,11 +24,21 @@ if (authToken == "your developer token") {
   process.exit(1);
 }
 
-// Initial development is performed on our sandbox server. To use the production
-// service, change sandbox: false and replace your
+// Initial development is performed on our sandbox server. 
+//
+// To use the production service, set isSandbox to false and replace your
 // developer token above with a token from
 // https://www.evernote.com/api/DeveloperToken.action
-var client = new Evernote.Client({token: authToken, sandbox: true});
+//
+// To use the Evernote China service, set isSandbox to false and isChina to true, then replace your 
+// developer token above with a token from
+// https://app.yinxiang.com/api/DeveloperToken.action
+//
+// For more information about Evernote China service, please visit 
+// https://dev.evernote.com/doc/articles/bootstrap.php
+var isSandbox = true;
+var isChina = false;
+var client = new Evernote.Client({token: authToken, sandbox: isSandbox, china: isChina});
 
 var userStore = client.getUserStore();
 

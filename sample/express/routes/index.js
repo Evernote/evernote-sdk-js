@@ -9,7 +9,8 @@ exports.index = function(req, res) {
     var token = req.session.oauthAccessToken;
     var client = new Evernote.Client({
       token: token,
-      sandbox: config.SANDBOX
+      sandbox: config.SANDBOX,
+      china: config.CHINA
     });
     var noteStore = client.getNoteStore();
     noteStore.listNotebooks(function(err, notebooks){
@@ -26,7 +27,8 @@ exports.oauth = function(req, res) {
   var client = new Evernote.Client({
     consumerKey: config.API_CONSUMER_KEY,
     consumerSecret: config.API_CONSUMER_SECRET,
-    sandbox: config.SANDBOX
+    sandbox: config.SANDBOX,
+    china: config.CHINA
   });
 
   client.getRequestToken(callbackUrl, function(error, oauthToken, oauthTokenSecret, results){
@@ -51,7 +53,8 @@ exports.oauth_callback = function(req, res) {
   var client = new Evernote.Client({
     consumerKey: config.API_CONSUMER_KEY,
     consumerSecret: config.API_CONSUMER_SECRET,
-    sandbox: config.SANDBOX
+    sandbox: config.SANDBOX,
+    china: config.CHINA
   });
 
   client.getAccessToken(
