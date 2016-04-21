@@ -26,11 +26,11 @@ if (authToken == "your developer token") {
 
 // Initial development is performed on our sandbox server. 
 //
-// To use the production(International) service, set isSandbox to false and replace your
+// To use the production service, set isSandbox to false and replace your
 // developer token above with a token from
 // https://www.evernote.com/api/DeveloperToken.action
 //
-// To use the production(China) service, set isSandbox to false and isChina to true, then replace your 
+// To use the Evernote China service, set isSandbox to false and isChina to true, then replace your 
 // developer token above with a token from
 // https://app.yinxiang.com/api/DeveloperToken.action
 //
