@@ -11,7 +11,7 @@
     "lib": "evernote-sdk-js",
     "example": "sample"
   },
-  "devEngines": {
+  "engines": {
     "node": "4.x || 5.x || 6.x",
     "npm": "2.x || 3.x"
   },
