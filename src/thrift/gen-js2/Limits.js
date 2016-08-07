@@ -7,7 +7,7 @@
 
   // Define types and services
 
-  var Thrift = require('evernote-thrift').Thrift;
+  var Thrift = require('../thrift');
 
   module.exports.EDAM_ATTRIBUTE_LEN_MIN = 1;
 

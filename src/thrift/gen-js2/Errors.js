@@ -7,7 +7,7 @@
 
   // Define types and services
 
-  var Thrift = require('evernote-thrift').Thrift;
+  var Thrift = require('../thrift');
   var Types = require('./Types');
 
 
