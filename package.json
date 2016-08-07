@@ -1,20 +1,19 @@
 {
   "author": "Evernote",
   "name": "evernote",
-  "description": "Evernote SDK for Node.js",
+  "description": "Evernote JavaScript SDK",
   "version": "1.25.82",
   "repository": {
     "url": "https://github.com/evernote/evernote-sdk-js"
   },
   "main": "index",
-  "directories": {
-    "lib": "evernote-sdk-js",
-    "example": "sample"
+  "scripts": {
+    "lint": "eslint src"
   },
-  "engines": {
-    "node": "*"
-  },
-  "dependencies": {
-    "oauth": "*"
+  "devDependencies": {
+    "babel-eslint": "^6.1.2",
+    "eslint": "^3.2.2",
+    "eslint-config-evernote": "^2.0.2",
+    "eslint-plugin-evernote": "^1.0.0"
   }
 }
