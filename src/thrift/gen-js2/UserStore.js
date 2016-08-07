@@ -5,3255 +5,439 @@
 //
 
 
-//HELPER FUNCTIONS AND STRUCTURES
-
-UserStore_checkVersion_args = function(args) {
-  this.clientName = null;
-  this.edamVersionMajor = 1;
-  this.edamVersionMinor = 28;
-  if (args) {
-    if (args.clientName !== undefined) {
-      this.clientName = args.clientName;
-    }
-    if (args.edamVersionMajor !== undefined) {
-      this.edamVersionMajor = args.edamVersionMajor;
-    }
-    if (args.edamVersionMinor !== undefined) {
-      this.edamVersionMinor = args.edamVersionMinor;
-    }
-  }
-};
-UserStore_checkVersion_args.prototype = {};
-UserStore_checkVersion_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.clientName = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.I16) {
-        this.edamVersionMajor = input.readI16().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.I16) {
-        this.edamVersionMinor = input.readI16().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_checkVersion_args.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_checkVersion_args');
-  if (this.clientName !== null && this.clientName !== undefined) {
-    output.writeFieldBegin('clientName', Thrift.Type.STRING, 1);
-    output.writeString(this.clientName);
-    output.writeFieldEnd();
-  }
-  if (this.edamVersionMajor !== null && this.edamVersionMajor !== undefined) {
-    output.writeFieldBegin('edamVersionMajor', Thrift.Type.I16, 2);
-    output.writeI16(this.edamVersionMajor);
-    output.writeFieldEnd();
-  }
-  if (this.edamVersionMinor !== null && this.edamVersionMinor !== undefined) {
-    output.writeFieldBegin('edamVersionMinor', Thrift.Type.I16, 3);
-    output.writeI16(this.edamVersionMinor);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_checkVersion_result = function(args) {
-  this.success = null;
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-  }
-};
-UserStore_checkVersion_result.prototype = {};
-UserStore_checkVersion_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.BOOL) {
-        this.success = input.readBool().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_checkVersion_result.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_checkVersion_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.BOOL, 0);
-    output.writeBool(this.success);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_getBootstrapInfo_args = function(args) {
-  this.locale = null;
-  if (args) {
-    if (args.locale !== undefined) {
-      this.locale = args.locale;
-    }
-  }
-};
-UserStore_getBootstrapInfo_args.prototype = {};
-UserStore_getBootstrapInfo_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.locale = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_getBootstrapInfo_args.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_getBootstrapInfo_args');
-  if (this.locale !== null && this.locale !== undefined) {
-    output.writeFieldBegin('locale', Thrift.Type.STRING, 1);
-    output.writeString(this.locale);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_getBootstrapInfo_result = function(args) {
-  this.success = null;
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-  }
-};
-UserStore_getBootstrapInfo_result.prototype = {};
-UserStore_getBootstrapInfo_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new BootstrapInfo();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_getBootstrapInfo_result.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_getBootstrapInfo_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_authenticateLongSession_args = function(args) {
-  this.username = null;
-  this.password = null;
-  this.consumerKey = null;
-  this.consumerSecret = null;
-  this.deviceIdentifier = null;
-  this.deviceDescription = null;
-  this.supportsTwoFactor = null;
-  if (args) {
-    if (args.username !== undefined) {
-      this.username = args.username;
-    }
-    if (args.password !== undefined) {
-      this.password = args.password;
-    }
-    if (args.consumerKey !== undefined) {
-      this.consumerKey = args.consumerKey;
-    }
-    if (args.consumerSecret !== undefined) {
-      this.consumerSecret = args.consumerSecret;
-    }
-    if (args.deviceIdentifier !== undefined) {
-      this.deviceIdentifier = args.deviceIdentifier;
-    }
-    if (args.deviceDescription !== undefined) {
-      this.deviceDescription = args.deviceDescription;
-    }
-    if (args.supportsTwoFactor !== undefined) {
-      this.supportsTwoFactor = args.supportsTwoFactor;
-    }
-  }
-};
-UserStore_authenticateLongSession_args.prototype = {};
-UserStore_authenticateLongSession_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.username = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.password = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRING) {
-        this.consumerKey = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 4:
-      if (ftype == Thrift.Type.STRING) {
-        this.consumerSecret = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 5:
-      if (ftype == Thrift.Type.STRING) {
-        this.deviceIdentifier = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 6:
-      if (ftype == Thrift.Type.STRING) {
-        this.deviceDescription = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 7:
-      if (ftype == Thrift.Type.BOOL) {
-        this.supportsTwoFactor = input.readBool().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_authenticateLongSession_args.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_authenticateLongSession_args');
-  if (this.username !== null && this.username !== undefined) {
-    output.writeFieldBegin('username', Thrift.Type.STRING, 1);
-    output.writeString(this.username);
-    output.writeFieldEnd();
-  }
-  if (this.password !== null && this.password !== undefined) {
-    output.writeFieldBegin('password', Thrift.Type.STRING, 2);
-    output.writeString(this.password);
-    output.writeFieldEnd();
-  }
-  if (this.consumerKey !== null && this.consumerKey !== undefined) {
-    output.writeFieldBegin('consumerKey', Thrift.Type.STRING, 3);
-    output.writeString(this.consumerKey);
-    output.writeFieldEnd();
-  }
-  if (this.consumerSecret !== null && this.consumerSecret !== undefined) {
-    output.writeFieldBegin('consumerSecret', Thrift.Type.STRING, 4);
-    output.writeString(this.consumerSecret);
-    output.writeFieldEnd();
-  }
-  if (this.deviceIdentifier !== null && this.deviceIdentifier !== undefined) {
-    output.writeFieldBegin('deviceIdentifier', Thrift.Type.STRING, 5);
-    output.writeString(this.deviceIdentifier);
-    output.writeFieldEnd();
-  }
-  if (this.deviceDescription !== null && this.deviceDescription !== undefined) {
-    output.writeFieldBegin('deviceDescription', Thrift.Type.STRING, 6);
-    output.writeString(this.deviceDescription);
-    output.writeFieldEnd();
-  }
-  if (this.supportsTwoFactor !== null && this.supportsTwoFactor !== undefined) {
-    output.writeFieldBegin('supportsTwoFactor', Thrift.Type.BOOL, 7);
-    output.writeBool(this.supportsTwoFactor);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_authenticateLongSession_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-UserStore_authenticateLongSession_result.prototype = {};
-UserStore_authenticateLongSession_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new AuthenticationResult();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_authenticateLongSession_result.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_authenticateLongSession_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_completeTwoFactorAuthentication_args = function(args) {
-  this.authenticationToken = null;
-  this.oneTimeCode = null;
-  this.deviceIdentifier = null;
-  this.deviceDescription = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.oneTimeCode !== undefined) {
-      this.oneTimeCode = args.oneTimeCode;
-    }
-    if (args.deviceIdentifier !== undefined) {
-      this.deviceIdentifier = args.deviceIdentifier;
-    }
-    if (args.deviceDescription !== undefined) {
-      this.deviceDescription = args.deviceDescription;
-    }
-  }
-};
-UserStore_completeTwoFactorAuthentication_args.prototype = {};
-UserStore_completeTwoFactorAuthentication_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.oneTimeCode = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRING) {
-        this.deviceIdentifier = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 4:
-      if (ftype == Thrift.Type.STRING) {
-        this.deviceDescription = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_completeTwoFactorAuthentication_args.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_completeTwoFactorAuthentication_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.oneTimeCode !== null && this.oneTimeCode !== undefined) {
-    output.writeFieldBegin('oneTimeCode', Thrift.Type.STRING, 2);
-    output.writeString(this.oneTimeCode);
-    output.writeFieldEnd();
-  }
-  if (this.deviceIdentifier !== null && this.deviceIdentifier !== undefined) {
-    output.writeFieldBegin('deviceIdentifier', Thrift.Type.STRING, 3);
-    output.writeString(this.deviceIdentifier);
-    output.writeFieldEnd();
-  }
-  if (this.deviceDescription !== null && this.deviceDescription !== undefined) {
-    output.writeFieldBegin('deviceDescription', Thrift.Type.STRING, 4);
-    output.writeString(this.deviceDescription);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_completeTwoFactorAuthentication_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-UserStore_completeTwoFactorAuthentication_result.prototype = {};
-UserStore_completeTwoFactorAuthentication_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new AuthenticationResult();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_completeTwoFactorAuthentication_result.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_completeTwoFactorAuthentication_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_revokeLongSession_args = function(args) {
-  this.authenticationToken = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-  }
-};
-UserStore_revokeLongSession_args.prototype = {};
-UserStore_revokeLongSession_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_revokeLongSession_args.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_revokeLongSession_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_revokeLongSession_result = function(args) {
-  this.userException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-UserStore_revokeLongSession_result.prototype = {};
-UserStore_revokeLongSession_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_revokeLongSession_result.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_revokeLongSession_result');
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_authenticateToBusiness_args = function(args) {
-  this.authenticationToken = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-  }
-};
-UserStore_authenticateToBusiness_args.prototype = {};
-UserStore_authenticateToBusiness_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_authenticateToBusiness_args.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_authenticateToBusiness_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_authenticateToBusiness_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-UserStore_authenticateToBusiness_result.prototype = {};
-UserStore_authenticateToBusiness_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new AuthenticationResult();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_authenticateToBusiness_result.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_authenticateToBusiness_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_getUser_args = function(args) {
-  this.authenticationToken = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-  }
-};
-UserStore_getUser_args.prototype = {};
-UserStore_getUser_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_getUser_args.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_getUser_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_getUser_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-UserStore_getUser_result.prototype = {};
-UserStore_getUser_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new User();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_getUser_result.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_getUser_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_getPublicUserInfo_args = function(args) {
-  this.username = null;
-  if (args) {
-    if (args.username !== undefined) {
-      this.username = args.username;
-    }
-  }
-};
-UserStore_getPublicUserInfo_args.prototype = {};
-UserStore_getPublicUserInfo_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.username = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_getPublicUserInfo_args.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_getPublicUserInfo_args');
-  if (this.username !== null && this.username !== undefined) {
-    output.writeFieldBegin('username', Thrift.Type.STRING, 1);
-    output.writeString(this.username);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_getPublicUserInfo_result = function(args) {
-  this.success = null;
-  this.notFoundException = null;
-  this.systemException = null;
-  this.userException = null;
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-  }
-};
-UserStore_getPublicUserInfo_result.prototype = {};
-UserStore_getPublicUserInfo_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new PublicUserInfo();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_getPublicUserInfo_result.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_getPublicUserInfo_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 1);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 3);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_getPremiumInfo_args = function(args) {
-  this.authenticationToken = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-  }
-};
-UserStore_getPremiumInfo_args.prototype = {};
-UserStore_getPremiumInfo_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_getPremiumInfo_args.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_getPremiumInfo_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_getPremiumInfo_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-UserStore_getPremiumInfo_result.prototype = {};
-UserStore_getPremiumInfo_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new PremiumInfo();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_getPremiumInfo_result.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_getPremiumInfo_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_getUserUrls_args = function(args) {
-  this.authenticationToken = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-  }
-};
-UserStore_getUserUrls_args.prototype = {};
-UserStore_getUserUrls_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_getUserUrls_args.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_getUserUrls_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_getUserUrls_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-UserStore_getUserUrls_result.prototype = {};
-UserStore_getUserUrls_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new UserUrls();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_getUserUrls_result.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_getUserUrls_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_inviteToBusiness_args = function(args) {
-  this.authenticationToken = null;
-  this.emailAddress = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.emailAddress !== undefined) {
-      this.emailAddress = args.emailAddress;
-    }
-  }
-};
-UserStore_inviteToBusiness_args.prototype = {};
-UserStore_inviteToBusiness_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.emailAddress = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_inviteToBusiness_args.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_inviteToBusiness_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.emailAddress !== null && this.emailAddress !== undefined) {
-    output.writeFieldBegin('emailAddress', Thrift.Type.STRING, 2);
-    output.writeString(this.emailAddress);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_inviteToBusiness_result = function(args) {
-  this.userException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-UserStore_inviteToBusiness_result.prototype = {};
-UserStore_inviteToBusiness_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_inviteToBusiness_result.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_inviteToBusiness_result');
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_removeFromBusiness_args = function(args) {
-  this.authenticationToken = null;
-  this.emailAddress = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.emailAddress !== undefined) {
-      this.emailAddress = args.emailAddress;
-    }
-  }
-};
-UserStore_removeFromBusiness_args.prototype = {};
-UserStore_removeFromBusiness_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.emailAddress = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_removeFromBusiness_args.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_removeFromBusiness_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.emailAddress !== null && this.emailAddress !== undefined) {
-    output.writeFieldBegin('emailAddress', Thrift.Type.STRING, 2);
-    output.writeString(this.emailAddress);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_removeFromBusiness_result = function(args) {
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-UserStore_removeFromBusiness_result.prototype = {};
-UserStore_removeFromBusiness_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_removeFromBusiness_result.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_removeFromBusiness_result');
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_updateBusinessUserIdentifier_args = function(args) {
-  this.authenticationToken = null;
-  this.oldEmailAddress = null;
-  this.newEmailAddress = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.oldEmailAddress !== undefined) {
-      this.oldEmailAddress = args.oldEmailAddress;
-    }
-    if (args.newEmailAddress !== undefined) {
-      this.newEmailAddress = args.newEmailAddress;
-    }
-  }
-};
-UserStore_updateBusinessUserIdentifier_args.prototype = {};
-UserStore_updateBusinessUserIdentifier_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.oldEmailAddress = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRING) {
-        this.newEmailAddress = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_updateBusinessUserIdentifier_args.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_updateBusinessUserIdentifier_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.oldEmailAddress !== null && this.oldEmailAddress !== undefined) {
-    output.writeFieldBegin('oldEmailAddress', Thrift.Type.STRING, 2);
-    output.writeString(this.oldEmailAddress);
-    output.writeFieldEnd();
-  }
-  if (this.newEmailAddress !== null && this.newEmailAddress !== undefined) {
-    output.writeFieldBegin('newEmailAddress', Thrift.Type.STRING, 3);
-    output.writeString(this.newEmailAddress);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_updateBusinessUserIdentifier_result = function(args) {
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-UserStore_updateBusinessUserIdentifier_result.prototype = {};
-UserStore_updateBusinessUserIdentifier_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_updateBusinessUserIdentifier_result.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_updateBusinessUserIdentifier_result');
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_listBusinessUsers_args = function(args) {
-  this.authenticationToken = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-  }
-};
-UserStore_listBusinessUsers_args.prototype = {};
-UserStore_listBusinessUsers_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_listBusinessUsers_args.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_listBusinessUsers_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_listBusinessUsers_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-UserStore_listBusinessUsers_result.prototype = {};
-UserStore_listBusinessUsers_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.LIST) {
-        var _size8 = 0;
-        var _rtmp312;
-        this.success = [];
-        var _etype11 = 0;
-        _rtmp312 = input.readListBegin();
-        _etype11 = _rtmp312.etype;
-        _size8 = _rtmp312.size;
-        for (var _i13 = 0; _i13 < _size8; ++_i13)
-        {
-          var elem14 = null;
-          elem14 = new UserProfile();
-          elem14.read(input);
-          this.success.push(elem14);
-        }
-        input.readListEnd();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_listBusinessUsers_result.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_listBusinessUsers_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.LIST, 0);
-    output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter15 in this.success)
-    {
-      if (this.success.hasOwnProperty(iter15))
-      {
-        iter15 = this.success[iter15];
-        iter15.write(output);
-      }
-    }
-    output.writeListEnd();
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_listBusinessInvitations_args = function(args) {
-  this.authenticationToken = null;
-  this.includeRequestedInvitations = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.includeRequestedInvitations !== undefined) {
-      this.includeRequestedInvitations = args.includeRequestedInvitations;
-    }
-  }
-};
-UserStore_listBusinessInvitations_args.prototype = {};
-UserStore_listBusinessInvitations_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.BOOL) {
-        this.includeRequestedInvitations = input.readBool().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_listBusinessInvitations_args.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_listBusinessInvitations_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.includeRequestedInvitations !== null && this.includeRequestedInvitations !== undefined) {
-    output.writeFieldBegin('includeRequestedInvitations', Thrift.Type.BOOL, 2);
-    output.writeBool(this.includeRequestedInvitations);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_listBusinessInvitations_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-UserStore_listBusinessInvitations_result.prototype = {};
-UserStore_listBusinessInvitations_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.LIST) {
-        var _size16 = 0;
-        var _rtmp320;
-        this.success = [];
-        var _etype19 = 0;
-        _rtmp320 = input.readListBegin();
-        _etype19 = _rtmp320.etype;
-        _size16 = _rtmp320.size;
-        for (var _i21 = 0; _i21 < _size16; ++_i21)
-        {
-          var elem22 = null;
-          elem22 = new BusinessInvitation();
-          elem22.read(input);
-          this.success.push(elem22);
-        }
-        input.readListEnd();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_listBusinessInvitations_result.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_listBusinessInvitations_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.LIST, 0);
-    output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter23 in this.success)
-    {
-      if (this.success.hasOwnProperty(iter23))
-      {
-        iter23 = this.success[iter23];
-        iter23.write(output);
-      }
-    }
-    output.writeListEnd();
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_getAccountLimits_args = function(args) {
-  this.serviceLevel = null;
-  if (args) {
-    if (args.serviceLevel !== undefined) {
-      this.serviceLevel = args.serviceLevel;
-    }
-  }
-};
-UserStore_getAccountLimits_args.prototype = {};
-UserStore_getAccountLimits_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.I32) {
-        this.serviceLevel = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_getAccountLimits_args.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_getAccountLimits_args');
-  if (this.serviceLevel !== null && this.serviceLevel !== undefined) {
-    output.writeFieldBegin('serviceLevel', Thrift.Type.I32, 1);
-    output.writeI32(this.serviceLevel);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStore_getAccountLimits_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-  }
-};
-UserStore_getAccountLimits_result.prototype = {};
-UserStore_getAccountLimits_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new AccountLimits();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-UserStore_getAccountLimits_result.prototype.write = function(output) {
-  output.writeStructBegin('UserStore_getAccountLimits_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-UserStoreClient = function(input, output) {
-    this.input = input;
-    this.output = (!output) ? input : output;
+  // Define types and services
+
+  var Thrift = require('evernote-thrift').Thrift;
+  var Types = require('./Types');
+  var Errors = require('./Errors');
+
+
+  module.exports.EDAM_VERSION_MAJOR = 1;
+
+  module.exports.EDAM_VERSION_MINOR = 28;
+
+  module.exports.PublicUserInfo = Thrift.Struct.define('PublicUserInfo',  {
+    1: { alias: 'userId', type: Thrift.Type.I32 },
+    7: { alias: 'serviceLevel', type: Thrift.Type.I32 },
+    4: { alias: 'username', type: Thrift.Type.STRING },
+    5: { alias: 'noteStoreUrl', type: Thrift.Type.STRING },
+    6: { alias: 'webApiUrlPrefix', type: Thrift.Type.STRING }
+  });
+
+  module.exports.UserUrls = Thrift.Struct.define('UserUrls',  {
+    1: { alias: 'noteStoreUrl', type: Thrift.Type.STRING },
+    2: { alias: 'webApiUrlPrefix', type: Thrift.Type.STRING },
+    3: { alias: 'userStoreUrl', type: Thrift.Type.STRING },
+    4: { alias: 'utilityUrl', type: Thrift.Type.STRING },
+    5: { alias: 'messageStoreUrl', type: Thrift.Type.STRING },
+    6: { alias: 'userWebSocketUrl', type: Thrift.Type.STRING }
+  });
+
+  module.exports.AuthenticationResult = Thrift.Struct.define('AuthenticationResult',  {
+    1: { alias: 'currentTime', type: Thrift.Type.I64 },
+    2: { alias: 'authenticationToken', type: Thrift.Type.STRING },
+    3: { alias: 'expiration', type: Thrift.Type.I64 },
+    4: { alias: 'user', type: Thrift.Type.STRUCT, def: Types.User },
+    5: { alias: 'publicUserInfo', type: Thrift.Type.STRUCT, def: module.exports.PublicUserInfo },
+    6: { alias: 'noteStoreUrl', type: Thrift.Type.STRING },
+    7: { alias: 'webApiUrlPrefix', type: Thrift.Type.STRING },
+    8: { alias: 'secondFactorRequired', type: Thrift.Type.BOOL },
+    9: { alias: 'secondFactorDeliveryHint', type: Thrift.Type.STRING },
+    10: { alias: 'urls', type: Thrift.Type.STRUCT, def: module.exports.UserUrls }
+  });
+
+  module.exports.BootstrapSettings = Thrift.Struct.define('BootstrapSettings',  {
+    1: { alias: 'serviceHost', type: Thrift.Type.STRING },
+    2: { alias: 'marketingUrl', type: Thrift.Type.STRING },
+    3: { alias: 'supportUrl', type: Thrift.Type.STRING },
+    4: { alias: 'accountEmailDomain', type: Thrift.Type.STRING },
+    5: { alias: 'enableFacebookSharing', type: Thrift.Type.BOOL },
+    6: { alias: 'enableGiftSubscriptions', type: Thrift.Type.BOOL },
+    7: { alias: 'enableSupportTickets', type: Thrift.Type.BOOL },
+    8: { alias: 'enableSharedNotebooks', type: Thrift.Type.BOOL },
+    9: { alias: 'enableSingleNoteSharing', type: Thrift.Type.BOOL },
+    10: { alias: 'enableSponsoredAccounts', type: Thrift.Type.BOOL },
+    11: { alias: 'enableTwitterSharing', type: Thrift.Type.BOOL },
+    12: { alias: 'enableLinkedInSharing', type: Thrift.Type.BOOL },
+    13: { alias: 'enablePublicNotebooks', type: Thrift.Type.BOOL },
+    16: { alias: 'enableGoogle', type: Thrift.Type.BOOL }
+  });
+
+  module.exports.BootstrapProfile = Thrift.Struct.define('BootstrapProfile',  {
+    1: { alias: 'name', type: Thrift.Type.STRING },
+    2: { alias: 'settings', type: Thrift.Type.STRUCT, def: module.exports.BootstrapSettings }
+  });
+
+  module.exports.BootstrapInfo = Thrift.Struct.define('BootstrapInfo',  {
+    1: { alias: 'profiles', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, module.exports.BootstrapProfile)  }
+  });
+
+  var UserStore = module.exports.UserStore = {};
+
+  UserStore.checkVersion = Thrift.Method.define({
+    alias: 'checkVersion',
+    args: Thrift.Struct.define('checkVersionArgs', {
+      1: { alias: 'clientName', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'edamVersionMajor', type: Thrift.Type.I16, index: 1 },
+      3: { alias: 'edamVersionMinor', type: Thrift.Type.I16, index: 2 }
+    }),
+    result: Thrift.Struct.define('checkVersionResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.BOOL }
+    })
+  });
+
+  UserStore.getBootstrapInfo = Thrift.Method.define({
+    alias: 'getBootstrapInfo',
+    args: Thrift.Struct.define('getBootstrapInfoArgs', {
+      1: { alias: 'locale', type: Thrift.Type.STRING, index: 0 }
+    }),
+    result: Thrift.Struct.define('getBootstrapInfoResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: module.exports.BootstrapInfo }
+    })
+  });
+
+  UserStore.authenticateLongSession = Thrift.Method.define({
+    alias: 'authenticateLongSession',
+    args: Thrift.Struct.define('authenticateLongSessionArgs', {
+      1: { alias: 'username', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'password', type: Thrift.Type.STRING, index: 1 },
+      3: { alias: 'consumerKey', type: Thrift.Type.STRING, index: 2 },
+      4: { alias: 'consumerSecret', type: Thrift.Type.STRING, index: 3 },
+      5: { alias: 'deviceIdentifier', type: Thrift.Type.STRING, index: 4 },
+      6: { alias: 'deviceDescription', type: Thrift.Type.STRING, index: 5 },
+      7: { alias: 'supportsTwoFactor', type: Thrift.Type.BOOL, index: 6 }
+    }),
+    result: Thrift.Struct.define('authenticateLongSessionResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: module.exports.AuthenticationResult },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  UserStore.completeTwoFactorAuthentication = Thrift.Method.define({
+    alias: 'completeTwoFactorAuthentication',
+    args: Thrift.Struct.define('completeTwoFactorAuthenticationArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'oneTimeCode', type: Thrift.Type.STRING, index: 1 },
+      3: { alias: 'deviceIdentifier', type: Thrift.Type.STRING, index: 2 },
+      4: { alias: 'deviceDescription', type: Thrift.Type.STRING, index: 3 }
+    }),
+    result: Thrift.Struct.define('completeTwoFactorAuthenticationResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: module.exports.AuthenticationResult },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  UserStore.revokeLongSession = Thrift.Method.define({
+    alias: 'revokeLongSession',
+    args: Thrift.Struct.define('revokeLongSessionArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 }
+    }),
+    result: Thrift.Struct.define('revokeLongSessionResult', {
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  UserStore.authenticateToBusiness = Thrift.Method.define({
+    alias: 'authenticateToBusiness',
+    args: Thrift.Struct.define('authenticateToBusinessArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 }
+    }),
+    result: Thrift.Struct.define('authenticateToBusinessResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: module.exports.AuthenticationResult },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  UserStore.getUser = Thrift.Method.define({
+    alias: 'getUser',
+    args: Thrift.Struct.define('getUserArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 }
+    }),
+    result: Thrift.Struct.define('getUserResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.User },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  UserStore.getPublicUserInfo = Thrift.Method.define({
+    alias: 'getPublicUserInfo',
+    args: Thrift.Struct.define('getPublicUserInfoArgs', {
+      1: { alias: 'username', type: Thrift.Type.STRING, index: 0 }
+    }),
+    result: Thrift.Struct.define('getPublicUserInfoResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: module.exports.PublicUserInfo },
+      1: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException }
+    })
+  });
+
+  UserStore.getPremiumInfo = Thrift.Method.define({
+    alias: 'getPremiumInfo',
+    args: Thrift.Struct.define('getPremiumInfoArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 }
+    }),
+    result: Thrift.Struct.define('getPremiumInfoResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.PremiumInfo },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  UserStore.getUserUrls = Thrift.Method.define({
+    alias: 'getUserUrls',
+    args: Thrift.Struct.define('getUserUrlsArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 }
+    }),
+    result: Thrift.Struct.define('getUserUrlsResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: module.exports.UserUrls },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  UserStore.inviteToBusiness = Thrift.Method.define({
+    alias: 'inviteToBusiness',
+    args: Thrift.Struct.define('inviteToBusinessArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'emailAddress', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('inviteToBusinessResult', {
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  UserStore.removeFromBusiness = Thrift.Method.define({
+    alias: 'removeFromBusiness',
+    args: Thrift.Struct.define('removeFromBusinessArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'emailAddress', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('removeFromBusinessResult', {
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  UserStore.updateBusinessUserIdentifier = Thrift.Method.define({
+    alias: 'updateBusinessUserIdentifier',
+    args: Thrift.Struct.define('updateBusinessUserIdentifierArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'oldEmailAddress', type: Thrift.Type.STRING, index: 1 },
+      3: { alias: 'newEmailAddress', type: Thrift.Type.STRING, index: 2 }
+    }),
+    result: Thrift.Struct.define('updateBusinessUserIdentifierResult', {
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  UserStore.listBusinessUsers = Thrift.Method.define({
+    alias: 'listBusinessUsers',
+    args: Thrift.Struct.define('listBusinessUsersArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 }
+    }),
+    result: Thrift.Struct.define('listBusinessUsersResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.UserProfile)  },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  UserStore.listBusinessInvitations = Thrift.Method.define({
+    alias: 'listBusinessInvitations',
+    args: Thrift.Struct.define('listBusinessInvitationsArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'includeRequestedInvitations', type: Thrift.Type.BOOL, index: 1 }
+    }),
+    result: Thrift.Struct.define('listBusinessInvitationsResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.BusinessInvitation)  },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  UserStore.getAccountLimits = Thrift.Method.define({
+    alias: 'getAccountLimits',
+    args: Thrift.Struct.define('getAccountLimitsArgs', {
+      1: { alias: 'serviceLevel', type: Thrift.Type.I32, index: 0 }
+    }),
+    result: Thrift.Struct.define('getAccountLimitsResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.AccountLimits },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException }
+    })
+  });
+
+  // Define UserStore Client
+
+  function UserStoreClient(output) {
+    this.output = output;
     this.seqid = 0;
-};
-UserStoreClient.prototype = {};
-UserStoreClient.prototype.checkVersion = function(clientName, edamVersionMajor, edamVersionMinor, callback) {
-  if (callback === undefined) {
-    this.send_checkVersion(clientName, edamVersionMajor, edamVersionMinor);
-    return this.recv_checkVersion();
-  } else {
-    var postData = this.send_checkVersion(clientName, edamVersionMajor, edamVersionMinor, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_checkVersion);
   }
-};
 
-UserStoreClient.prototype.send_checkVersion = function(clientName, edamVersionMajor, edamVersionMinor, callback) {
-  this.output.writeMessageBegin('checkVersion', Thrift.MessageType.CALL, this.seqid);
-  var args = new UserStore_checkVersion_args();
-  args.clientName = clientName;
-  args.edamVersionMajor = edamVersionMajor;
-  args.edamVersionMinor = edamVersionMinor;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
+  UserStoreClient.prototype.checkVersion = function(clientName, edamVersionMajor, edamVersionMinor, callback) {
+    var mdef = UserStore.checkVersion;
+    var args = new mdef.args();
+    args.clientName = clientName;
+    args.edamVersionMajor = edamVersionMajor;
+    args.edamVersionMinor = edamVersionMinor;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
 
-UserStoreClient.prototype.recv_checkVersion = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new UserStore_checkVersion_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
+  UserStoreClient.prototype.getBootstrapInfo = function(locale, callback) {
+    var mdef = UserStore.getBootstrapInfo;
+    var args = new mdef.args();
+    args.locale = locale;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
 
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'checkVersion failed: unknown result';
-};
-UserStoreClient.prototype.getBootstrapInfo = function(locale, callback) {
-  if (callback === undefined) {
-    this.send_getBootstrapInfo(locale);
-    return this.recv_getBootstrapInfo();
-  } else {
-    var postData = this.send_getBootstrapInfo(locale, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getBootstrapInfo);
-  }
-};
+  UserStoreClient.prototype.authenticateLongSession = function(username, password, consumerKey, consumerSecret, deviceIdentifier, deviceDescription, supportsTwoFactor, callback) {
+    var mdef = UserStore.authenticateLongSession;
+    var args = new mdef.args();
+    args.username = username;
+    args.password = password;
+    args.consumerKey = consumerKey;
+    args.consumerSecret = consumerSecret;
+    args.deviceIdentifier = deviceIdentifier;
+    args.deviceDescription = deviceDescription;
+    args.supportsTwoFactor = supportsTwoFactor;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
 
-UserStoreClient.prototype.send_getBootstrapInfo = function(locale, callback) {
-  this.output.writeMessageBegin('getBootstrapInfo', Thrift.MessageType.CALL, this.seqid);
-  var args = new UserStore_getBootstrapInfo_args();
-  args.locale = locale;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
+  UserStoreClient.prototype.completeTwoFactorAuthentication = function(authenticationToken, oneTimeCode, deviceIdentifier, deviceDescription, callback) {
+    var mdef = UserStore.completeTwoFactorAuthentication;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.oneTimeCode = oneTimeCode;
+    args.deviceIdentifier = deviceIdentifier;
+    args.deviceDescription = deviceDescription;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
 
-UserStoreClient.prototype.recv_getBootstrapInfo = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new UserStore_getBootstrapInfo_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
+  UserStoreClient.prototype.revokeLongSession = function(authenticationToken, callback) {
+    var mdef = UserStore.revokeLongSession;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
 
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getBootstrapInfo failed: unknown result';
-};
-UserStoreClient.prototype.authenticateLongSession = function(username, password, consumerKey, consumerSecret, deviceIdentifier, deviceDescription, supportsTwoFactor, callback) {
-  if (callback === undefined) {
-    this.send_authenticateLongSession(username, password, consumerKey, consumerSecret, deviceIdentifier, deviceDescription, supportsTwoFactor);
-    return this.recv_authenticateLongSession();
-  } else {
-    var postData = this.send_authenticateLongSession(username, password, consumerKey, consumerSecret, deviceIdentifier, deviceDescription, supportsTwoFactor, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_authenticateLongSession);
-  }
-};
+  UserStoreClient.prototype.authenticateToBusiness = function(authenticationToken, callback) {
+    var mdef = UserStore.authenticateToBusiness;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
 
-UserStoreClient.prototype.send_authenticateLongSession = function(username, password, consumerKey, consumerSecret, deviceIdentifier, deviceDescription, supportsTwoFactor, callback) {
-  this.output.writeMessageBegin('authenticateLongSession', Thrift.MessageType.CALL, this.seqid);
-  var args = new UserStore_authenticateLongSession_args();
-  args.username = username;
-  args.password = password;
-  args.consumerKey = consumerKey;
-  args.consumerSecret = consumerSecret;
-  args.deviceIdentifier = deviceIdentifier;
-  args.deviceDescription = deviceDescription;
-  args.supportsTwoFactor = supportsTwoFactor;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
+  UserStoreClient.prototype.getUser = function(authenticationToken, callback) {
+    var mdef = UserStore.getUser;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
 
-UserStoreClient.prototype.recv_authenticateLongSession = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new UserStore_authenticateLongSession_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
+  UserStoreClient.prototype.getPublicUserInfo = function(username, callback) {
+    var mdef = UserStore.getPublicUserInfo;
+    var args = new mdef.args();
+    args.username = username;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
 
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'authenticateLongSession failed: unknown result';
-};
-UserStoreClient.prototype.completeTwoFactorAuthentication = function(authenticationToken, oneTimeCode, deviceIdentifier, deviceDescription, callback) {
-  if (callback === undefined) {
-    this.send_completeTwoFactorAuthentication(authenticationToken, oneTimeCode, deviceIdentifier, deviceDescription);
-    return this.recv_completeTwoFactorAuthentication();
-  } else {
-    var postData = this.send_completeTwoFactorAuthentication(authenticationToken, oneTimeCode, deviceIdentifier, deviceDescription, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_completeTwoFactorAuthentication);
-  }
-};
+  UserStoreClient.prototype.getPremiumInfo = function(authenticationToken, callback) {
+    var mdef = UserStore.getPremiumInfo;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
 
-UserStoreClient.prototype.send_completeTwoFactorAuthentication = function(authenticationToken, oneTimeCode, deviceIdentifier, deviceDescription, callback) {
-  this.output.writeMessageBegin('completeTwoFactorAuthentication', Thrift.MessageType.CALL, this.seqid);
-  var args = new UserStore_completeTwoFactorAuthentication_args();
-  args.authenticationToken = authenticationToken;
-  args.oneTimeCode = oneTimeCode;
-  args.deviceIdentifier = deviceIdentifier;
-  args.deviceDescription = deviceDescription;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
+  UserStoreClient.prototype.getUserUrls = function(authenticationToken, callback) {
+    var mdef = UserStore.getUserUrls;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
 
-UserStoreClient.prototype.recv_completeTwoFactorAuthentication = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new UserStore_completeTwoFactorAuthentication_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
+  UserStoreClient.prototype.inviteToBusiness = function(authenticationToken, emailAddress, callback) {
+    var mdef = UserStore.inviteToBusiness;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.emailAddress = emailAddress;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
 
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'completeTwoFactorAuthentication failed: unknown result';
-};
-UserStoreClient.prototype.revokeLongSession = function(authenticationToken, callback) {
-  if (callback === undefined) {
-    this.send_revokeLongSession(authenticationToken);
-    this.recv_revokeLongSession();
-  } else {
-    var postData = this.send_revokeLongSession(authenticationToken, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_revokeLongSession);
-  }
-};
+  UserStoreClient.prototype.removeFromBusiness = function(authenticationToken, emailAddress, callback) {
+    var mdef = UserStore.removeFromBusiness;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.emailAddress = emailAddress;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
 
-UserStoreClient.prototype.send_revokeLongSession = function(authenticationToken, callback) {
-  this.output.writeMessageBegin('revokeLongSession', Thrift.MessageType.CALL, this.seqid);
-  var args = new UserStore_revokeLongSession_args();
-  args.authenticationToken = authenticationToken;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
+  UserStoreClient.prototype.updateBusinessUserIdentifier = function(authenticationToken, oldEmailAddress, newEmailAddress, callback) {
+    var mdef = UserStore.updateBusinessUserIdentifier;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.oldEmailAddress = oldEmailAddress;
+    args.newEmailAddress = newEmailAddress;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
 
-UserStoreClient.prototype.recv_revokeLongSession = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new UserStore_revokeLongSession_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
+  UserStoreClient.prototype.listBusinessUsers = function(authenticationToken, callback) {
+    var mdef = UserStore.listBusinessUsers;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
 
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  return;
-};
-UserStoreClient.prototype.authenticateToBusiness = function(authenticationToken, callback) {
-  if (callback === undefined) {
-    this.send_authenticateToBusiness(authenticationToken);
-    return this.recv_authenticateToBusiness();
-  } else {
-    var postData = this.send_authenticateToBusiness(authenticationToken, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_authenticateToBusiness);
-  }
-};
+  UserStoreClient.prototype.listBusinessInvitations = function(authenticationToken, includeRequestedInvitations, callback) {
+    var mdef = UserStore.listBusinessInvitations;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.includeRequestedInvitations = includeRequestedInvitations;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
 
-UserStoreClient.prototype.send_authenticateToBusiness = function(authenticationToken, callback) {
-  this.output.writeMessageBegin('authenticateToBusiness', Thrift.MessageType.CALL, this.seqid);
-  var args = new UserStore_authenticateToBusiness_args();
-  args.authenticationToken = authenticationToken;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
+  UserStoreClient.prototype.getAccountLimits = function(serviceLevel, callback) {
+    var mdef = UserStore.getAccountLimits;
+    var args = new mdef.args();
+    args.serviceLevel = serviceLevel;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
 
-UserStoreClient.prototype.recv_authenticateToBusiness = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new UserStore_authenticateToBusiness_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
+  module.exports.UserStore.Client = UserStoreClient;
 
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'authenticateToBusiness failed: unknown result';
-};
-UserStoreClient.prototype.getUser = function(authenticationToken, callback) {
-  if (callback === undefined) {
-    this.send_getUser(authenticationToken);
-    return this.recv_getUser();
-  } else {
-    var postData = this.send_getUser(authenticationToken, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getUser);
-  }
-};
+  // Define UserStore Server
 
-UserStoreClient.prototype.send_getUser = function(authenticationToken, callback) {
-  this.output.writeMessageBegin('getUser', Thrift.MessageType.CALL, this.seqid);
-  var args = new UserStore_getUser_args();
-  args.authenticationToken = authenticationToken;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
+  function UserStoreServer(service, stransport, Protocol) {
+    var methodName;
+      this.service = service;
+      this.stransport = stransport;
+      this.processor = new Thrift.Processor();
+      for (methodName in UserStore) {
+        if (service[methodName]) {
+          this.processor.addMethod(UserStore[methodName], service[methodName].bind(service));
+        }
+      }
+      this.stransport.process = function (input, output, noop) {
+      var inprot = new Protocol(input);
+      var outprot = new Protocol(output);
+      this.processor.process(inprot, outprot, noop);
+    }.bind(this);
+  }
 
-UserStoreClient.prototype.recv_getUser = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new UserStore_getUser_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
+  UserStoreServer.prototype.start = function () {
+    this.stransport.listen();
+  };
+  UserStoreServer.prototype.stop = function () {
+    this.stransport.close();
+  };
 
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getUser failed: unknown result';
-};
-UserStoreClient.prototype.getPublicUserInfo = function(username, callback) {
-  if (callback === undefined) {
-    this.send_getPublicUserInfo(username);
-    return this.recv_getPublicUserInfo();
-  } else {
-    var postData = this.send_getPublicUserInfo(username, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getPublicUserInfo);
-  }
-};
+  module.exports.UserStore.Server = UserStoreServer;
 
-UserStoreClient.prototype.send_getPublicUserInfo = function(username, callback) {
-  this.output.writeMessageBegin('getPublicUserInfo', Thrift.MessageType.CALL, this.seqid);
-  var args = new UserStore_getPublicUserInfo_args();
-  args.username = username;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-UserStoreClient.prototype.recv_getPublicUserInfo = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new UserStore_getPublicUserInfo_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getPublicUserInfo failed: unknown result';
-};
-UserStoreClient.prototype.getPremiumInfo = function(authenticationToken, callback) {
-  if (callback === undefined) {
-    this.send_getPremiumInfo(authenticationToken);
-    return this.recv_getPremiumInfo();
-  } else {
-    var postData = this.send_getPremiumInfo(authenticationToken, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getPremiumInfo);
-  }
-};
-
-UserStoreClient.prototype.send_getPremiumInfo = function(authenticationToken, callback) {
-  this.output.writeMessageBegin('getPremiumInfo', Thrift.MessageType.CALL, this.seqid);
-  var args = new UserStore_getPremiumInfo_args();
-  args.authenticationToken = authenticationToken;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-UserStoreClient.prototype.recv_getPremiumInfo = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new UserStore_getPremiumInfo_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getPremiumInfo failed: unknown result';
-};
-UserStoreClient.prototype.getUserUrls = function(authenticationToken, callback) {
-  if (callback === undefined) {
-    this.send_getUserUrls(authenticationToken);
-    return this.recv_getUserUrls();
-  } else {
-    var postData = this.send_getUserUrls(authenticationToken, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getUserUrls);
-  }
-};
-
-UserStoreClient.prototype.send_getUserUrls = function(authenticationToken, callback) {
-  this.output.writeMessageBegin('getUserUrls', Thrift.MessageType.CALL, this.seqid);
-  var args = new UserStore_getUserUrls_args();
-  args.authenticationToken = authenticationToken;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-UserStoreClient.prototype.recv_getUserUrls = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new UserStore_getUserUrls_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getUserUrls failed: unknown result';
-};
-UserStoreClient.prototype.inviteToBusiness = function(authenticationToken, emailAddress, callback) {
-  if (callback === undefined) {
-    this.send_inviteToBusiness(authenticationToken, emailAddress);
-    this.recv_inviteToBusiness();
-  } else {
-    var postData = this.send_inviteToBusiness(authenticationToken, emailAddress, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_inviteToBusiness);
-  }
-};
-
-UserStoreClient.prototype.send_inviteToBusiness = function(authenticationToken, emailAddress, callback) {
-  this.output.writeMessageBegin('inviteToBusiness', Thrift.MessageType.CALL, this.seqid);
-  var args = new UserStore_inviteToBusiness_args();
-  args.authenticationToken = authenticationToken;
-  args.emailAddress = emailAddress;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-UserStoreClient.prototype.recv_inviteToBusiness = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new UserStore_inviteToBusiness_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  return;
-};
-UserStoreClient.prototype.removeFromBusiness = function(authenticationToken, emailAddress, callback) {
-  if (callback === undefined) {
-    this.send_removeFromBusiness(authenticationToken, emailAddress);
-    this.recv_removeFromBusiness();
-  } else {
-    var postData = this.send_removeFromBusiness(authenticationToken, emailAddress, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_removeFromBusiness);
-  }
-};
-
-UserStoreClient.prototype.send_removeFromBusiness = function(authenticationToken, emailAddress, callback) {
-  this.output.writeMessageBegin('removeFromBusiness', Thrift.MessageType.CALL, this.seqid);
-  var args = new UserStore_removeFromBusiness_args();
-  args.authenticationToken = authenticationToken;
-  args.emailAddress = emailAddress;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-UserStoreClient.prototype.recv_removeFromBusiness = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new UserStore_removeFromBusiness_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  return;
-};
-UserStoreClient.prototype.updateBusinessUserIdentifier = function(authenticationToken, oldEmailAddress, newEmailAddress, callback) {
-  if (callback === undefined) {
-    this.send_updateBusinessUserIdentifier(authenticationToken, oldEmailAddress, newEmailAddress);
-    this.recv_updateBusinessUserIdentifier();
-  } else {
-    var postData = this.send_updateBusinessUserIdentifier(authenticationToken, oldEmailAddress, newEmailAddress, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_updateBusinessUserIdentifier);
-  }
-};
-
-UserStoreClient.prototype.send_updateBusinessUserIdentifier = function(authenticationToken, oldEmailAddress, newEmailAddress, callback) {
-  this.output.writeMessageBegin('updateBusinessUserIdentifier', Thrift.MessageType.CALL, this.seqid);
-  var args = new UserStore_updateBusinessUserIdentifier_args();
-  args.authenticationToken = authenticationToken;
-  args.oldEmailAddress = oldEmailAddress;
-  args.newEmailAddress = newEmailAddress;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-UserStoreClient.prototype.recv_updateBusinessUserIdentifier = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new UserStore_updateBusinessUserIdentifier_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  return;
-};
-UserStoreClient.prototype.listBusinessUsers = function(authenticationToken, callback) {
-  if (callback === undefined) {
-    this.send_listBusinessUsers(authenticationToken);
-    return this.recv_listBusinessUsers();
-  } else {
-    var postData = this.send_listBusinessUsers(authenticationToken, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_listBusinessUsers);
-  }
-};
-
-UserStoreClient.prototype.send_listBusinessUsers = function(authenticationToken, callback) {
-  this.output.writeMessageBegin('listBusinessUsers', Thrift.MessageType.CALL, this.seqid);
-  var args = new UserStore_listBusinessUsers_args();
-  args.authenticationToken = authenticationToken;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-UserStoreClient.prototype.recv_listBusinessUsers = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new UserStore_listBusinessUsers_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'listBusinessUsers failed: unknown result';
-};
-UserStoreClient.prototype.listBusinessInvitations = function(authenticationToken, includeRequestedInvitations, callback) {
-  if (callback === undefined) {
-    this.send_listBusinessInvitations(authenticationToken, includeRequestedInvitations);
-    return this.recv_listBusinessInvitations();
-  } else {
-    var postData = this.send_listBusinessInvitations(authenticationToken, includeRequestedInvitations, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_listBusinessInvitations);
-  }
-};
-
-UserStoreClient.prototype.send_listBusinessInvitations = function(authenticationToken, includeRequestedInvitations, callback) {
-  this.output.writeMessageBegin('listBusinessInvitations', Thrift.MessageType.CALL, this.seqid);
-  var args = new UserStore_listBusinessInvitations_args();
-  args.authenticationToken = authenticationToken;
-  args.includeRequestedInvitations = includeRequestedInvitations;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-UserStoreClient.prototype.recv_listBusinessInvitations = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new UserStore_listBusinessInvitations_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'listBusinessInvitations failed: unknown result';
-};
-UserStoreClient.prototype.getAccountLimits = function(serviceLevel, callback) {
-  if (callback === undefined) {
-    this.send_getAccountLimits(serviceLevel);
-    return this.recv_getAccountLimits();
-  } else {
-    var postData = this.send_getAccountLimits(serviceLevel, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getAccountLimits);
-  }
-};
-
-UserStoreClient.prototype.send_getAccountLimits = function(serviceLevel, callback) {
-  this.output.writeMessageBegin('getAccountLimits', Thrift.MessageType.CALL, this.seqid);
-  var args = new UserStore_getAccountLimits_args();
-  args.serviceLevel = serviceLevel;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-UserStoreClient.prototype.recv_getAccountLimits = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new UserStore_getAccountLimits_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getAccountLimits failed: unknown result';
-};

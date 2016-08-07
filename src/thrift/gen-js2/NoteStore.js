@@ -5,17542 +5,2033 @@
 //
 
 
-//HELPER FUNCTIONS AND STRUCTURES
-
-NoteStore_getSyncState_args = function(args) {
-  this.authenticationToken = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-  }
-};
-NoteStore_getSyncState_args.prototype = {};
-NoteStore_getSyncState_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getSyncState_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getSyncState_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getSyncState_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_getSyncState_result.prototype = {};
-NoteStore_getSyncState_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new SyncState();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getSyncState_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getSyncState_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getFilteredSyncChunk_args = function(args) {
-  this.authenticationToken = null;
-  this.afterUSN = null;
-  this.maxEntries = null;
-  this.filter = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.afterUSN !== undefined) {
-      this.afterUSN = args.afterUSN;
-    }
-    if (args.maxEntries !== undefined) {
-      this.maxEntries = args.maxEntries;
-    }
-    if (args.filter !== undefined) {
-      this.filter = args.filter;
-    }
-  }
-};
-NoteStore_getFilteredSyncChunk_args.prototype = {};
-NoteStore_getFilteredSyncChunk_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.I32) {
-        this.afterUSN = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.I32) {
-        this.maxEntries = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 4:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.filter = new SyncChunkFilter();
-        this.filter.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getFilteredSyncChunk_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getFilteredSyncChunk_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.afterUSN !== null && this.afterUSN !== undefined) {
-    output.writeFieldBegin('afterUSN', Thrift.Type.I32, 2);
-    output.writeI32(this.afterUSN);
-    output.writeFieldEnd();
-  }
-  if (this.maxEntries !== null && this.maxEntries !== undefined) {
-    output.writeFieldBegin('maxEntries', Thrift.Type.I32, 3);
-    output.writeI32(this.maxEntries);
-    output.writeFieldEnd();
-  }
-  if (this.filter !== null && this.filter !== undefined) {
-    output.writeFieldBegin('filter', Thrift.Type.STRUCT, 4);
-    this.filter.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getFilteredSyncChunk_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_getFilteredSyncChunk_result.prototype = {};
-NoteStore_getFilteredSyncChunk_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new SyncChunk();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getFilteredSyncChunk_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getFilteredSyncChunk_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getLinkedNotebookSyncState_args = function(args) {
-  this.authenticationToken = null;
-  this.linkedNotebook = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.linkedNotebook !== undefined) {
-      this.linkedNotebook = args.linkedNotebook;
-    }
-  }
-};
-NoteStore_getLinkedNotebookSyncState_args.prototype = {};
-NoteStore_getLinkedNotebookSyncState_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.linkedNotebook = new LinkedNotebook();
-        this.linkedNotebook.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getLinkedNotebookSyncState_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getLinkedNotebookSyncState_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.linkedNotebook !== null && this.linkedNotebook !== undefined) {
-    output.writeFieldBegin('linkedNotebook', Thrift.Type.STRUCT, 2);
-    this.linkedNotebook.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getLinkedNotebookSyncState_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_getLinkedNotebookSyncState_result.prototype = {};
-NoteStore_getLinkedNotebookSyncState_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new SyncState();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getLinkedNotebookSyncState_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getLinkedNotebookSyncState_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getLinkedNotebookSyncChunk_args = function(args) {
-  this.authenticationToken = null;
-  this.linkedNotebook = null;
-  this.afterUSN = null;
-  this.maxEntries = null;
-  this.fullSyncOnly = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.linkedNotebook !== undefined) {
-      this.linkedNotebook = args.linkedNotebook;
-    }
-    if (args.afterUSN !== undefined) {
-      this.afterUSN = args.afterUSN;
-    }
-    if (args.maxEntries !== undefined) {
-      this.maxEntries = args.maxEntries;
-    }
-    if (args.fullSyncOnly !== undefined) {
-      this.fullSyncOnly = args.fullSyncOnly;
-    }
-  }
-};
-NoteStore_getLinkedNotebookSyncChunk_args.prototype = {};
-NoteStore_getLinkedNotebookSyncChunk_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.linkedNotebook = new LinkedNotebook();
-        this.linkedNotebook.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.I32) {
-        this.afterUSN = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 4:
-      if (ftype == Thrift.Type.I32) {
-        this.maxEntries = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 5:
-      if (ftype == Thrift.Type.BOOL) {
-        this.fullSyncOnly = input.readBool().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getLinkedNotebookSyncChunk_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getLinkedNotebookSyncChunk_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.linkedNotebook !== null && this.linkedNotebook !== undefined) {
-    output.writeFieldBegin('linkedNotebook', Thrift.Type.STRUCT, 2);
-    this.linkedNotebook.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.afterUSN !== null && this.afterUSN !== undefined) {
-    output.writeFieldBegin('afterUSN', Thrift.Type.I32, 3);
-    output.writeI32(this.afterUSN);
-    output.writeFieldEnd();
-  }
-  if (this.maxEntries !== null && this.maxEntries !== undefined) {
-    output.writeFieldBegin('maxEntries', Thrift.Type.I32, 4);
-    output.writeI32(this.maxEntries);
-    output.writeFieldEnd();
-  }
-  if (this.fullSyncOnly !== null && this.fullSyncOnly !== undefined) {
-    output.writeFieldBegin('fullSyncOnly', Thrift.Type.BOOL, 5);
-    output.writeBool(this.fullSyncOnly);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getLinkedNotebookSyncChunk_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_getLinkedNotebookSyncChunk_result.prototype = {};
-NoteStore_getLinkedNotebookSyncChunk_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new SyncChunk();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getLinkedNotebookSyncChunk_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getLinkedNotebookSyncChunk_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_listNotebooks_args = function(args) {
-  this.authenticationToken = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-  }
-};
-NoteStore_listNotebooks_args.prototype = {};
-NoteStore_listNotebooks_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_listNotebooks_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_listNotebooks_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_listNotebooks_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_listNotebooks_result.prototype = {};
-NoteStore_listNotebooks_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.LIST) {
-        var _size380 = 0;
-        var _rtmp3384;
-        this.success = [];
-        var _etype383 = 0;
-        _rtmp3384 = input.readListBegin();
-        _etype383 = _rtmp3384.etype;
-        _size380 = _rtmp3384.size;
-        for (var _i385 = 0; _i385 < _size380; ++_i385)
-        {
-          var elem386 = null;
-          elem386 = new Notebook();
-          elem386.read(input);
-          this.success.push(elem386);
-        }
-        input.readListEnd();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_listNotebooks_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_listNotebooks_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.LIST, 0);
-    output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter387 in this.success)
-    {
-      if (this.success.hasOwnProperty(iter387))
-      {
-        iter387 = this.success[iter387];
-        iter387.write(output);
-      }
-    }
-    output.writeListEnd();
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_listAccessibleBusinessNotebooks_args = function(args) {
-  this.authenticationToken = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-  }
-};
-NoteStore_listAccessibleBusinessNotebooks_args.prototype = {};
-NoteStore_listAccessibleBusinessNotebooks_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_listAccessibleBusinessNotebooks_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_listAccessibleBusinessNotebooks_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_listAccessibleBusinessNotebooks_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_listAccessibleBusinessNotebooks_result.prototype = {};
-NoteStore_listAccessibleBusinessNotebooks_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.LIST) {
-        var _size388 = 0;
-        var _rtmp3392;
-        this.success = [];
-        var _etype391 = 0;
-        _rtmp3392 = input.readListBegin();
-        _etype391 = _rtmp3392.etype;
-        _size388 = _rtmp3392.size;
-        for (var _i393 = 0; _i393 < _size388; ++_i393)
-        {
-          var elem394 = null;
-          elem394 = new Notebook();
-          elem394.read(input);
-          this.success.push(elem394);
-        }
-        input.readListEnd();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_listAccessibleBusinessNotebooks_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_listAccessibleBusinessNotebooks_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.LIST, 0);
-    output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter395 in this.success)
-    {
-      if (this.success.hasOwnProperty(iter395))
-      {
-        iter395 = this.success[iter395];
-        iter395.write(output);
-      }
-    }
-    output.writeListEnd();
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getNotebook_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-  }
-};
-NoteStore_getNotebook_args.prototype = {};
-NoteStore_getNotebook_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getNotebook_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getNotebook_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getNotebook_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_getNotebook_result.prototype = {};
-NoteStore_getNotebook_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new Notebook();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getNotebook_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getNotebook_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getDefaultNotebook_args = function(args) {
-  this.authenticationToken = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-  }
-};
-NoteStore_getDefaultNotebook_args.prototype = {};
-NoteStore_getDefaultNotebook_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getDefaultNotebook_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getDefaultNotebook_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getDefaultNotebook_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_getDefaultNotebook_result.prototype = {};
-NoteStore_getDefaultNotebook_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new Notebook();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getDefaultNotebook_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getDefaultNotebook_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_createNotebook_args = function(args) {
-  this.authenticationToken = null;
-  this.notebook = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.notebook !== undefined) {
-      this.notebook = args.notebook;
-    }
-  }
-};
-NoteStore_createNotebook_args.prototype = {};
-NoteStore_createNotebook_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notebook = new Notebook();
-        this.notebook.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_createNotebook_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_createNotebook_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.notebook !== null && this.notebook !== undefined) {
-    output.writeFieldBegin('notebook', Thrift.Type.STRUCT, 2);
-    this.notebook.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_createNotebook_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_createNotebook_result.prototype = {};
-NoteStore_createNotebook_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new Notebook();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_createNotebook_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_createNotebook_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_updateNotebook_args = function(args) {
-  this.authenticationToken = null;
-  this.notebook = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.notebook !== undefined) {
-      this.notebook = args.notebook;
-    }
-  }
-};
-NoteStore_updateNotebook_args.prototype = {};
-NoteStore_updateNotebook_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notebook = new Notebook();
-        this.notebook.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_updateNotebook_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_updateNotebook_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.notebook !== null && this.notebook !== undefined) {
-    output.writeFieldBegin('notebook', Thrift.Type.STRUCT, 2);
-    this.notebook.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_updateNotebook_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_updateNotebook_result.prototype = {};
-NoteStore_updateNotebook_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.I32) {
-        this.success = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_updateNotebook_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_updateNotebook_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.I32, 0);
-    output.writeI32(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_expungeNotebook_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-  }
-};
-NoteStore_expungeNotebook_args.prototype = {};
-NoteStore_expungeNotebook_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_expungeNotebook_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_expungeNotebook_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_expungeNotebook_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_expungeNotebook_result.prototype = {};
-NoteStore_expungeNotebook_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.I32) {
-        this.success = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_expungeNotebook_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_expungeNotebook_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.I32, 0);
-    output.writeI32(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_listTags_args = function(args) {
-  this.authenticationToken = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-  }
-};
-NoteStore_listTags_args.prototype = {};
-NoteStore_listTags_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_listTags_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_listTags_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_listTags_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_listTags_result.prototype = {};
-NoteStore_listTags_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.LIST) {
-        var _size396 = 0;
-        var _rtmp3400;
-        this.success = [];
-        var _etype399 = 0;
-        _rtmp3400 = input.readListBegin();
-        _etype399 = _rtmp3400.etype;
-        _size396 = _rtmp3400.size;
-        for (var _i401 = 0; _i401 < _size396; ++_i401)
-        {
-          var elem402 = null;
-          elem402 = new Tag();
-          elem402.read(input);
-          this.success.push(elem402);
-        }
-        input.readListEnd();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_listTags_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_listTags_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.LIST, 0);
-    output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter403 in this.success)
-    {
-      if (this.success.hasOwnProperty(iter403))
-      {
-        iter403 = this.success[iter403];
-        iter403.write(output);
-      }
-    }
-    output.writeListEnd();
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_listTagsByNotebook_args = function(args) {
-  this.authenticationToken = null;
-  this.notebookGuid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.notebookGuid !== undefined) {
-      this.notebookGuid = args.notebookGuid;
-    }
-  }
-};
-NoteStore_listTagsByNotebook_args.prototype = {};
-NoteStore_listTagsByNotebook_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.notebookGuid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_listTagsByNotebook_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_listTagsByNotebook_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.notebookGuid !== null && this.notebookGuid !== undefined) {
-    output.writeFieldBegin('notebookGuid', Thrift.Type.STRING, 2);
-    output.writeString(this.notebookGuid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_listTagsByNotebook_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_listTagsByNotebook_result.prototype = {};
-NoteStore_listTagsByNotebook_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.LIST) {
-        var _size404 = 0;
-        var _rtmp3408;
-        this.success = [];
-        var _etype407 = 0;
-        _rtmp3408 = input.readListBegin();
-        _etype407 = _rtmp3408.etype;
-        _size404 = _rtmp3408.size;
-        for (var _i409 = 0; _i409 < _size404; ++_i409)
-        {
-          var elem410 = null;
-          elem410 = new Tag();
-          elem410.read(input);
-          this.success.push(elem410);
-        }
-        input.readListEnd();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_listTagsByNotebook_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_listTagsByNotebook_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.LIST, 0);
-    output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter411 in this.success)
-    {
-      if (this.success.hasOwnProperty(iter411))
-      {
-        iter411 = this.success[iter411];
-        iter411.write(output);
-      }
-    }
-    output.writeListEnd();
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getTag_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-  }
-};
-NoteStore_getTag_args.prototype = {};
-NoteStore_getTag_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getTag_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getTag_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getTag_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_getTag_result.prototype = {};
-NoteStore_getTag_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new Tag();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getTag_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getTag_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_createTag_args = function(args) {
-  this.authenticationToken = null;
-  this.tag = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.tag !== undefined) {
-      this.tag = args.tag;
-    }
-  }
-};
-NoteStore_createTag_args.prototype = {};
-NoteStore_createTag_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.tag = new Tag();
-        this.tag.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_createTag_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_createTag_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.tag !== null && this.tag !== undefined) {
-    output.writeFieldBegin('tag', Thrift.Type.STRUCT, 2);
-    this.tag.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_createTag_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_createTag_result.prototype = {};
-NoteStore_createTag_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new Tag();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_createTag_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_createTag_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_updateTag_args = function(args) {
-  this.authenticationToken = null;
-  this.tag = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.tag !== undefined) {
-      this.tag = args.tag;
-    }
-  }
-};
-NoteStore_updateTag_args.prototype = {};
-NoteStore_updateTag_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.tag = new Tag();
-        this.tag.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_updateTag_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_updateTag_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.tag !== null && this.tag !== undefined) {
-    output.writeFieldBegin('tag', Thrift.Type.STRUCT, 2);
-    this.tag.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_updateTag_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_updateTag_result.prototype = {};
-NoteStore_updateTag_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.I32) {
-        this.success = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_updateTag_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_updateTag_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.I32, 0);
-    output.writeI32(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_untagAll_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-  }
-};
-NoteStore_untagAll_args.prototype = {};
-NoteStore_untagAll_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_untagAll_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_untagAll_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_untagAll_result = function(args) {
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_untagAll_result.prototype = {};
-NoteStore_untagAll_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_untagAll_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_untagAll_result');
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_expungeTag_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-  }
-};
-NoteStore_expungeTag_args.prototype = {};
-NoteStore_expungeTag_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_expungeTag_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_expungeTag_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_expungeTag_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_expungeTag_result.prototype = {};
-NoteStore_expungeTag_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.I32) {
-        this.success = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_expungeTag_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_expungeTag_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.I32, 0);
-    output.writeI32(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_listSearches_args = function(args) {
-  this.authenticationToken = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-  }
-};
-NoteStore_listSearches_args.prototype = {};
-NoteStore_listSearches_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_listSearches_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_listSearches_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_listSearches_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_listSearches_result.prototype = {};
-NoteStore_listSearches_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.LIST) {
-        var _size412 = 0;
-        var _rtmp3416;
-        this.success = [];
-        var _etype415 = 0;
-        _rtmp3416 = input.readListBegin();
-        _etype415 = _rtmp3416.etype;
-        _size412 = _rtmp3416.size;
-        for (var _i417 = 0; _i417 < _size412; ++_i417)
-        {
-          var elem418 = null;
-          elem418 = new SavedSearch();
-          elem418.read(input);
-          this.success.push(elem418);
-        }
-        input.readListEnd();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_listSearches_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_listSearches_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.LIST, 0);
-    output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter419 in this.success)
-    {
-      if (this.success.hasOwnProperty(iter419))
-      {
-        iter419 = this.success[iter419];
-        iter419.write(output);
-      }
-    }
-    output.writeListEnd();
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getSearch_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-  }
-};
-NoteStore_getSearch_args.prototype = {};
-NoteStore_getSearch_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getSearch_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getSearch_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getSearch_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_getSearch_result.prototype = {};
-NoteStore_getSearch_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new SavedSearch();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getSearch_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getSearch_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_createSearch_args = function(args) {
-  this.authenticationToken = null;
-  this.search = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.search !== undefined) {
-      this.search = args.search;
-    }
-  }
-};
-NoteStore_createSearch_args.prototype = {};
-NoteStore_createSearch_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.search = new SavedSearch();
-        this.search.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_createSearch_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_createSearch_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.search !== null && this.search !== undefined) {
-    output.writeFieldBegin('search', Thrift.Type.STRUCT, 2);
-    this.search.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_createSearch_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_createSearch_result.prototype = {};
-NoteStore_createSearch_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new SavedSearch();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_createSearch_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_createSearch_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_updateSearch_args = function(args) {
-  this.authenticationToken = null;
-  this.search = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.search !== undefined) {
-      this.search = args.search;
-    }
-  }
-};
-NoteStore_updateSearch_args.prototype = {};
-NoteStore_updateSearch_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.search = new SavedSearch();
-        this.search.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_updateSearch_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_updateSearch_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.search !== null && this.search !== undefined) {
-    output.writeFieldBegin('search', Thrift.Type.STRUCT, 2);
-    this.search.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_updateSearch_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_updateSearch_result.prototype = {};
-NoteStore_updateSearch_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.I32) {
-        this.success = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_updateSearch_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_updateSearch_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.I32, 0);
-    output.writeI32(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_expungeSearch_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-  }
-};
-NoteStore_expungeSearch_args.prototype = {};
-NoteStore_expungeSearch_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_expungeSearch_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_expungeSearch_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_expungeSearch_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_expungeSearch_result.prototype = {};
-NoteStore_expungeSearch_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.I32) {
-        this.success = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_expungeSearch_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_expungeSearch_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.I32, 0);
-    output.writeI32(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_findNoteOffset_args = function(args) {
-  this.authenticationToken = null;
-  this.filter = null;
-  this.guid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.filter !== undefined) {
-      this.filter = args.filter;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-  }
-};
-NoteStore_findNoteOffset_args.prototype = {};
-NoteStore_findNoteOffset_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.filter = new NoteFilter();
-        this.filter.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_findNoteOffset_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_findNoteOffset_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.filter !== null && this.filter !== undefined) {
-    output.writeFieldBegin('filter', Thrift.Type.STRUCT, 2);
-    this.filter.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 3);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_findNoteOffset_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_findNoteOffset_result.prototype = {};
-NoteStore_findNoteOffset_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.I32) {
-        this.success = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_findNoteOffset_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_findNoteOffset_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.I32, 0);
-    output.writeI32(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_findNotesMetadata_args = function(args) {
-  this.authenticationToken = null;
-  this.filter = null;
-  this.offset = null;
-  this.maxNotes = null;
-  this.resultSpec = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.filter !== undefined) {
-      this.filter = args.filter;
-    }
-    if (args.offset !== undefined) {
-      this.offset = args.offset;
-    }
-    if (args.maxNotes !== undefined) {
-      this.maxNotes = args.maxNotes;
-    }
-    if (args.resultSpec !== undefined) {
-      this.resultSpec = args.resultSpec;
-    }
-  }
-};
-NoteStore_findNotesMetadata_args.prototype = {};
-NoteStore_findNotesMetadata_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.filter = new NoteFilter();
-        this.filter.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.I32) {
-        this.offset = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 4:
-      if (ftype == Thrift.Type.I32) {
-        this.maxNotes = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 5:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.resultSpec = new NotesMetadataResultSpec();
-        this.resultSpec.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_findNotesMetadata_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_findNotesMetadata_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.filter !== null && this.filter !== undefined) {
-    output.writeFieldBegin('filter', Thrift.Type.STRUCT, 2);
-    this.filter.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.offset !== null && this.offset !== undefined) {
-    output.writeFieldBegin('offset', Thrift.Type.I32, 3);
-    output.writeI32(this.offset);
-    output.writeFieldEnd();
-  }
-  if (this.maxNotes !== null && this.maxNotes !== undefined) {
-    output.writeFieldBegin('maxNotes', Thrift.Type.I32, 4);
-    output.writeI32(this.maxNotes);
-    output.writeFieldEnd();
-  }
-  if (this.resultSpec !== null && this.resultSpec !== undefined) {
-    output.writeFieldBegin('resultSpec', Thrift.Type.STRUCT, 5);
-    this.resultSpec.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_findNotesMetadata_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_findNotesMetadata_result.prototype = {};
-NoteStore_findNotesMetadata_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new NotesMetadataList();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_findNotesMetadata_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_findNotesMetadata_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_findNoteCounts_args = function(args) {
-  this.authenticationToken = null;
-  this.filter = null;
-  this.withTrash = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.filter !== undefined) {
-      this.filter = args.filter;
-    }
-    if (args.withTrash !== undefined) {
-      this.withTrash = args.withTrash;
-    }
-  }
-};
-NoteStore_findNoteCounts_args.prototype = {};
-NoteStore_findNoteCounts_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.filter = new NoteFilter();
-        this.filter.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.BOOL) {
-        this.withTrash = input.readBool().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_findNoteCounts_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_findNoteCounts_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.filter !== null && this.filter !== undefined) {
-    output.writeFieldBegin('filter', Thrift.Type.STRUCT, 2);
-    this.filter.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.withTrash !== null && this.withTrash !== undefined) {
-    output.writeFieldBegin('withTrash', Thrift.Type.BOOL, 3);
-    output.writeBool(this.withTrash);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_findNoteCounts_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_findNoteCounts_result.prototype = {};
-NoteStore_findNoteCounts_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new NoteCollectionCounts();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_findNoteCounts_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_findNoteCounts_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getNoteWithResultSpec_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  this.resultSpec = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-    if (args.resultSpec !== undefined) {
-      this.resultSpec = args.resultSpec;
-    }
-  }
-};
-NoteStore_getNoteWithResultSpec_args.prototype = {};
-NoteStore_getNoteWithResultSpec_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.resultSpec = new NoteResultSpec();
-        this.resultSpec.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getNoteWithResultSpec_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getNoteWithResultSpec_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  if (this.resultSpec !== null && this.resultSpec !== undefined) {
-    output.writeFieldBegin('resultSpec', Thrift.Type.STRUCT, 3);
-    this.resultSpec.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getNoteWithResultSpec_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_getNoteWithResultSpec_result.prototype = {};
-NoteStore_getNoteWithResultSpec_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new Note();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getNoteWithResultSpec_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getNoteWithResultSpec_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getNote_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  this.withContent = null;
-  this.withResourcesData = null;
-  this.withResourcesRecognition = null;
-  this.withResourcesAlternateData = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-    if (args.withContent !== undefined) {
-      this.withContent = args.withContent;
-    }
-    if (args.withResourcesData !== undefined) {
-      this.withResourcesData = args.withResourcesData;
-    }
-    if (args.withResourcesRecognition !== undefined) {
-      this.withResourcesRecognition = args.withResourcesRecognition;
-    }
-    if (args.withResourcesAlternateData !== undefined) {
-      this.withResourcesAlternateData = args.withResourcesAlternateData;
-    }
-  }
-};
-NoteStore_getNote_args.prototype = {};
-NoteStore_getNote_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.BOOL) {
-        this.withContent = input.readBool().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 4:
-      if (ftype == Thrift.Type.BOOL) {
-        this.withResourcesData = input.readBool().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 5:
-      if (ftype == Thrift.Type.BOOL) {
-        this.withResourcesRecognition = input.readBool().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 6:
-      if (ftype == Thrift.Type.BOOL) {
-        this.withResourcesAlternateData = input.readBool().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getNote_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getNote_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  if (this.withContent !== null && this.withContent !== undefined) {
-    output.writeFieldBegin('withContent', Thrift.Type.BOOL, 3);
-    output.writeBool(this.withContent);
-    output.writeFieldEnd();
-  }
-  if (this.withResourcesData !== null && this.withResourcesData !== undefined) {
-    output.writeFieldBegin('withResourcesData', Thrift.Type.BOOL, 4);
-    output.writeBool(this.withResourcesData);
-    output.writeFieldEnd();
-  }
-  if (this.withResourcesRecognition !== null && this.withResourcesRecognition !== undefined) {
-    output.writeFieldBegin('withResourcesRecognition', Thrift.Type.BOOL, 5);
-    output.writeBool(this.withResourcesRecognition);
-    output.writeFieldEnd();
-  }
-  if (this.withResourcesAlternateData !== null && this.withResourcesAlternateData !== undefined) {
-    output.writeFieldBegin('withResourcesAlternateData', Thrift.Type.BOOL, 6);
-    output.writeBool(this.withResourcesAlternateData);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getNote_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_getNote_result.prototype = {};
-NoteStore_getNote_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new Note();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getNote_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getNote_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getNoteApplicationData_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-  }
-};
-NoteStore_getNoteApplicationData_args.prototype = {};
-NoteStore_getNoteApplicationData_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getNoteApplicationData_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getNoteApplicationData_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getNoteApplicationData_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_getNoteApplicationData_result.prototype = {};
-NoteStore_getNoteApplicationData_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new LazyMap();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getNoteApplicationData_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getNoteApplicationData_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getNoteApplicationDataEntry_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  this.key = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-    if (args.key !== undefined) {
-      this.key = args.key;
-    }
-  }
-};
-NoteStore_getNoteApplicationDataEntry_args.prototype = {};
-NoteStore_getNoteApplicationDataEntry_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRING) {
-        this.key = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getNoteApplicationDataEntry_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getNoteApplicationDataEntry_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  if (this.key !== null && this.key !== undefined) {
-    output.writeFieldBegin('key', Thrift.Type.STRING, 3);
-    output.writeString(this.key);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getNoteApplicationDataEntry_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_getNoteApplicationDataEntry_result.prototype = {};
-NoteStore_getNoteApplicationDataEntry_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRING) {
-        this.success = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getNoteApplicationDataEntry_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getNoteApplicationDataEntry_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRING, 0);
-    output.writeString(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_setNoteApplicationDataEntry_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  this.key = null;
-  this.value = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-    if (args.key !== undefined) {
-      this.key = args.key;
-    }
-    if (args.value !== undefined) {
-      this.value = args.value;
-    }
-  }
-};
-NoteStore_setNoteApplicationDataEntry_args.prototype = {};
-NoteStore_setNoteApplicationDataEntry_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRING) {
-        this.key = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 4:
-      if (ftype == Thrift.Type.STRING) {
-        this.value = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_setNoteApplicationDataEntry_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_setNoteApplicationDataEntry_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  if (this.key !== null && this.key !== undefined) {
-    output.writeFieldBegin('key', Thrift.Type.STRING, 3);
-    output.writeString(this.key);
-    output.writeFieldEnd();
-  }
-  if (this.value !== null && this.value !== undefined) {
-    output.writeFieldBegin('value', Thrift.Type.STRING, 4);
-    output.writeString(this.value);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_setNoteApplicationDataEntry_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_setNoteApplicationDataEntry_result.prototype = {};
-NoteStore_setNoteApplicationDataEntry_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.I32) {
-        this.success = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_setNoteApplicationDataEntry_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_setNoteApplicationDataEntry_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.I32, 0);
-    output.writeI32(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_unsetNoteApplicationDataEntry_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  this.key = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-    if (args.key !== undefined) {
-      this.key = args.key;
-    }
-  }
-};
-NoteStore_unsetNoteApplicationDataEntry_args.prototype = {};
-NoteStore_unsetNoteApplicationDataEntry_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRING) {
-        this.key = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_unsetNoteApplicationDataEntry_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_unsetNoteApplicationDataEntry_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  if (this.key !== null && this.key !== undefined) {
-    output.writeFieldBegin('key', Thrift.Type.STRING, 3);
-    output.writeString(this.key);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_unsetNoteApplicationDataEntry_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_unsetNoteApplicationDataEntry_result.prototype = {};
-NoteStore_unsetNoteApplicationDataEntry_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.I32) {
-        this.success = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_unsetNoteApplicationDataEntry_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_unsetNoteApplicationDataEntry_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.I32, 0);
-    output.writeI32(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getNoteContent_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-  }
-};
-NoteStore_getNoteContent_args.prototype = {};
-NoteStore_getNoteContent_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getNoteContent_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getNoteContent_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getNoteContent_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_getNoteContent_result.prototype = {};
-NoteStore_getNoteContent_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRING) {
-        this.success = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getNoteContent_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getNoteContent_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRING, 0);
-    output.writeString(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getNoteSearchText_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  this.noteOnly = null;
-  this.tokenizeForIndexing = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-    if (args.noteOnly !== undefined) {
-      this.noteOnly = args.noteOnly;
-    }
-    if (args.tokenizeForIndexing !== undefined) {
-      this.tokenizeForIndexing = args.tokenizeForIndexing;
-    }
-  }
-};
-NoteStore_getNoteSearchText_args.prototype = {};
-NoteStore_getNoteSearchText_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.BOOL) {
-        this.noteOnly = input.readBool().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 4:
-      if (ftype == Thrift.Type.BOOL) {
-        this.tokenizeForIndexing = input.readBool().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getNoteSearchText_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getNoteSearchText_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  if (this.noteOnly !== null && this.noteOnly !== undefined) {
-    output.writeFieldBegin('noteOnly', Thrift.Type.BOOL, 3);
-    output.writeBool(this.noteOnly);
-    output.writeFieldEnd();
-  }
-  if (this.tokenizeForIndexing !== null && this.tokenizeForIndexing !== undefined) {
-    output.writeFieldBegin('tokenizeForIndexing', Thrift.Type.BOOL, 4);
-    output.writeBool(this.tokenizeForIndexing);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getNoteSearchText_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_getNoteSearchText_result.prototype = {};
-NoteStore_getNoteSearchText_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRING) {
-        this.success = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getNoteSearchText_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getNoteSearchText_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRING, 0);
-    output.writeString(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getResourceSearchText_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-  }
-};
-NoteStore_getResourceSearchText_args.prototype = {};
-NoteStore_getResourceSearchText_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getResourceSearchText_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getResourceSearchText_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getResourceSearchText_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_getResourceSearchText_result.prototype = {};
-NoteStore_getResourceSearchText_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRING) {
-        this.success = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getResourceSearchText_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getResourceSearchText_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRING, 0);
-    output.writeString(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getNoteTagNames_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-  }
-};
-NoteStore_getNoteTagNames_args.prototype = {};
-NoteStore_getNoteTagNames_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getNoteTagNames_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getNoteTagNames_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getNoteTagNames_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_getNoteTagNames_result.prototype = {};
-NoteStore_getNoteTagNames_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.LIST) {
-        var _size420 = 0;
-        var _rtmp3424;
-        this.success = [];
-        var _etype423 = 0;
-        _rtmp3424 = input.readListBegin();
-        _etype423 = _rtmp3424.etype;
-        _size420 = _rtmp3424.size;
-        for (var _i425 = 0; _i425 < _size420; ++_i425)
-        {
-          var elem426 = null;
-          elem426 = input.readString().value;
-          this.success.push(elem426);
-        }
-        input.readListEnd();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getNoteTagNames_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getNoteTagNames_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.LIST, 0);
-    output.writeListBegin(Thrift.Type.STRING, this.success.length);
-    for (var iter427 in this.success)
-    {
-      if (this.success.hasOwnProperty(iter427))
-      {
-        iter427 = this.success[iter427];
-        output.writeString(iter427);
-      }
-    }
-    output.writeListEnd();
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_createNote_args = function(args) {
-  this.authenticationToken = null;
-  this.note = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.note !== undefined) {
-      this.note = args.note;
-    }
-  }
-};
-NoteStore_createNote_args.prototype = {};
-NoteStore_createNote_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.note = new Note();
-        this.note.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_createNote_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_createNote_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.note !== null && this.note !== undefined) {
-    output.writeFieldBegin('note', Thrift.Type.STRUCT, 2);
-    this.note.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_createNote_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_createNote_result.prototype = {};
-NoteStore_createNote_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new Note();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_createNote_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_createNote_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_updateNote_args = function(args) {
-  this.authenticationToken = null;
-  this.note = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.note !== undefined) {
-      this.note = args.note;
-    }
-  }
-};
-NoteStore_updateNote_args.prototype = {};
-NoteStore_updateNote_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.note = new Note();
-        this.note.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_updateNote_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_updateNote_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.note !== null && this.note !== undefined) {
-    output.writeFieldBegin('note', Thrift.Type.STRUCT, 2);
-    this.note.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_updateNote_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_updateNote_result.prototype = {};
-NoteStore_updateNote_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new Note();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_updateNote_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_updateNote_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_deleteNote_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-  }
-};
-NoteStore_deleteNote_args.prototype = {};
-NoteStore_deleteNote_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_deleteNote_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_deleteNote_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_deleteNote_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_deleteNote_result.prototype = {};
-NoteStore_deleteNote_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.I32) {
-        this.success = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_deleteNote_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_deleteNote_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.I32, 0);
-    output.writeI32(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_expungeNote_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-  }
-};
-NoteStore_expungeNote_args.prototype = {};
-NoteStore_expungeNote_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_expungeNote_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_expungeNote_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_expungeNote_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_expungeNote_result.prototype = {};
-NoteStore_expungeNote_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.I32) {
-        this.success = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_expungeNote_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_expungeNote_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.I32, 0);
-    output.writeI32(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_copyNote_args = function(args) {
-  this.authenticationToken = null;
-  this.noteGuid = null;
-  this.toNotebookGuid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.noteGuid !== undefined) {
-      this.noteGuid = args.noteGuid;
-    }
-    if (args.toNotebookGuid !== undefined) {
-      this.toNotebookGuid = args.toNotebookGuid;
-    }
-  }
-};
-NoteStore_copyNote_args.prototype = {};
-NoteStore_copyNote_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.noteGuid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRING) {
-        this.toNotebookGuid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_copyNote_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_copyNote_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.noteGuid !== null && this.noteGuid !== undefined) {
-    output.writeFieldBegin('noteGuid', Thrift.Type.STRING, 2);
-    output.writeString(this.noteGuid);
-    output.writeFieldEnd();
-  }
-  if (this.toNotebookGuid !== null && this.toNotebookGuid !== undefined) {
-    output.writeFieldBegin('toNotebookGuid', Thrift.Type.STRING, 3);
-    output.writeString(this.toNotebookGuid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_copyNote_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_copyNote_result.prototype = {};
-NoteStore_copyNote_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new Note();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_copyNote_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_copyNote_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_listNoteVersions_args = function(args) {
-  this.authenticationToken = null;
-  this.noteGuid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.noteGuid !== undefined) {
-      this.noteGuid = args.noteGuid;
-    }
-  }
-};
-NoteStore_listNoteVersions_args.prototype = {};
-NoteStore_listNoteVersions_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.noteGuid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_listNoteVersions_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_listNoteVersions_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.noteGuid !== null && this.noteGuid !== undefined) {
-    output.writeFieldBegin('noteGuid', Thrift.Type.STRING, 2);
-    output.writeString(this.noteGuid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_listNoteVersions_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_listNoteVersions_result.prototype = {};
-NoteStore_listNoteVersions_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.LIST) {
-        var _size428 = 0;
-        var _rtmp3432;
-        this.success = [];
-        var _etype431 = 0;
-        _rtmp3432 = input.readListBegin();
-        _etype431 = _rtmp3432.etype;
-        _size428 = _rtmp3432.size;
-        for (var _i433 = 0; _i433 < _size428; ++_i433)
-        {
-          var elem434 = null;
-          elem434 = new NoteVersionId();
-          elem434.read(input);
-          this.success.push(elem434);
-        }
-        input.readListEnd();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_listNoteVersions_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_listNoteVersions_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.LIST, 0);
-    output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter435 in this.success)
-    {
-      if (this.success.hasOwnProperty(iter435))
-      {
-        iter435 = this.success[iter435];
-        iter435.write(output);
-      }
-    }
-    output.writeListEnd();
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getNoteVersion_args = function(args) {
-  this.authenticationToken = null;
-  this.noteGuid = null;
-  this.updateSequenceNum = null;
-  this.withResourcesData = null;
-  this.withResourcesRecognition = null;
-  this.withResourcesAlternateData = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.noteGuid !== undefined) {
-      this.noteGuid = args.noteGuid;
-    }
-    if (args.updateSequenceNum !== undefined) {
-      this.updateSequenceNum = args.updateSequenceNum;
-    }
-    if (args.withResourcesData !== undefined) {
-      this.withResourcesData = args.withResourcesData;
-    }
-    if (args.withResourcesRecognition !== undefined) {
-      this.withResourcesRecognition = args.withResourcesRecognition;
-    }
-    if (args.withResourcesAlternateData !== undefined) {
-      this.withResourcesAlternateData = args.withResourcesAlternateData;
-    }
-  }
-};
-NoteStore_getNoteVersion_args.prototype = {};
-NoteStore_getNoteVersion_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.noteGuid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.I32) {
-        this.updateSequenceNum = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 4:
-      if (ftype == Thrift.Type.BOOL) {
-        this.withResourcesData = input.readBool().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 5:
-      if (ftype == Thrift.Type.BOOL) {
-        this.withResourcesRecognition = input.readBool().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 6:
-      if (ftype == Thrift.Type.BOOL) {
-        this.withResourcesAlternateData = input.readBool().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getNoteVersion_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getNoteVersion_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.noteGuid !== null && this.noteGuid !== undefined) {
-    output.writeFieldBegin('noteGuid', Thrift.Type.STRING, 2);
-    output.writeString(this.noteGuid);
-    output.writeFieldEnd();
-  }
-  if (this.updateSequenceNum !== null && this.updateSequenceNum !== undefined) {
-    output.writeFieldBegin('updateSequenceNum', Thrift.Type.I32, 3);
-    output.writeI32(this.updateSequenceNum);
-    output.writeFieldEnd();
-  }
-  if (this.withResourcesData !== null && this.withResourcesData !== undefined) {
-    output.writeFieldBegin('withResourcesData', Thrift.Type.BOOL, 4);
-    output.writeBool(this.withResourcesData);
-    output.writeFieldEnd();
-  }
-  if (this.withResourcesRecognition !== null && this.withResourcesRecognition !== undefined) {
-    output.writeFieldBegin('withResourcesRecognition', Thrift.Type.BOOL, 5);
-    output.writeBool(this.withResourcesRecognition);
-    output.writeFieldEnd();
-  }
-  if (this.withResourcesAlternateData !== null && this.withResourcesAlternateData !== undefined) {
-    output.writeFieldBegin('withResourcesAlternateData', Thrift.Type.BOOL, 6);
-    output.writeBool(this.withResourcesAlternateData);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getNoteVersion_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_getNoteVersion_result.prototype = {};
-NoteStore_getNoteVersion_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new Note();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getNoteVersion_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getNoteVersion_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getResource_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  this.withData = null;
-  this.withRecognition = null;
-  this.withAttributes = null;
-  this.withAlternateData = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-    if (args.withData !== undefined) {
-      this.withData = args.withData;
-    }
-    if (args.withRecognition !== undefined) {
-      this.withRecognition = args.withRecognition;
-    }
-    if (args.withAttributes !== undefined) {
-      this.withAttributes = args.withAttributes;
-    }
-    if (args.withAlternateData !== undefined) {
-      this.withAlternateData = args.withAlternateData;
-    }
-  }
-};
-NoteStore_getResource_args.prototype = {};
-NoteStore_getResource_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.BOOL) {
-        this.withData = input.readBool().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 4:
-      if (ftype == Thrift.Type.BOOL) {
-        this.withRecognition = input.readBool().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 5:
-      if (ftype == Thrift.Type.BOOL) {
-        this.withAttributes = input.readBool().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 6:
-      if (ftype == Thrift.Type.BOOL) {
-        this.withAlternateData = input.readBool().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getResource_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getResource_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  if (this.withData !== null && this.withData !== undefined) {
-    output.writeFieldBegin('withData', Thrift.Type.BOOL, 3);
-    output.writeBool(this.withData);
-    output.writeFieldEnd();
-  }
-  if (this.withRecognition !== null && this.withRecognition !== undefined) {
-    output.writeFieldBegin('withRecognition', Thrift.Type.BOOL, 4);
-    output.writeBool(this.withRecognition);
-    output.writeFieldEnd();
-  }
-  if (this.withAttributes !== null && this.withAttributes !== undefined) {
-    output.writeFieldBegin('withAttributes', Thrift.Type.BOOL, 5);
-    output.writeBool(this.withAttributes);
-    output.writeFieldEnd();
-  }
-  if (this.withAlternateData !== null && this.withAlternateData !== undefined) {
-    output.writeFieldBegin('withAlternateData', Thrift.Type.BOOL, 6);
-    output.writeBool(this.withAlternateData);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getResource_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_getResource_result.prototype = {};
-NoteStore_getResource_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new Resource();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getResource_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getResource_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getResourceApplicationData_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-  }
-};
-NoteStore_getResourceApplicationData_args.prototype = {};
-NoteStore_getResourceApplicationData_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getResourceApplicationData_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getResourceApplicationData_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getResourceApplicationData_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_getResourceApplicationData_result.prototype = {};
-NoteStore_getResourceApplicationData_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new LazyMap();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getResourceApplicationData_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getResourceApplicationData_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getResourceApplicationDataEntry_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  this.key = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-    if (args.key !== undefined) {
-      this.key = args.key;
-    }
-  }
-};
-NoteStore_getResourceApplicationDataEntry_args.prototype = {};
-NoteStore_getResourceApplicationDataEntry_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRING) {
-        this.key = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getResourceApplicationDataEntry_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getResourceApplicationDataEntry_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  if (this.key !== null && this.key !== undefined) {
-    output.writeFieldBegin('key', Thrift.Type.STRING, 3);
-    output.writeString(this.key);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getResourceApplicationDataEntry_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_getResourceApplicationDataEntry_result.prototype = {};
-NoteStore_getResourceApplicationDataEntry_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRING) {
-        this.success = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getResourceApplicationDataEntry_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getResourceApplicationDataEntry_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRING, 0);
-    output.writeString(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_setResourceApplicationDataEntry_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  this.key = null;
-  this.value = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-    if (args.key !== undefined) {
-      this.key = args.key;
-    }
-    if (args.value !== undefined) {
-      this.value = args.value;
-    }
-  }
-};
-NoteStore_setResourceApplicationDataEntry_args.prototype = {};
-NoteStore_setResourceApplicationDataEntry_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRING) {
-        this.key = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 4:
-      if (ftype == Thrift.Type.STRING) {
-        this.value = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_setResourceApplicationDataEntry_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_setResourceApplicationDataEntry_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  if (this.key !== null && this.key !== undefined) {
-    output.writeFieldBegin('key', Thrift.Type.STRING, 3);
-    output.writeString(this.key);
-    output.writeFieldEnd();
-  }
-  if (this.value !== null && this.value !== undefined) {
-    output.writeFieldBegin('value', Thrift.Type.STRING, 4);
-    output.writeString(this.value);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_setResourceApplicationDataEntry_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_setResourceApplicationDataEntry_result.prototype = {};
-NoteStore_setResourceApplicationDataEntry_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.I32) {
-        this.success = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_setResourceApplicationDataEntry_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_setResourceApplicationDataEntry_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.I32, 0);
-    output.writeI32(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_unsetResourceApplicationDataEntry_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  this.key = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-    if (args.key !== undefined) {
-      this.key = args.key;
-    }
-  }
-};
-NoteStore_unsetResourceApplicationDataEntry_args.prototype = {};
-NoteStore_unsetResourceApplicationDataEntry_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRING) {
-        this.key = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_unsetResourceApplicationDataEntry_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_unsetResourceApplicationDataEntry_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  if (this.key !== null && this.key !== undefined) {
-    output.writeFieldBegin('key', Thrift.Type.STRING, 3);
-    output.writeString(this.key);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_unsetResourceApplicationDataEntry_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_unsetResourceApplicationDataEntry_result.prototype = {};
-NoteStore_unsetResourceApplicationDataEntry_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.I32) {
-        this.success = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_unsetResourceApplicationDataEntry_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_unsetResourceApplicationDataEntry_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.I32, 0);
-    output.writeI32(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_updateResource_args = function(args) {
-  this.authenticationToken = null;
-  this.resource = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.resource !== undefined) {
-      this.resource = args.resource;
-    }
-  }
-};
-NoteStore_updateResource_args.prototype = {};
-NoteStore_updateResource_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.resource = new Resource();
-        this.resource.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_updateResource_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_updateResource_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.resource !== null && this.resource !== undefined) {
-    output.writeFieldBegin('resource', Thrift.Type.STRUCT, 2);
-    this.resource.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_updateResource_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_updateResource_result.prototype = {};
-NoteStore_updateResource_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.I32) {
-        this.success = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_updateResource_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_updateResource_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.I32, 0);
-    output.writeI32(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getResourceData_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-  }
-};
-NoteStore_getResourceData_args.prototype = {};
-NoteStore_getResourceData_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getResourceData_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getResourceData_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getResourceData_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_getResourceData_result.prototype = {};
-NoteStore_getResourceData_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRING) {
-        this.success = input.readBinary().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getResourceData_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getResourceData_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRING, 0);
-    output.writeBinary(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getResourceByHash_args = function(args) {
-  this.authenticationToken = null;
-  this.noteGuid = null;
-  this.contentHash = null;
-  this.withData = null;
-  this.withRecognition = null;
-  this.withAlternateData = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.noteGuid !== undefined) {
-      this.noteGuid = args.noteGuid;
-    }
-    if (args.contentHash !== undefined) {
-      this.contentHash = args.contentHash;
-    }
-    if (args.withData !== undefined) {
-      this.withData = args.withData;
-    }
-    if (args.withRecognition !== undefined) {
-      this.withRecognition = args.withRecognition;
-    }
-    if (args.withAlternateData !== undefined) {
-      this.withAlternateData = args.withAlternateData;
-    }
-  }
-};
-NoteStore_getResourceByHash_args.prototype = {};
-NoteStore_getResourceByHash_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.noteGuid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRING) {
-        this.contentHash = input.readBinary().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 4:
-      if (ftype == Thrift.Type.BOOL) {
-        this.withData = input.readBool().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 5:
-      if (ftype == Thrift.Type.BOOL) {
-        this.withRecognition = input.readBool().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 6:
-      if (ftype == Thrift.Type.BOOL) {
-        this.withAlternateData = input.readBool().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getResourceByHash_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getResourceByHash_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.noteGuid !== null && this.noteGuid !== undefined) {
-    output.writeFieldBegin('noteGuid', Thrift.Type.STRING, 2);
-    output.writeString(this.noteGuid);
-    output.writeFieldEnd();
-  }
-  if (this.contentHash !== null && this.contentHash !== undefined) {
-    output.writeFieldBegin('contentHash', Thrift.Type.STRING, 3);
-    output.writeBinary(this.contentHash);
-    output.writeFieldEnd();
-  }
-  if (this.withData !== null && this.withData !== undefined) {
-    output.writeFieldBegin('withData', Thrift.Type.BOOL, 4);
-    output.writeBool(this.withData);
-    output.writeFieldEnd();
-  }
-  if (this.withRecognition !== null && this.withRecognition !== undefined) {
-    output.writeFieldBegin('withRecognition', Thrift.Type.BOOL, 5);
-    output.writeBool(this.withRecognition);
-    output.writeFieldEnd();
-  }
-  if (this.withAlternateData !== null && this.withAlternateData !== undefined) {
-    output.writeFieldBegin('withAlternateData', Thrift.Type.BOOL, 6);
-    output.writeBool(this.withAlternateData);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getResourceByHash_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_getResourceByHash_result.prototype = {};
-NoteStore_getResourceByHash_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new Resource();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getResourceByHash_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getResourceByHash_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getResourceRecognition_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-  }
-};
-NoteStore_getResourceRecognition_args.prototype = {};
-NoteStore_getResourceRecognition_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getResourceRecognition_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getResourceRecognition_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getResourceRecognition_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_getResourceRecognition_result.prototype = {};
-NoteStore_getResourceRecognition_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRING) {
-        this.success = input.readBinary().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getResourceRecognition_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getResourceRecognition_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRING, 0);
-    output.writeBinary(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getResourceAlternateData_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-  }
-};
-NoteStore_getResourceAlternateData_args.prototype = {};
-NoteStore_getResourceAlternateData_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getResourceAlternateData_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getResourceAlternateData_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getResourceAlternateData_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_getResourceAlternateData_result.prototype = {};
-NoteStore_getResourceAlternateData_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRING) {
-        this.success = input.readBinary().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getResourceAlternateData_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getResourceAlternateData_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRING, 0);
-    output.writeBinary(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getResourceAttributes_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-  }
-};
-NoteStore_getResourceAttributes_args.prototype = {};
-NoteStore_getResourceAttributes_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getResourceAttributes_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getResourceAttributes_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getResourceAttributes_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_getResourceAttributes_result.prototype = {};
-NoteStore_getResourceAttributes_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new ResourceAttributes();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getResourceAttributes_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getResourceAttributes_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getPublicNotebook_args = function(args) {
-  this.userId = null;
-  this.publicUri = null;
-  if (args) {
-    if (args.userId !== undefined) {
-      this.userId = args.userId;
-    }
-    if (args.publicUri !== undefined) {
-      this.publicUri = args.publicUri;
-    }
-  }
-};
-NoteStore_getPublicNotebook_args.prototype = {};
-NoteStore_getPublicNotebook_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.I32) {
-        this.userId = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.publicUri = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getPublicNotebook_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getPublicNotebook_args');
-  if (this.userId !== null && this.userId !== undefined) {
-    output.writeFieldBegin('userId', Thrift.Type.I32, 1);
-    output.writeI32(this.userId);
-    output.writeFieldEnd();
-  }
-  if (this.publicUri !== null && this.publicUri !== undefined) {
-    output.writeFieldBegin('publicUri', Thrift.Type.STRING, 2);
-    output.writeString(this.publicUri);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getPublicNotebook_result = function(args) {
-  this.success = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_getPublicNotebook_result.prototype = {};
-NoteStore_getPublicNotebook_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new Notebook();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getPublicNotebook_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getPublicNotebook_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 1);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 2);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_shareNotebook_args = function(args) {
-  this.authenticationToken = null;
-  this.sharedNotebook = null;
-  this.message = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.sharedNotebook !== undefined) {
-      this.sharedNotebook = args.sharedNotebook;
-    }
-    if (args.message !== undefined) {
-      this.message = args.message;
-    }
-  }
-};
-NoteStore_shareNotebook_args.prototype = {};
-NoteStore_shareNotebook_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.sharedNotebook = new SharedNotebook();
-        this.sharedNotebook.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRING) {
-        this.message = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_shareNotebook_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_shareNotebook_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.sharedNotebook !== null && this.sharedNotebook !== undefined) {
-    output.writeFieldBegin('sharedNotebook', Thrift.Type.STRUCT, 2);
-    this.sharedNotebook.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.message !== null && this.message !== undefined) {
-    output.writeFieldBegin('message', Thrift.Type.STRING, 3);
-    output.writeString(this.message);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_shareNotebook_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.notFoundException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_shareNotebook_result.prototype = {};
-NoteStore_shareNotebook_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new SharedNotebook();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_shareNotebook_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_shareNotebook_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 2);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 3);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_createOrUpdateNotebookShares_args = function(args) {
-  this.authenticationToken = null;
-  this.shareTemplate = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.shareTemplate !== undefined) {
-      this.shareTemplate = args.shareTemplate;
-    }
-  }
-};
-NoteStore_createOrUpdateNotebookShares_args.prototype = {};
-NoteStore_createOrUpdateNotebookShares_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.shareTemplate = new NotebookShareTemplate();
-        this.shareTemplate.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_createOrUpdateNotebookShares_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_createOrUpdateNotebookShares_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.shareTemplate !== null && this.shareTemplate !== undefined) {
-    output.writeFieldBegin('shareTemplate', Thrift.Type.STRUCT, 2);
-    this.shareTemplate.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_createOrUpdateNotebookShares_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.notFoundException = null;
-  this.systemException = null;
-  this.invalidContactsException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMInvalidContactsException) {
-    this.invalidContactsException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.invalidContactsException !== undefined) {
-      this.invalidContactsException = args.invalidContactsException;
-    }
-  }
-};
-NoteStore_createOrUpdateNotebookShares_result.prototype = {};
-NoteStore_createOrUpdateNotebookShares_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new CreateOrUpdateNotebookSharesResult();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 4:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.invalidContactsException = new EDAMInvalidContactsException();
-        this.invalidContactsException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_createOrUpdateNotebookShares_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_createOrUpdateNotebookShares_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 2);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 3);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.invalidContactsException !== null && this.invalidContactsException !== undefined) {
-    output.writeFieldBegin('invalidContactsException', Thrift.Type.STRUCT, 4);
-    this.invalidContactsException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_updateSharedNotebook_args = function(args) {
-  this.authenticationToken = null;
-  this.sharedNotebook = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.sharedNotebook !== undefined) {
-      this.sharedNotebook = args.sharedNotebook;
-    }
-  }
-};
-NoteStore_updateSharedNotebook_args.prototype = {};
-NoteStore_updateSharedNotebook_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.sharedNotebook = new SharedNotebook();
-        this.sharedNotebook.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_updateSharedNotebook_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_updateSharedNotebook_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.sharedNotebook !== null && this.sharedNotebook !== undefined) {
-    output.writeFieldBegin('sharedNotebook', Thrift.Type.STRUCT, 2);
-    this.sharedNotebook.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_updateSharedNotebook_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.notFoundException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_updateSharedNotebook_result.prototype = {};
-NoteStore_updateSharedNotebook_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.I32) {
-        this.success = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_updateSharedNotebook_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_updateSharedNotebook_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.I32, 0);
-    output.writeI32(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 2);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 3);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_setNotebookRecipientSettings_args = function(args) {
-  this.authenticationToken = null;
-  this.notebookGuid = null;
-  this.recipientSettings = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.notebookGuid !== undefined) {
-      this.notebookGuid = args.notebookGuid;
-    }
-    if (args.recipientSettings !== undefined) {
-      this.recipientSettings = args.recipientSettings;
-    }
-  }
-};
-NoteStore_setNotebookRecipientSettings_args.prototype = {};
-NoteStore_setNotebookRecipientSettings_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.notebookGuid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.recipientSettings = new NotebookRecipientSettings();
-        this.recipientSettings.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_setNotebookRecipientSettings_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_setNotebookRecipientSettings_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.notebookGuid !== null && this.notebookGuid !== undefined) {
-    output.writeFieldBegin('notebookGuid', Thrift.Type.STRING, 2);
-    output.writeString(this.notebookGuid);
-    output.writeFieldEnd();
-  }
-  if (this.recipientSettings !== null && this.recipientSettings !== undefined) {
-    output.writeFieldBegin('recipientSettings', Thrift.Type.STRUCT, 3);
-    this.recipientSettings.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_setNotebookRecipientSettings_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.notFoundException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_setNotebookRecipientSettings_result.prototype = {};
-NoteStore_setNotebookRecipientSettings_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new Notebook();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_setNotebookRecipientSettings_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_setNotebookRecipientSettings_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 2);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 3);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_listSharedNotebooks_args = function(args) {
-  this.authenticationToken = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-  }
-};
-NoteStore_listSharedNotebooks_args.prototype = {};
-NoteStore_listSharedNotebooks_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_listSharedNotebooks_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_listSharedNotebooks_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_listSharedNotebooks_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.notFoundException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_listSharedNotebooks_result.prototype = {};
-NoteStore_listSharedNotebooks_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.LIST) {
-        var _size436 = 0;
-        var _rtmp3440;
-        this.success = [];
-        var _etype439 = 0;
-        _rtmp3440 = input.readListBegin();
-        _etype439 = _rtmp3440.etype;
-        _size436 = _rtmp3440.size;
-        for (var _i441 = 0; _i441 < _size436; ++_i441)
-        {
-          var elem442 = null;
-          elem442 = new SharedNotebook();
-          elem442.read(input);
-          this.success.push(elem442);
-        }
-        input.readListEnd();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_listSharedNotebooks_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_listSharedNotebooks_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.LIST, 0);
-    output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter443 in this.success)
-    {
-      if (this.success.hasOwnProperty(iter443))
-      {
-        iter443 = this.success[iter443];
-        iter443.write(output);
-      }
-    }
-    output.writeListEnd();
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 2);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 3);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_createLinkedNotebook_args = function(args) {
-  this.authenticationToken = null;
-  this.linkedNotebook = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.linkedNotebook !== undefined) {
-      this.linkedNotebook = args.linkedNotebook;
-    }
-  }
-};
-NoteStore_createLinkedNotebook_args.prototype = {};
-NoteStore_createLinkedNotebook_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.linkedNotebook = new LinkedNotebook();
-        this.linkedNotebook.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_createLinkedNotebook_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_createLinkedNotebook_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.linkedNotebook !== null && this.linkedNotebook !== undefined) {
-    output.writeFieldBegin('linkedNotebook', Thrift.Type.STRUCT, 2);
-    this.linkedNotebook.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_createLinkedNotebook_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.notFoundException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_createLinkedNotebook_result.prototype = {};
-NoteStore_createLinkedNotebook_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new LinkedNotebook();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_createLinkedNotebook_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_createLinkedNotebook_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 2);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 3);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_updateLinkedNotebook_args = function(args) {
-  this.authenticationToken = null;
-  this.linkedNotebook = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.linkedNotebook !== undefined) {
-      this.linkedNotebook = args.linkedNotebook;
-    }
-  }
-};
-NoteStore_updateLinkedNotebook_args.prototype = {};
-NoteStore_updateLinkedNotebook_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.linkedNotebook = new LinkedNotebook();
-        this.linkedNotebook.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_updateLinkedNotebook_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_updateLinkedNotebook_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.linkedNotebook !== null && this.linkedNotebook !== undefined) {
-    output.writeFieldBegin('linkedNotebook', Thrift.Type.STRUCT, 2);
-    this.linkedNotebook.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_updateLinkedNotebook_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.notFoundException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_updateLinkedNotebook_result.prototype = {};
-NoteStore_updateLinkedNotebook_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.I32) {
-        this.success = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_updateLinkedNotebook_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_updateLinkedNotebook_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.I32, 0);
-    output.writeI32(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 2);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 3);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_listLinkedNotebooks_args = function(args) {
-  this.authenticationToken = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-  }
-};
-NoteStore_listLinkedNotebooks_args.prototype = {};
-NoteStore_listLinkedNotebooks_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_listLinkedNotebooks_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_listLinkedNotebooks_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_listLinkedNotebooks_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.notFoundException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_listLinkedNotebooks_result.prototype = {};
-NoteStore_listLinkedNotebooks_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.LIST) {
-        var _size444 = 0;
-        var _rtmp3448;
-        this.success = [];
-        var _etype447 = 0;
-        _rtmp3448 = input.readListBegin();
-        _etype447 = _rtmp3448.etype;
-        _size444 = _rtmp3448.size;
-        for (var _i449 = 0; _i449 < _size444; ++_i449)
-        {
-          var elem450 = null;
-          elem450 = new LinkedNotebook();
-          elem450.read(input);
-          this.success.push(elem450);
-        }
-        input.readListEnd();
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_listLinkedNotebooks_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_listLinkedNotebooks_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.LIST, 0);
-    output.writeListBegin(Thrift.Type.STRUCT, this.success.length);
-    for (var iter451 in this.success)
-    {
-      if (this.success.hasOwnProperty(iter451))
-      {
-        iter451 = this.success[iter451];
-        iter451.write(output);
-      }
-    }
-    output.writeListEnd();
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 2);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 3);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_expungeLinkedNotebook_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-  }
-};
-NoteStore_expungeLinkedNotebook_args.prototype = {};
-NoteStore_expungeLinkedNotebook_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_expungeLinkedNotebook_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_expungeLinkedNotebook_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_expungeLinkedNotebook_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.notFoundException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_expungeLinkedNotebook_result.prototype = {};
-NoteStore_expungeLinkedNotebook_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.I32) {
-        this.success = input.readI32().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_expungeLinkedNotebook_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_expungeLinkedNotebook_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.I32, 0);
-    output.writeI32(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 2);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 3);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_authenticateToSharedNotebook_args = function(args) {
-  this.shareKeyOrGlobalId = null;
-  this.authenticationToken = null;
-  if (args) {
-    if (args.shareKeyOrGlobalId !== undefined) {
-      this.shareKeyOrGlobalId = args.shareKeyOrGlobalId;
-    }
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-  }
-};
-NoteStore_authenticateToSharedNotebook_args.prototype = {};
-NoteStore_authenticateToSharedNotebook_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.shareKeyOrGlobalId = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_authenticateToSharedNotebook_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_authenticateToSharedNotebook_args');
-  if (this.shareKeyOrGlobalId !== null && this.shareKeyOrGlobalId !== undefined) {
-    output.writeFieldBegin('shareKeyOrGlobalId', Thrift.Type.STRING, 1);
-    output.writeString(this.shareKeyOrGlobalId);
-    output.writeFieldEnd();
-  }
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 2);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_authenticateToSharedNotebook_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.notFoundException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_authenticateToSharedNotebook_result.prototype = {};
-NoteStore_authenticateToSharedNotebook_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new AuthenticationResult();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_authenticateToSharedNotebook_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_authenticateToSharedNotebook_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 2);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 3);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getSharedNotebookByAuth_args = function(args) {
-  this.authenticationToken = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-  }
-};
-NoteStore_getSharedNotebookByAuth_args.prototype = {};
-NoteStore_getSharedNotebookByAuth_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 0:
-        input.skip(ftype);
-        break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getSharedNotebookByAuth_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getSharedNotebookByAuth_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getSharedNotebookByAuth_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.notFoundException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_getSharedNotebookByAuth_result.prototype = {};
-NoteStore_getSharedNotebookByAuth_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new SharedNotebook();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getSharedNotebookByAuth_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getSharedNotebookByAuth_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 2);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 3);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_emailNote_args = function(args) {
-  this.authenticationToken = null;
-  this.parameters = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.parameters !== undefined) {
-      this.parameters = args.parameters;
-    }
-  }
-};
-NoteStore_emailNote_args.prototype = {};
-NoteStore_emailNote_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.parameters = new NoteEmailParameters();
-        this.parameters.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_emailNote_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_emailNote_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.parameters !== null && this.parameters !== undefined) {
-    output.writeFieldBegin('parameters', Thrift.Type.STRUCT, 2);
-    this.parameters.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_emailNote_result = function(args) {
-  this.userException = null;
-  this.notFoundException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_emailNote_result.prototype = {};
-NoteStore_emailNote_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_emailNote_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_emailNote_result');
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 2);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 3);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_shareNote_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-  }
-};
-NoteStore_shareNote_args.prototype = {};
-NoteStore_shareNote_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_shareNote_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_shareNote_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_shareNote_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.notFoundException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_shareNote_result.prototype = {};
-NoteStore_shareNote_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRING) {
-        this.success = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_shareNote_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_shareNote_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRING, 0);
-    output.writeString(this.success);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 2);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 3);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_stopSharingNote_args = function(args) {
-  this.authenticationToken = null;
-  this.guid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-  }
-};
-NoteStore_stopSharingNote_args.prototype = {};
-NoteStore_stopSharingNote_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_stopSharingNote_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_stopSharingNote_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 2);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_stopSharingNote_result = function(args) {
-  this.userException = null;
-  this.notFoundException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_stopSharingNote_result.prototype = {};
-NoteStore_stopSharingNote_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_stopSharingNote_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_stopSharingNote_result');
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 2);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 3);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_authenticateToSharedNote_args = function(args) {
-  this.guid = null;
-  this.noteKey = null;
-  this.authenticationToken = null;
-  if (args) {
-    if (args.guid !== undefined) {
-      this.guid = args.guid;
-    }
-    if (args.noteKey !== undefined) {
-      this.noteKey = args.noteKey;
-    }
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-  }
-};
-NoteStore_authenticateToSharedNote_args.prototype = {};
-NoteStore_authenticateToSharedNote_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.guid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.noteKey = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_authenticateToSharedNote_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_authenticateToSharedNote_args');
-  if (this.guid !== null && this.guid !== undefined) {
-    output.writeFieldBegin('guid', Thrift.Type.STRING, 1);
-    output.writeString(this.guid);
-    output.writeFieldEnd();
-  }
-  if (this.noteKey !== null && this.noteKey !== undefined) {
-    output.writeFieldBegin('noteKey', Thrift.Type.STRING, 2);
-    output.writeString(this.noteKey);
-    output.writeFieldEnd();
-  }
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 3);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_authenticateToSharedNote_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.notFoundException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_authenticateToSharedNote_result.prototype = {};
-NoteStore_authenticateToSharedNote_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new AuthenticationResult();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_authenticateToSharedNote_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_authenticateToSharedNote_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 2);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 3);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_findRelated_args = function(args) {
-  this.authenticationToken = null;
-  this.query = null;
-  this.resultSpec = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.query !== undefined) {
-      this.query = args.query;
-    }
-    if (args.resultSpec !== undefined) {
-      this.resultSpec = args.resultSpec;
-    }
-  }
-};
-NoteStore_findRelated_args.prototype = {};
-NoteStore_findRelated_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.query = new RelatedQuery();
-        this.query.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.resultSpec = new RelatedResultSpec();
-        this.resultSpec.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_findRelated_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_findRelated_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.query !== null && this.query !== undefined) {
-    output.writeFieldBegin('query', Thrift.Type.STRUCT, 2);
-    this.query.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.resultSpec !== null && this.resultSpec !== undefined) {
-    output.writeFieldBegin('resultSpec', Thrift.Type.STRUCT, 3);
-    this.resultSpec.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_findRelated_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.systemException = null;
-  this.notFoundException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-  }
-};
-NoteStore_findRelated_result.prototype = {};
-NoteStore_findRelated_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new RelatedResult();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_findRelated_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_findRelated_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 2);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 3);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_updateNoteIfUsnMatches_args = function(args) {
-  this.authenticationToken = null;
-  this.note = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.note !== undefined) {
-      this.note = args.note;
-    }
-  }
-};
-NoteStore_updateNoteIfUsnMatches_args.prototype = {};
-NoteStore_updateNoteIfUsnMatches_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.note = new Note();
-        this.note.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_updateNoteIfUsnMatches_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_updateNoteIfUsnMatches_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.note !== null && this.note !== undefined) {
-    output.writeFieldBegin('note', Thrift.Type.STRUCT, 2);
-    this.note.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_updateNoteIfUsnMatches_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.notFoundException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_updateNoteIfUsnMatches_result.prototype = {};
-NoteStore_updateNoteIfUsnMatches_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new UpdateNoteIfUsnMatchesResult();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_updateNoteIfUsnMatches_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_updateNoteIfUsnMatches_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 2);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 3);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_manageNotebookShares_args = function(args) {
-  this.authenticationToken = null;
-  this.parameters = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.parameters !== undefined) {
-      this.parameters = args.parameters;
-    }
-  }
-};
-NoteStore_manageNotebookShares_args.prototype = {};
-NoteStore_manageNotebookShares_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.parameters = new ManageNotebookSharesParameters();
-        this.parameters.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_manageNotebookShares_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_manageNotebookShares_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.parameters !== null && this.parameters !== undefined) {
-    output.writeFieldBegin('parameters', Thrift.Type.STRUCT, 2);
-    this.parameters.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_manageNotebookShares_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.notFoundException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_manageNotebookShares_result.prototype = {};
-NoteStore_manageNotebookShares_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new ManageNotebookSharesResult();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_manageNotebookShares_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_manageNotebookShares_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 2);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 3);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getNotebookShares_args = function(args) {
-  this.authenticationToken = null;
-  this.notebookGuid = null;
-  if (args) {
-    if (args.authenticationToken !== undefined) {
-      this.authenticationToken = args.authenticationToken;
-    }
-    if (args.notebookGuid !== undefined) {
-      this.notebookGuid = args.notebookGuid;
-    }
-  }
-};
-NoteStore_getNotebookShares_args.prototype = {};
-NoteStore_getNotebookShares_args.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-      if (ftype == Thrift.Type.STRING) {
-        this.authenticationToken = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRING) {
-        this.notebookGuid = input.readString().value;
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getNotebookShares_args.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getNotebookShares_args');
-  if (this.authenticationToken !== null && this.authenticationToken !== undefined) {
-    output.writeFieldBegin('authenticationToken', Thrift.Type.STRING, 1);
-    output.writeString(this.authenticationToken);
-    output.writeFieldEnd();
-  }
-  if (this.notebookGuid !== null && this.notebookGuid !== undefined) {
-    output.writeFieldBegin('notebookGuid', Thrift.Type.STRING, 2);
-    output.writeString(this.notebookGuid);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStore_getNotebookShares_result = function(args) {
-  this.success = null;
-  this.userException = null;
-  this.notFoundException = null;
-  this.systemException = null;
-  if (args instanceof EDAMUserException) {
-    this.userException = args;
-    return;
-  }
-  if (args instanceof EDAMNotFoundException) {
-    this.notFoundException = args;
-    return;
-  }
-  if (args instanceof EDAMSystemException) {
-    this.systemException = args;
-    return;
-  }
-  if (args) {
-    if (args.success !== undefined) {
-      this.success = args.success;
-    }
-    if (args.userException !== undefined) {
-      this.userException = args.userException;
-    }
-    if (args.notFoundException !== undefined) {
-      this.notFoundException = args.notFoundException;
-    }
-    if (args.systemException !== undefined) {
-      this.systemException = args.systemException;
-    }
-  }
-};
-NoteStore_getNotebookShares_result.prototype = {};
-NoteStore_getNotebookShares_result.prototype.read = function(input) {
-  input.readStructBegin();
-  while (true)
-  {
-    var ret = input.readFieldBegin();
-    var fname = ret.fname;
-    var ftype = ret.ftype;
-    var fid = ret.fid;
-    if (ftype == Thrift.Type.STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.success = new ShareRelationships();
-        this.success.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 1:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.userException = new EDAMUserException();
-        this.userException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 2:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.notFoundException = new EDAMNotFoundException();
-        this.notFoundException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      case 3:
-      if (ftype == Thrift.Type.STRUCT) {
-        this.systemException = new EDAMSystemException();
-        this.systemException.read(input);
-      } else {
-        input.skip(ftype);
-      }
-      break;
-      default:
-        input.skip(ftype);
-    }
-    input.readFieldEnd();
-  }
-  input.readStructEnd();
-  return;
-};
-
-NoteStore_getNotebookShares_result.prototype.write = function(output) {
-  output.writeStructBegin('NoteStore_getNotebookShares_result');
-  if (this.success !== null && this.success !== undefined) {
-    output.writeFieldBegin('success', Thrift.Type.STRUCT, 0);
-    this.success.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.userException !== null && this.userException !== undefined) {
-    output.writeFieldBegin('userException', Thrift.Type.STRUCT, 1);
-    this.userException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.notFoundException !== null && this.notFoundException !== undefined) {
-    output.writeFieldBegin('notFoundException', Thrift.Type.STRUCT, 2);
-    this.notFoundException.write(output);
-    output.writeFieldEnd();
-  }
-  if (this.systemException !== null && this.systemException !== undefined) {
-    output.writeFieldBegin('systemException', Thrift.Type.STRUCT, 3);
-    this.systemException.write(output);
-    output.writeFieldEnd();
-  }
-  output.writeFieldStop();
-  output.writeStructEnd();
-  return;
-};
-
-NoteStoreClient = function(input, output) {
-    this.input = input;
-    this.output = (!output) ? input : output;
+  // Define types and services
+
+  var Thrift = require('evernote-thrift').Thrift;
+  var UserStore = require('./UserStore');
+  var Types = require('./Types');
+  var Errors = require('./Errors');
+  var Limits = require('./Limits');
+
+
+  module.exports.UserSetting = {
+    'RECEIVE_REMINDER_EMAIL' : 1,
+    'TIMEZONE' : 2
+  };
+
+  module.exports.ShareRelationshipPrivilegeLevel = {
+    'READ_NOTEBOOK' : 0,
+    'READ_NOTEBOOK_PLUS_ACTIVITY' : 10,
+    'MODIFY_NOTEBOOK_PLUS_ACTIVITY' : 20,
+    'FULL_ACCESS' : 30
+  };
+
+  module.exports.SyncState = Thrift.Struct.define('SyncState',  {
+    1: { alias: 'currentTime', type: Thrift.Type.I64 },
+    2: { alias: 'fullSyncBefore', type: Thrift.Type.I64 },
+    3: { alias: 'updateCount', type: Thrift.Type.I32 },
+    4: { alias: 'uploaded', type: Thrift.Type.I64 },
+    5: { alias: 'userLastUpdated', type: Thrift.Type.I64 },
+    6: { alias: 'userMaxMessageEventId', type: Thrift.Type.I64 }
+  });
+
+  module.exports.SyncChunk = Thrift.Struct.define('SyncChunk',  {
+    1: { alias: 'currentTime', type: Thrift.Type.I64 },
+    2: { alias: 'chunkHighUSN', type: Thrift.Type.I32 },
+    3: { alias: 'updateCount', type: Thrift.Type.I32 },
+    4: { alias: 'notes', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.Note)  },
+    5: { alias: 'notebooks', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.Notebook)  },
+    6: { alias: 'tags', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.Tag)  },
+    7: { alias: 'searches', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.SavedSearch)  },
+    8: { alias: 'resources', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.Resource)  },
+    9: { alias: 'expungedNotes', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRING)  },
+    10: { alias: 'expungedNotebooks', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRING)  },
+    11: { alias: 'expungedTags', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRING)  },
+    12: { alias: 'expungedSearches', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRING)  },
+    13: { alias: 'linkedNotebooks', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.LinkedNotebook)  },
+    14: { alias: 'expungedLinkedNotebooks', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRING)  }
+  });
+
+  module.exports.SyncChunkFilter = Thrift.Struct.define('SyncChunkFilter',  {
+    1: { alias: 'includeNotes', type: Thrift.Type.BOOL },
+    2: { alias: 'includeNoteResources', type: Thrift.Type.BOOL },
+    3: { alias: 'includeNoteAttributes', type: Thrift.Type.BOOL },
+    4: { alias: 'includeNotebooks', type: Thrift.Type.BOOL },
+    5: { alias: 'includeTags', type: Thrift.Type.BOOL },
+    6: { alias: 'includeSearches', type: Thrift.Type.BOOL },
+    7: { alias: 'includeResources', type: Thrift.Type.BOOL },
+    8: { alias: 'includeLinkedNotebooks', type: Thrift.Type.BOOL },
+    9: { alias: 'includeExpunged', type: Thrift.Type.BOOL },
+    10: { alias: 'includeNoteApplicationDataFullMap', type: Thrift.Type.BOOL },
+    12: { alias: 'includeResourceApplicationDataFullMap', type: Thrift.Type.BOOL },
+    13: { alias: 'includeNoteResourceApplicationDataFullMap', type: Thrift.Type.BOOL },
+    17: { alias: 'includeSharedNotes', type: Thrift.Type.BOOL },
+    16: { alias: 'omitSharedNotebooks', type: Thrift.Type.BOOL },
+    11: { alias: 'requireNoteContentClass', type: Thrift.Type.STRING },
+    15: { alias: 'notebookGuids', type: Thrift.Type.SET, def: Thrift.Set.define(Thrift.Type.STRING) }
+  });
+
+  module.exports.NoteFilter = Thrift.Struct.define('NoteFilter',  {
+    1: { alias: 'order', type: Thrift.Type.I32 },
+    2: { alias: 'ascending', type: Thrift.Type.BOOL },
+    3: { alias: 'words', type: Thrift.Type.STRING },
+    4: { alias: 'notebookGuid', type: Thrift.Type.STRING },
+    5: { alias: 'tagGuids', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRING)  },
+    6: { alias: 'timeZone', type: Thrift.Type.STRING },
+    7: { alias: 'inactive', type: Thrift.Type.BOOL },
+    8: { alias: 'emphasized', type: Thrift.Type.STRING },
+    9: { alias: 'includeAllReadableNotebooks', type: Thrift.Type.BOOL }
+  });
+
+  module.exports.NoteList = Thrift.Struct.define('NoteList',  {
+    1: { alias: 'startIndex', type: Thrift.Type.I32 },
+    2: { alias: 'totalNotes', type: Thrift.Type.I32 },
+    3: { alias: 'notes', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.Note)  },
+    4: { alias: 'stoppedWords', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRING)  },
+    5: { alias: 'searchedWords', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRING)  },
+    6: { alias: 'updateCount', type: Thrift.Type.I32 }
+  });
+
+  module.exports.NoteMetadata = Thrift.Struct.define('NoteMetadata',  {
+    1: { alias: 'guid', type: Thrift.Type.STRING },
+    2: { alias: 'title', type: Thrift.Type.STRING },
+    5: { alias: 'contentLength', type: Thrift.Type.I32 },
+    6: { alias: 'created', type: Thrift.Type.I64 },
+    7: { alias: 'updated', type: Thrift.Type.I64 },
+    8: { alias: 'deleted', type: Thrift.Type.I64 },
+    10: { alias: 'updateSequenceNum', type: Thrift.Type.I32 },
+    11: { alias: 'notebookGuid', type: Thrift.Type.STRING },
+    12: { alias: 'tagGuids', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRING)  },
+    14: { alias: 'attributes', type: Thrift.Type.STRUCT, def: Types.NoteAttributes },
+    20: { alias: 'largestResourceMime', type: Thrift.Type.STRING },
+    21: { alias: 'largestResourceSize', type: Thrift.Type.I32 }
+  });
+
+  module.exports.NotesMetadataList = Thrift.Struct.define('NotesMetadataList',  {
+    1: { alias: 'startIndex', type: Thrift.Type.I32 },
+    2: { alias: 'totalNotes', type: Thrift.Type.I32 },
+    3: { alias: 'notes', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, module.exports.NoteMetadata)  },
+    4: { alias: 'stoppedWords', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRING)  },
+    5: { alias: 'searchedWords', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRING)  },
+    6: { alias: 'updateCount', type: Thrift.Type.I32 }
+  });
+
+  module.exports.NotesMetadataResultSpec = Thrift.Struct.define('NotesMetadataResultSpec',  {
+    2: { alias: 'includeTitle', type: Thrift.Type.BOOL },
+    5: { alias: 'includeContentLength', type: Thrift.Type.BOOL },
+    6: { alias: 'includeCreated', type: Thrift.Type.BOOL },
+    7: { alias: 'includeUpdated', type: Thrift.Type.BOOL },
+    8: { alias: 'includeDeleted', type: Thrift.Type.BOOL },
+    10: { alias: 'includeUpdateSequenceNum', type: Thrift.Type.BOOL },
+    11: { alias: 'includeNotebookGuid', type: Thrift.Type.BOOL },
+    12: { alias: 'includeTagGuids', type: Thrift.Type.BOOL },
+    14: { alias: 'includeAttributes', type: Thrift.Type.BOOL },
+    20: { alias: 'includeLargestResourceMime', type: Thrift.Type.BOOL },
+    21: { alias: 'includeLargestResourceSize', type: Thrift.Type.BOOL }
+  });
+
+  module.exports.NoteCollectionCounts = Thrift.Struct.define('NoteCollectionCounts',  {
+    1: { alias: 'notebookCounts', type: Thrift.Type.MAP, def: Thrift.Map.define(Thrift.Type.STRING, Thrift.Type.I32 )  },
+    2: { alias: 'tagCounts', type: Thrift.Type.MAP, def: Thrift.Map.define(Thrift.Type.STRING, Thrift.Type.I32 )  },
+    3: { alias: 'trashCount', type: Thrift.Type.I32 }
+  });
+
+  module.exports.NoteResultSpec = Thrift.Struct.define('NoteResultSpec',  {
+    1: { alias: 'includeContent', type: Thrift.Type.BOOL },
+    2: { alias: 'includeResourcesData', type: Thrift.Type.BOOL },
+    3: { alias: 'includeResourcesRecognition', type: Thrift.Type.BOOL },
+    4: { alias: 'includeResourcesAlternateData', type: Thrift.Type.BOOL },
+    5: { alias: 'includeSharedNotes', type: Thrift.Type.BOOL },
+    6: { alias: 'includeNoteAppDataValues', type: Thrift.Type.BOOL },
+    7: { alias: 'includeResourceAppDataValues', type: Thrift.Type.BOOL },
+    8: { alias: 'includeAccountLimits', type: Thrift.Type.BOOL }
+  });
+
+  module.exports.NoteEmailParameters = Thrift.Struct.define('NoteEmailParameters',  {
+    1: { alias: 'guid', type: Thrift.Type.STRING },
+    2: { alias: 'note', type: Thrift.Type.STRUCT, def: Types.Note },
+    3: { alias: 'toAddresses', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRING)  },
+    4: { alias: 'ccAddresses', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRING)  },
+    5: { alias: 'subject', type: Thrift.Type.STRING },
+    6: { alias: 'message', type: Thrift.Type.STRING }
+  });
+
+  module.exports.NoteVersionId = Thrift.Struct.define('NoteVersionId',  {
+    1: { alias: 'updateSequenceNum', type: Thrift.Type.I32 },
+    2: { alias: 'updated', type: Thrift.Type.I64 },
+    3: { alias: 'saved', type: Thrift.Type.I64 },
+    4: { alias: 'title', type: Thrift.Type.STRING },
+    5: { alias: 'lastEditorId', type: Thrift.Type.I32 }
+  });
+
+  module.exports.RelatedQuery = Thrift.Struct.define('RelatedQuery',  {
+    1: { alias: 'noteGuid', type: Thrift.Type.STRING },
+    2: { alias: 'plainText', type: Thrift.Type.STRING },
+    3: { alias: 'filter', type: Thrift.Type.STRUCT, def: module.exports.NoteFilter },
+    4: { alias: 'referenceUri', type: Thrift.Type.STRING },
+    5: { alias: 'context', type: Thrift.Type.STRING },
+    6: { alias: 'cacheKey', type: Thrift.Type.STRING }
+  });
+
+  module.exports.RelatedResult = Thrift.Struct.define('RelatedResult',  {
+    1: { alias: 'notes', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.Note)  },
+    2: { alias: 'notebooks', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.Notebook)  },
+    3: { alias: 'tags', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.Tag)  },
+    4: { alias: 'containingNotebooks', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.NotebookDescriptor)  },
+    5: { alias: 'debugInfo', type: Thrift.Type.STRING },
+    6: { alias: 'experts', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.UserProfile)  },
+    7: { alias: 'relatedContent', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.RelatedContent)  },
+    8: { alias: 'cacheKey', type: Thrift.Type.STRING },
+    9: { alias: 'cacheExpires', type: Thrift.Type.I32 }
+  });
+
+  module.exports.RelatedResultSpec = Thrift.Struct.define('RelatedResultSpec',  {
+    1: { alias: 'maxNotes', type: Thrift.Type.I32 },
+    2: { alias: 'maxNotebooks', type: Thrift.Type.I32 },
+    3: { alias: 'maxTags', type: Thrift.Type.I32 },
+    4: { alias: 'writableNotebooksOnly', type: Thrift.Type.BOOL },
+    5: { alias: 'includeContainingNotebooks', type: Thrift.Type.BOOL },
+    6: { alias: 'includeDebugInfo', type: Thrift.Type.BOOL },
+    7: { alias: 'maxExperts', type: Thrift.Type.I32 },
+    8: { alias: 'maxRelatedContent', type: Thrift.Type.I32 },
+    9: { alias: 'relatedContentTypes', type: Thrift.Type.SET, def: Thrift.Set.define(Thrift.Type.I32) }
+  });
+
+  module.exports.UpdateNoteIfUsnMatchesResult = Thrift.Struct.define('UpdateNoteIfUsnMatchesResult',  {
+    1: { alias: 'note', type: Thrift.Type.STRUCT, def: Types.Note },
+    2: { alias: 'updated', type: Thrift.Type.BOOL }
+  });
+
+  module.exports.ShareRelationshipRestrictions = Thrift.Struct.define('ShareRelationshipRestrictions',  {
+    1: { alias: 'noSetReadOnly', type: Thrift.Type.BOOL },
+    2: { alias: 'noSetReadPlusActivity', type: Thrift.Type.BOOL },
+    3: { alias: 'noSetModify', type: Thrift.Type.BOOL },
+    4: { alias: 'noSetFullAccess', type: Thrift.Type.BOOL }
+  });
+
+  module.exports.InvitationShareRelationship = Thrift.Struct.define('InvitationShareRelationship',  {
+    1: { alias: 'displayName', type: Thrift.Type.STRING },
+    2: { alias: 'recipientUserIdentity', type: Thrift.Type.STRUCT, def: Types.UserIdentity },
+    3: { alias: 'privilege', type: Thrift.Type.I32 },
+    5: { alias: 'sharerUserId', type: Thrift.Type.I32 }
+  });
+
+  module.exports.MemberShareRelationship = Thrift.Struct.define('MemberShareRelationship',  {
+    1: { alias: 'displayName', type: Thrift.Type.STRING },
+    2: { alias: 'recipientUserId', type: Thrift.Type.I32 },
+    3: { alias: 'bestPrivilege', type: Thrift.Type.I32 },
+    4: { alias: 'individualPrivilege', type: Thrift.Type.I32 },
+    5: { alias: 'restrictions', type: Thrift.Type.STRUCT, def: module.exports.ShareRelationshipRestrictions },
+    6: { alias: 'sharerUserId', type: Thrift.Type.I32 }
+  });
+
+  module.exports.ShareRelationships = Thrift.Struct.define('ShareRelationships',  {
+    1: { alias: 'invitations', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, module.exports.InvitationShareRelationship)  },
+    2: { alias: 'memberships', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, module.exports.MemberShareRelationship)  },
+    3: { alias: 'invitationRestrictions', type: Thrift.Type.STRUCT, def: module.exports.ShareRelationshipRestrictions }
+  });
+
+  module.exports.ManageNotebookSharesParameters = Thrift.Struct.define('ManageNotebookSharesParameters',  {
+    1: { alias: 'notebookGuid', type: Thrift.Type.STRING },
+    2: { alias: 'inviteMessage', type: Thrift.Type.STRING },
+    3: { alias: 'membershipsToUpdate', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, module.exports.MemberShareRelationship)  },
+    4: { alias: 'invitationsToCreateOrUpdate', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, module.exports.InvitationShareRelationship)  },
+    5: { alias: 'unshares', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.UserIdentity)  }
+  });
+
+  module.exports.ManageNotebookSharesError = Thrift.Struct.define('ManageNotebookSharesError',  {
+    1: { alias: 'userIdentity', type: Thrift.Type.STRUCT, def: Types.UserIdentity },
+    2: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+    3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+  });
+
+  module.exports.ManageNotebookSharesResult = Thrift.Struct.define('ManageNotebookSharesResult',  {
+    1: { alias: 'errors', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, module.exports.ManageNotebookSharesError)  }
+  });
+
+  module.exports.SharedNoteTemplate = Thrift.Struct.define('SharedNoteTemplate',  {
+    1: { alias: 'noteGuid', type: Thrift.Type.STRING },
+    4: { alias: 'recipientThreadId', type: Thrift.Type.I64 },
+    2: { alias: 'recipientContacts', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.Contact)  },
+    3: { alias: 'privilege', type: Thrift.Type.I32 }
+  });
+
+  module.exports.NotebookShareTemplate = Thrift.Struct.define('NotebookShareTemplate',  {
+    1: { alias: 'notebookGuid', type: Thrift.Type.STRING },
+    4: { alias: 'recipientThreadId', type: Thrift.Type.I64 },
+    2: { alias: 'recipientContacts', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.Contact)  },
+    3: { alias: 'privilege', type: Thrift.Type.I32 }
+  });
+
+  module.exports.CreateOrUpdateNotebookSharesResult = Thrift.Struct.define('CreateOrUpdateNotebookSharesResult',  {
+    1: { alias: 'updateSequenceNum', type: Thrift.Type.I32 },
+    2: { alias: 'matchingShares', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.SharedNotebook)  }
+  });
+
+  module.exports.NoteShareRelationshipRestrictions = Thrift.Struct.define('NoteShareRelationshipRestrictions',  {
+    1: { alias: 'noSetReadNote', type: Thrift.Type.BOOL },
+    2: { alias: 'noSetModifyNote', type: Thrift.Type.BOOL },
+    3: { alias: 'noSetFullAccess', type: Thrift.Type.BOOL }
+  });
+
+  module.exports.NoteMemberShareRelationship = Thrift.Struct.define('NoteMemberShareRelationship',  {
+    1: { alias: 'displayName', type: Thrift.Type.STRING },
+    2: { alias: 'recipientUserId', type: Thrift.Type.I32 },
+    3: { alias: 'privilege', type: Thrift.Type.I32 },
+    4: { alias: 'restrictions', type: Thrift.Type.STRUCT, def: module.exports.NoteShareRelationshipRestrictions },
+    5: { alias: 'sharerUserId', type: Thrift.Type.I32 }
+  });
+
+  module.exports.NoteInvitationShareRelationship = Thrift.Struct.define('NoteInvitationShareRelationship',  {
+    1: { alias: 'displayName', type: Thrift.Type.STRING },
+    2: { alias: 'recipientIdentityId', type: Thrift.Type.I64 },
+    3: { alias: 'privilege', type: Thrift.Type.I32 },
+    5: { alias: 'sharerUserId', type: Thrift.Type.I32 }
+  });
+
+  module.exports.NoteShareRelationships = Thrift.Struct.define('NoteShareRelationships',  {
+    1: { alias: 'invitations', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, module.exports.NoteInvitationShareRelationship)  },
+    2: { alias: 'memberships', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, module.exports.NoteMemberShareRelationship)  },
+    3: { alias: 'invitationRestrictions', type: Thrift.Type.STRUCT, def: module.exports.NoteShareRelationshipRestrictions }
+  });
+
+  module.exports.ManageNoteSharesParameters = Thrift.Struct.define('ManageNoteSharesParameters',  {
+    1: { alias: 'noteGuid', type: Thrift.Type.STRING },
+    2: { alias: 'membershipsToUpdate', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, module.exports.NoteMemberShareRelationship)  },
+    3: { alias: 'invitationsToUpdate', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, module.exports.NoteInvitationShareRelationship)  },
+    4: { alias: 'membershipsToUnshare', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.I32)  },
+    5: { alias: 'invitationsToUnshare', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.I64)  }
+  });
+
+  module.exports.ManageNoteSharesError = Thrift.Struct.define('ManageNoteSharesError',  {
+    1: { alias: 'identityID', type: Thrift.Type.I64 },
+    2: { alias: 'userID', type: Thrift.Type.I32 },
+    3: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+    4: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+  });
+
+  module.exports.ManageNoteSharesResult = Thrift.Struct.define('ManageNoteSharesResult',  {
+    1: { alias: 'errors', type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, module.exports.ManageNoteSharesError)  }
+  });
+
+  var NoteStore = module.exports.NoteStore = {};
+
+  NoteStore.getSyncState = Thrift.Method.define({
+    alias: 'getSyncState',
+    args: Thrift.Struct.define('getSyncStateArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 }
+    }),
+    result: Thrift.Struct.define('getSyncStateResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: module.exports.SyncState },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.getFilteredSyncChunk = Thrift.Method.define({
+    alias: 'getFilteredSyncChunk',
+    args: Thrift.Struct.define('getFilteredSyncChunkArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'afterUSN', type: Thrift.Type.I32, index: 1 },
+      3: { alias: 'maxEntries', type: Thrift.Type.I32, index: 2 },
+      4: { alias: 'filter', type: Thrift.Type.STRUCT, def: module.exports.SyncChunkFilter, index: 3 }
+    }),
+    result: Thrift.Struct.define('getFilteredSyncChunkResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: module.exports.SyncChunk },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.getLinkedNotebookSyncState = Thrift.Method.define({
+    alias: 'getLinkedNotebookSyncState',
+    args: Thrift.Struct.define('getLinkedNotebookSyncStateArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'linkedNotebook', type: Thrift.Type.STRUCT, def: Types.LinkedNotebook, index: 1 }
+    }),
+    result: Thrift.Struct.define('getLinkedNotebookSyncStateResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: module.exports.SyncState },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.getLinkedNotebookSyncChunk = Thrift.Method.define({
+    alias: 'getLinkedNotebookSyncChunk',
+    args: Thrift.Struct.define('getLinkedNotebookSyncChunkArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'linkedNotebook', type: Thrift.Type.STRUCT, def: Types.LinkedNotebook, index: 1 },
+      3: { alias: 'afterUSN', type: Thrift.Type.I32, index: 2 },
+      4: { alias: 'maxEntries', type: Thrift.Type.I32, index: 3 },
+      5: { alias: 'fullSyncOnly', type: Thrift.Type.BOOL, index: 4 }
+    }),
+    result: Thrift.Struct.define('getLinkedNotebookSyncChunkResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: module.exports.SyncChunk },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.listNotebooks = Thrift.Method.define({
+    alias: 'listNotebooks',
+    args: Thrift.Struct.define('listNotebooksArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 }
+    }),
+    result: Thrift.Struct.define('listNotebooksResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.Notebook)  },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.listAccessibleBusinessNotebooks = Thrift.Method.define({
+    alias: 'listAccessibleBusinessNotebooks',
+    args: Thrift.Struct.define('listAccessibleBusinessNotebooksArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 }
+    }),
+    result: Thrift.Struct.define('listAccessibleBusinessNotebooksResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.Notebook)  },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.getNotebook = Thrift.Method.define({
+    alias: 'getNotebook',
+    args: Thrift.Struct.define('getNotebookArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('getNotebookResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.Notebook },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.getDefaultNotebook = Thrift.Method.define({
+    alias: 'getDefaultNotebook',
+    args: Thrift.Struct.define('getDefaultNotebookArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 }
+    }),
+    result: Thrift.Struct.define('getDefaultNotebookResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.Notebook },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.createNotebook = Thrift.Method.define({
+    alias: 'createNotebook',
+    args: Thrift.Struct.define('createNotebookArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'notebook', type: Thrift.Type.STRUCT, def: Types.Notebook, index: 1 }
+    }),
+    result: Thrift.Struct.define('createNotebookResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.Notebook },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.updateNotebook = Thrift.Method.define({
+    alias: 'updateNotebook',
+    args: Thrift.Struct.define('updateNotebookArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'notebook', type: Thrift.Type.STRUCT, def: Types.Notebook, index: 1 }
+    }),
+    result: Thrift.Struct.define('updateNotebookResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.I32 },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.expungeNotebook = Thrift.Method.define({
+    alias: 'expungeNotebook',
+    args: Thrift.Struct.define('expungeNotebookArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('expungeNotebookResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.I32 },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.listTags = Thrift.Method.define({
+    alias: 'listTags',
+    args: Thrift.Struct.define('listTagsArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 }
+    }),
+    result: Thrift.Struct.define('listTagsResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.Tag)  },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.listTagsByNotebook = Thrift.Method.define({
+    alias: 'listTagsByNotebook',
+    args: Thrift.Struct.define('listTagsByNotebookArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'notebookGuid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('listTagsByNotebookResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.Tag)  },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.getTag = Thrift.Method.define({
+    alias: 'getTag',
+    args: Thrift.Struct.define('getTagArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('getTagResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.Tag },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.createTag = Thrift.Method.define({
+    alias: 'createTag',
+    args: Thrift.Struct.define('createTagArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'tag', type: Thrift.Type.STRUCT, def: Types.Tag, index: 1 }
+    }),
+    result: Thrift.Struct.define('createTagResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.Tag },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.updateTag = Thrift.Method.define({
+    alias: 'updateTag',
+    args: Thrift.Struct.define('updateTagArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'tag', type: Thrift.Type.STRUCT, def: Types.Tag, index: 1 }
+    }),
+    result: Thrift.Struct.define('updateTagResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.I32 },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.untagAll = Thrift.Method.define({
+    alias: 'untagAll',
+    args: Thrift.Struct.define('untagAllArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('untagAllResult', {
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.expungeTag = Thrift.Method.define({
+    alias: 'expungeTag',
+    args: Thrift.Struct.define('expungeTagArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('expungeTagResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.I32 },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.listSearches = Thrift.Method.define({
+    alias: 'listSearches',
+    args: Thrift.Struct.define('listSearchesArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 }
+    }),
+    result: Thrift.Struct.define('listSearchesResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.SavedSearch)  },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.getSearch = Thrift.Method.define({
+    alias: 'getSearch',
+    args: Thrift.Struct.define('getSearchArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('getSearchResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.SavedSearch },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.createSearch = Thrift.Method.define({
+    alias: 'createSearch',
+    args: Thrift.Struct.define('createSearchArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'search', type: Thrift.Type.STRUCT, def: Types.SavedSearch, index: 1 }
+    }),
+    result: Thrift.Struct.define('createSearchResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.SavedSearch },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.updateSearch = Thrift.Method.define({
+    alias: 'updateSearch',
+    args: Thrift.Struct.define('updateSearchArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'search', type: Thrift.Type.STRUCT, def: Types.SavedSearch, index: 1 }
+    }),
+    result: Thrift.Struct.define('updateSearchResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.I32 },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.expungeSearch = Thrift.Method.define({
+    alias: 'expungeSearch',
+    args: Thrift.Struct.define('expungeSearchArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('expungeSearchResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.I32 },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.findNoteOffset = Thrift.Method.define({
+    alias: 'findNoteOffset',
+    args: Thrift.Struct.define('findNoteOffsetArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'filter', type: Thrift.Type.STRUCT, def: module.exports.NoteFilter, index: 1 },
+      3: { alias: 'guid', type: Thrift.Type.STRING, index: 2 }
+    }),
+    result: Thrift.Struct.define('findNoteOffsetResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.I32 },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.findNotesMetadata = Thrift.Method.define({
+    alias: 'findNotesMetadata',
+    args: Thrift.Struct.define('findNotesMetadataArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'filter', type: Thrift.Type.STRUCT, def: module.exports.NoteFilter, index: 1 },
+      3: { alias: 'offset', type: Thrift.Type.I32, index: 2 },
+      4: { alias: 'maxNotes', type: Thrift.Type.I32, index: 3 },
+      5: { alias: 'resultSpec', type: Thrift.Type.STRUCT, def: module.exports.NotesMetadataResultSpec, index: 4 }
+    }),
+    result: Thrift.Struct.define('findNotesMetadataResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: module.exports.NotesMetadataList },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.findNoteCounts = Thrift.Method.define({
+    alias: 'findNoteCounts',
+    args: Thrift.Struct.define('findNoteCountsArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'filter', type: Thrift.Type.STRUCT, def: module.exports.NoteFilter, index: 1 },
+      3: { alias: 'withTrash', type: Thrift.Type.BOOL, index: 2 }
+    }),
+    result: Thrift.Struct.define('findNoteCountsResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: module.exports.NoteCollectionCounts },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.getNoteWithResultSpec = Thrift.Method.define({
+    alias: 'getNoteWithResultSpec',
+    args: Thrift.Struct.define('getNoteWithResultSpecArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 },
+      3: { alias: 'resultSpec', type: Thrift.Type.STRUCT, def: module.exports.NoteResultSpec, index: 2 }
+    }),
+    result: Thrift.Struct.define('getNoteWithResultSpecResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.Note },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.getNote = Thrift.Method.define({
+    alias: 'getNote',
+    args: Thrift.Struct.define('getNoteArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 },
+      3: { alias: 'withContent', type: Thrift.Type.BOOL, index: 2 },
+      4: { alias: 'withResourcesData', type: Thrift.Type.BOOL, index: 3 },
+      5: { alias: 'withResourcesRecognition', type: Thrift.Type.BOOL, index: 4 },
+      6: { alias: 'withResourcesAlternateData', type: Thrift.Type.BOOL, index: 5 }
+    }),
+    result: Thrift.Struct.define('getNoteResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.Note },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.getNoteApplicationData = Thrift.Method.define({
+    alias: 'getNoteApplicationData',
+    args: Thrift.Struct.define('getNoteApplicationDataArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('getNoteApplicationDataResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.LazyMap },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.getNoteApplicationDataEntry = Thrift.Method.define({
+    alias: 'getNoteApplicationDataEntry',
+    args: Thrift.Struct.define('getNoteApplicationDataEntryArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 },
+      3: { alias: 'key', type: Thrift.Type.STRING, index: 2 }
+    }),
+    result: Thrift.Struct.define('getNoteApplicationDataEntryResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRING },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.setNoteApplicationDataEntry = Thrift.Method.define({
+    alias: 'setNoteApplicationDataEntry',
+    args: Thrift.Struct.define('setNoteApplicationDataEntryArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 },
+      3: { alias: 'key', type: Thrift.Type.STRING, index: 2 },
+      4: { alias: 'value', type: Thrift.Type.STRING, index: 3 }
+    }),
+    result: Thrift.Struct.define('setNoteApplicationDataEntryResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.I32 },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.unsetNoteApplicationDataEntry = Thrift.Method.define({
+    alias: 'unsetNoteApplicationDataEntry',
+    args: Thrift.Struct.define('unsetNoteApplicationDataEntryArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 },
+      3: { alias: 'key', type: Thrift.Type.STRING, index: 2 }
+    }),
+    result: Thrift.Struct.define('unsetNoteApplicationDataEntryResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.I32 },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.getNoteContent = Thrift.Method.define({
+    alias: 'getNoteContent',
+    args: Thrift.Struct.define('getNoteContentArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('getNoteContentResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRING },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.getNoteSearchText = Thrift.Method.define({
+    alias: 'getNoteSearchText',
+    args: Thrift.Struct.define('getNoteSearchTextArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 },
+      3: { alias: 'noteOnly', type: Thrift.Type.BOOL, index: 2 },
+      4: { alias: 'tokenizeForIndexing', type: Thrift.Type.BOOL, index: 3 }
+    }),
+    result: Thrift.Struct.define('getNoteSearchTextResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRING },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.getResourceSearchText = Thrift.Method.define({
+    alias: 'getResourceSearchText',
+    args: Thrift.Struct.define('getResourceSearchTextArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('getResourceSearchTextResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRING },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.getNoteTagNames = Thrift.Method.define({
+    alias: 'getNoteTagNames',
+    args: Thrift.Struct.define('getNoteTagNamesArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('getNoteTagNamesResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRING)  },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.createNote = Thrift.Method.define({
+    alias: 'createNote',
+    args: Thrift.Struct.define('createNoteArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'note', type: Thrift.Type.STRUCT, def: Types.Note, index: 1 }
+    }),
+    result: Thrift.Struct.define('createNoteResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.Note },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.updateNote = Thrift.Method.define({
+    alias: 'updateNote',
+    args: Thrift.Struct.define('updateNoteArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'note', type: Thrift.Type.STRUCT, def: Types.Note, index: 1 }
+    }),
+    result: Thrift.Struct.define('updateNoteResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.Note },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.deleteNote = Thrift.Method.define({
+    alias: 'deleteNote',
+    args: Thrift.Struct.define('deleteNoteArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('deleteNoteResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.I32 },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.expungeNote = Thrift.Method.define({
+    alias: 'expungeNote',
+    args: Thrift.Struct.define('expungeNoteArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('expungeNoteResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.I32 },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.copyNote = Thrift.Method.define({
+    alias: 'copyNote',
+    args: Thrift.Struct.define('copyNoteArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'noteGuid', type: Thrift.Type.STRING, index: 1 },
+      3: { alias: 'toNotebookGuid', type: Thrift.Type.STRING, index: 2 }
+    }),
+    result: Thrift.Struct.define('copyNoteResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.Note },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.listNoteVersions = Thrift.Method.define({
+    alias: 'listNoteVersions',
+    args: Thrift.Struct.define('listNoteVersionsArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'noteGuid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('listNoteVersionsResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, module.exports.NoteVersionId)  },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.getNoteVersion = Thrift.Method.define({
+    alias: 'getNoteVersion',
+    args: Thrift.Struct.define('getNoteVersionArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'noteGuid', type: Thrift.Type.STRING, index: 1 },
+      3: { alias: 'updateSequenceNum', type: Thrift.Type.I32, index: 2 },
+      4: { alias: 'withResourcesData', type: Thrift.Type.BOOL, index: 3 },
+      5: { alias: 'withResourcesRecognition', type: Thrift.Type.BOOL, index: 4 },
+      6: { alias: 'withResourcesAlternateData', type: Thrift.Type.BOOL, index: 5 }
+    }),
+    result: Thrift.Struct.define('getNoteVersionResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.Note },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.getResource = Thrift.Method.define({
+    alias: 'getResource',
+    args: Thrift.Struct.define('getResourceArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 },
+      3: { alias: 'withData', type: Thrift.Type.BOOL, index: 2 },
+      4: { alias: 'withRecognition', type: Thrift.Type.BOOL, index: 3 },
+      5: { alias: 'withAttributes', type: Thrift.Type.BOOL, index: 4 },
+      6: { alias: 'withAlternateData', type: Thrift.Type.BOOL, index: 5 }
+    }),
+    result: Thrift.Struct.define('getResourceResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.Resource },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.getResourceApplicationData = Thrift.Method.define({
+    alias: 'getResourceApplicationData',
+    args: Thrift.Struct.define('getResourceApplicationDataArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('getResourceApplicationDataResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.LazyMap },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.getResourceApplicationDataEntry = Thrift.Method.define({
+    alias: 'getResourceApplicationDataEntry',
+    args: Thrift.Struct.define('getResourceApplicationDataEntryArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 },
+      3: { alias: 'key', type: Thrift.Type.STRING, index: 2 }
+    }),
+    result: Thrift.Struct.define('getResourceApplicationDataEntryResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRING },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.setResourceApplicationDataEntry = Thrift.Method.define({
+    alias: 'setResourceApplicationDataEntry',
+    args: Thrift.Struct.define('setResourceApplicationDataEntryArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 },
+      3: { alias: 'key', type: Thrift.Type.STRING, index: 2 },
+      4: { alias: 'value', type: Thrift.Type.STRING, index: 3 }
+    }),
+    result: Thrift.Struct.define('setResourceApplicationDataEntryResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.I32 },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.unsetResourceApplicationDataEntry = Thrift.Method.define({
+    alias: 'unsetResourceApplicationDataEntry',
+    args: Thrift.Struct.define('unsetResourceApplicationDataEntryArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 },
+      3: { alias: 'key', type: Thrift.Type.STRING, index: 2 }
+    }),
+    result: Thrift.Struct.define('unsetResourceApplicationDataEntryResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.I32 },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.updateResource = Thrift.Method.define({
+    alias: 'updateResource',
+    args: Thrift.Struct.define('updateResourceArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'resource', type: Thrift.Type.STRUCT, def: Types.Resource, index: 1 }
+    }),
+    result: Thrift.Struct.define('updateResourceResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.I32 },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.getResourceData = Thrift.Method.define({
+    alias: 'getResourceData',
+    args: Thrift.Struct.define('getResourceDataArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('getResourceDataResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.BINARY },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.getResourceByHash = Thrift.Method.define({
+    alias: 'getResourceByHash',
+    args: Thrift.Struct.define('getResourceByHashArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'noteGuid', type: Thrift.Type.STRING, index: 1 },
+      3: { alias: 'contentHash', type: Thrift.Type.BINARY, index: 2 },
+      4: { alias: 'withData', type: Thrift.Type.BOOL, index: 3 },
+      5: { alias: 'withRecognition', type: Thrift.Type.BOOL, index: 4 },
+      6: { alias: 'withAlternateData', type: Thrift.Type.BOOL, index: 5 }
+    }),
+    result: Thrift.Struct.define('getResourceByHashResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.Resource },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.getResourceRecognition = Thrift.Method.define({
+    alias: 'getResourceRecognition',
+    args: Thrift.Struct.define('getResourceRecognitionArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('getResourceRecognitionResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.BINARY },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.getResourceAlternateData = Thrift.Method.define({
+    alias: 'getResourceAlternateData',
+    args: Thrift.Struct.define('getResourceAlternateDataArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('getResourceAlternateDataResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.BINARY },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.getResourceAttributes = Thrift.Method.define({
+    alias: 'getResourceAttributes',
+    args: Thrift.Struct.define('getResourceAttributesArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('getResourceAttributesResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.ResourceAttributes },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.getPublicNotebook = Thrift.Method.define({
+    alias: 'getPublicNotebook',
+    args: Thrift.Struct.define('getPublicNotebookArgs', {
+      1: { alias: 'userId', type: Thrift.Type.I32, index: 0 },
+      2: { alias: 'publicUri', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('getPublicNotebookResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.Notebook },
+      1: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      2: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.shareNotebook = Thrift.Method.define({
+    alias: 'shareNotebook',
+    args: Thrift.Struct.define('shareNotebookArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'sharedNotebook', type: Thrift.Type.STRUCT, def: Types.SharedNotebook, index: 1 },
+      3: { alias: 'message', type: Thrift.Type.STRING, index: 2 }
+    }),
+    result: Thrift.Struct.define('shareNotebookResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.SharedNotebook },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException },
+      3: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.createOrUpdateNotebookShares = Thrift.Method.define({
+    alias: 'createOrUpdateNotebookShares',
+    args: Thrift.Struct.define('createOrUpdateNotebookSharesArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'shareTemplate', type: Thrift.Type.STRUCT, def: module.exports.NotebookShareTemplate, index: 1 }
+    }),
+    result: Thrift.Struct.define('createOrUpdateNotebookSharesResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: module.exports.CreateOrUpdateNotebookSharesResult },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException },
+      3: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      4: { alias: 'invalidContactsException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMInvalidContactsException }
+    })
+  });
+
+  NoteStore.updateSharedNotebook = Thrift.Method.define({
+    alias: 'updateSharedNotebook',
+    args: Thrift.Struct.define('updateSharedNotebookArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'sharedNotebook', type: Thrift.Type.STRUCT, def: Types.SharedNotebook, index: 1 }
+    }),
+    result: Thrift.Struct.define('updateSharedNotebookResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.I32 },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException },
+      3: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.setNotebookRecipientSettings = Thrift.Method.define({
+    alias: 'setNotebookRecipientSettings',
+    args: Thrift.Struct.define('setNotebookRecipientSettingsArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'notebookGuid', type: Thrift.Type.STRING, index: 1 },
+      3: { alias: 'recipientSettings', type: Thrift.Type.STRUCT, def: Types.NotebookRecipientSettings, index: 2 }
+    }),
+    result: Thrift.Struct.define('setNotebookRecipientSettingsResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.Notebook },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException },
+      3: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.listSharedNotebooks = Thrift.Method.define({
+    alias: 'listSharedNotebooks',
+    args: Thrift.Struct.define('listSharedNotebooksArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 }
+    }),
+    result: Thrift.Struct.define('listSharedNotebooksResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.SharedNotebook)  },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException },
+      3: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.createLinkedNotebook = Thrift.Method.define({
+    alias: 'createLinkedNotebook',
+    args: Thrift.Struct.define('createLinkedNotebookArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'linkedNotebook', type: Thrift.Type.STRUCT, def: Types.LinkedNotebook, index: 1 }
+    }),
+    result: Thrift.Struct.define('createLinkedNotebookResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.LinkedNotebook },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException },
+      3: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.updateLinkedNotebook = Thrift.Method.define({
+    alias: 'updateLinkedNotebook',
+    args: Thrift.Struct.define('updateLinkedNotebookArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'linkedNotebook', type: Thrift.Type.STRUCT, def: Types.LinkedNotebook, index: 1 }
+    }),
+    result: Thrift.Struct.define('updateLinkedNotebookResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.I32 },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException },
+      3: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.listLinkedNotebooks = Thrift.Method.define({
+    alias: 'listLinkedNotebooks',
+    args: Thrift.Struct.define('listLinkedNotebooksArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 }
+    }),
+    result: Thrift.Struct.define('listLinkedNotebooksResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.LIST, def: Thrift.List.define(Thrift.Type.STRUCT, Types.LinkedNotebook)  },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException },
+      3: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.expungeLinkedNotebook = Thrift.Method.define({
+    alias: 'expungeLinkedNotebook',
+    args: Thrift.Struct.define('expungeLinkedNotebookArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('expungeLinkedNotebookResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.I32 },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException },
+      3: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.authenticateToSharedNotebook = Thrift.Method.define({
+    alias: 'authenticateToSharedNotebook',
+    args: Thrift.Struct.define('authenticateToSharedNotebookArgs', {
+      1: { alias: 'shareKeyOrGlobalId', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('authenticateToSharedNotebookResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: UserStore.AuthenticationResult },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException },
+      3: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.getSharedNotebookByAuth = Thrift.Method.define({
+    alias: 'getSharedNotebookByAuth',
+    args: Thrift.Struct.define('getSharedNotebookByAuthArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 }
+    }),
+    result: Thrift.Struct.define('getSharedNotebookByAuthResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: Types.SharedNotebook },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException },
+      3: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.emailNote = Thrift.Method.define({
+    alias: 'emailNote',
+    args: Thrift.Struct.define('emailNoteArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'parameters', type: Thrift.Type.STRUCT, def: module.exports.NoteEmailParameters, index: 1 }
+    }),
+    result: Thrift.Struct.define('emailNoteResult', {
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException },
+      3: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.shareNote = Thrift.Method.define({
+    alias: 'shareNote',
+    args: Thrift.Struct.define('shareNoteArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('shareNoteResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRING },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException },
+      3: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.stopSharingNote = Thrift.Method.define({
+    alias: 'stopSharingNote',
+    args: Thrift.Struct.define('stopSharingNoteArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'guid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('stopSharingNoteResult', {
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException },
+      3: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.authenticateToSharedNote = Thrift.Method.define({
+    alias: 'authenticateToSharedNote',
+    args: Thrift.Struct.define('authenticateToSharedNoteArgs', {
+      1: { alias: 'guid', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'noteKey', type: Thrift.Type.STRING, index: 1 },
+      3: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 2 }
+    }),
+    result: Thrift.Struct.define('authenticateToSharedNoteResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: UserStore.AuthenticationResult },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException },
+      3: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.findRelated = Thrift.Method.define({
+    alias: 'findRelated',
+    args: Thrift.Struct.define('findRelatedArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'query', type: Thrift.Type.STRUCT, def: module.exports.RelatedQuery, index: 1 },
+      3: { alias: 'resultSpec', type: Thrift.Type.STRUCT, def: module.exports.RelatedResultSpec, index: 2 }
+    }),
+    result: Thrift.Struct.define('findRelatedResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: module.exports.RelatedResult },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException },
+      3: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException }
+    })
+  });
+
+  NoteStore.updateNoteIfUsnMatches = Thrift.Method.define({
+    alias: 'updateNoteIfUsnMatches',
+    args: Thrift.Struct.define('updateNoteIfUsnMatchesArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'note', type: Thrift.Type.STRUCT, def: Types.Note, index: 1 }
+    }),
+    result: Thrift.Struct.define('updateNoteIfUsnMatchesResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: module.exports.UpdateNoteIfUsnMatchesResult },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException },
+      3: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.manageNotebookShares = Thrift.Method.define({
+    alias: 'manageNotebookShares',
+    args: Thrift.Struct.define('manageNotebookSharesArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'parameters', type: Thrift.Type.STRUCT, def: module.exports.ManageNotebookSharesParameters, index: 1 }
+    }),
+    result: Thrift.Struct.define('manageNotebookSharesResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: module.exports.ManageNotebookSharesResult },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException },
+      3: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  NoteStore.getNotebookShares = Thrift.Method.define({
+    alias: 'getNotebookShares',
+    args: Thrift.Struct.define('getNotebookSharesArgs', {
+      1: { alias: 'authenticationToken', type: Thrift.Type.STRING, index: 0 },
+      2: { alias: 'notebookGuid', type: Thrift.Type.STRING, index: 1 }
+    }),
+    result: Thrift.Struct.define('getNotebookSharesResult', {
+      0: { alias: 'returnValue',type: Thrift.Type.STRUCT, def: module.exports.ShareRelationships },
+      1: { alias: 'userException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMUserException },
+      2: { alias: 'notFoundException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMNotFoundException },
+      3: { alias: 'systemException', type: Thrift.Type.EXCEPTION, def: Errors.EDAMSystemException }
+    })
+  });
+
+  // Define NoteStore Client
+
+  function NoteStoreClient(output) {
+    this.output = output;
     this.seqid = 0;
-};
-NoteStoreClient.prototype = {};
-NoteStoreClient.prototype.getSyncState = function(authenticationToken, callback) {
-  if (callback === undefined) {
-    this.send_getSyncState(authenticationToken);
-    return this.recv_getSyncState();
-  } else {
-    var postData = this.send_getSyncState(authenticationToken, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getSyncState);
   }
-};
-
-NoteStoreClient.prototype.send_getSyncState = function(authenticationToken, callback) {
-  this.output.writeMessageBegin('getSyncState', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getSyncState_args();
-  args.authenticationToken = authenticationToken;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getSyncState = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getSyncState_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getSyncState failed: unknown result';
-};
-NoteStoreClient.prototype.getFilteredSyncChunk = function(authenticationToken, afterUSN, maxEntries, filter, callback) {
-  if (callback === undefined) {
-    this.send_getFilteredSyncChunk(authenticationToken, afterUSN, maxEntries, filter);
-    return this.recv_getFilteredSyncChunk();
-  } else {
-    var postData = this.send_getFilteredSyncChunk(authenticationToken, afterUSN, maxEntries, filter, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getFilteredSyncChunk);
-  }
-};
-
-NoteStoreClient.prototype.send_getFilteredSyncChunk = function(authenticationToken, afterUSN, maxEntries, filter, callback) {
-  this.output.writeMessageBegin('getFilteredSyncChunk', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getFilteredSyncChunk_args();
-  args.authenticationToken = authenticationToken;
-  args.afterUSN = afterUSN;
-  args.maxEntries = maxEntries;
-  args.filter = filter;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getFilteredSyncChunk = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getFilteredSyncChunk_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getFilteredSyncChunk failed: unknown result';
-};
-NoteStoreClient.prototype.getLinkedNotebookSyncState = function(authenticationToken, linkedNotebook, callback) {
-  if (callback === undefined) {
-    this.send_getLinkedNotebookSyncState(authenticationToken, linkedNotebook);
-    return this.recv_getLinkedNotebookSyncState();
-  } else {
-    var postData = this.send_getLinkedNotebookSyncState(authenticationToken, linkedNotebook, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getLinkedNotebookSyncState);
-  }
-};
-
-NoteStoreClient.prototype.send_getLinkedNotebookSyncState = function(authenticationToken, linkedNotebook, callback) {
-  this.output.writeMessageBegin('getLinkedNotebookSyncState', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getLinkedNotebookSyncState_args();
-  args.authenticationToken = authenticationToken;
-  args.linkedNotebook = linkedNotebook;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getLinkedNotebookSyncState = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getLinkedNotebookSyncState_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getLinkedNotebookSyncState failed: unknown result';
-};
-NoteStoreClient.prototype.getLinkedNotebookSyncChunk = function(authenticationToken, linkedNotebook, afterUSN, maxEntries, fullSyncOnly, callback) {
-  if (callback === undefined) {
-    this.send_getLinkedNotebookSyncChunk(authenticationToken, linkedNotebook, afterUSN, maxEntries, fullSyncOnly);
-    return this.recv_getLinkedNotebookSyncChunk();
-  } else {
-    var postData = this.send_getLinkedNotebookSyncChunk(authenticationToken, linkedNotebook, afterUSN, maxEntries, fullSyncOnly, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getLinkedNotebookSyncChunk);
-  }
-};
-
-NoteStoreClient.prototype.send_getLinkedNotebookSyncChunk = function(authenticationToken, linkedNotebook, afterUSN, maxEntries, fullSyncOnly, callback) {
-  this.output.writeMessageBegin('getLinkedNotebookSyncChunk', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getLinkedNotebookSyncChunk_args();
-  args.authenticationToken = authenticationToken;
-  args.linkedNotebook = linkedNotebook;
-  args.afterUSN = afterUSN;
-  args.maxEntries = maxEntries;
-  args.fullSyncOnly = fullSyncOnly;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getLinkedNotebookSyncChunk = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getLinkedNotebookSyncChunk_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getLinkedNotebookSyncChunk failed: unknown result';
-};
-NoteStoreClient.prototype.listNotebooks = function(authenticationToken, callback) {
-  if (callback === undefined) {
-    this.send_listNotebooks(authenticationToken);
-    return this.recv_listNotebooks();
-  } else {
-    var postData = this.send_listNotebooks(authenticationToken, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_listNotebooks);
-  }
-};
-
-NoteStoreClient.prototype.send_listNotebooks = function(authenticationToken, callback) {
-  this.output.writeMessageBegin('listNotebooks', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_listNotebooks_args();
-  args.authenticationToken = authenticationToken;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_listNotebooks = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_listNotebooks_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'listNotebooks failed: unknown result';
-};
-NoteStoreClient.prototype.listAccessibleBusinessNotebooks = function(authenticationToken, callback) {
-  if (callback === undefined) {
-    this.send_listAccessibleBusinessNotebooks(authenticationToken);
-    return this.recv_listAccessibleBusinessNotebooks();
-  } else {
-    var postData = this.send_listAccessibleBusinessNotebooks(authenticationToken, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_listAccessibleBusinessNotebooks);
-  }
-};
-
-NoteStoreClient.prototype.send_listAccessibleBusinessNotebooks = function(authenticationToken, callback) {
-  this.output.writeMessageBegin('listAccessibleBusinessNotebooks', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_listAccessibleBusinessNotebooks_args();
-  args.authenticationToken = authenticationToken;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_listAccessibleBusinessNotebooks = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_listAccessibleBusinessNotebooks_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'listAccessibleBusinessNotebooks failed: unknown result';
-};
-NoteStoreClient.prototype.getNotebook = function(authenticationToken, guid, callback) {
-  if (callback === undefined) {
-    this.send_getNotebook(authenticationToken, guid);
-    return this.recv_getNotebook();
-  } else {
-    var postData = this.send_getNotebook(authenticationToken, guid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getNotebook);
-  }
-};
-
-NoteStoreClient.prototype.send_getNotebook = function(authenticationToken, guid, callback) {
-  this.output.writeMessageBegin('getNotebook', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getNotebook_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getNotebook = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getNotebook_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getNotebook failed: unknown result';
-};
-NoteStoreClient.prototype.getDefaultNotebook = function(authenticationToken, callback) {
-  if (callback === undefined) {
-    this.send_getDefaultNotebook(authenticationToken);
-    return this.recv_getDefaultNotebook();
-  } else {
-    var postData = this.send_getDefaultNotebook(authenticationToken, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getDefaultNotebook);
-  }
-};
-
-NoteStoreClient.prototype.send_getDefaultNotebook = function(authenticationToken, callback) {
-  this.output.writeMessageBegin('getDefaultNotebook', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getDefaultNotebook_args();
-  args.authenticationToken = authenticationToken;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getDefaultNotebook = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getDefaultNotebook_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getDefaultNotebook failed: unknown result';
-};
-NoteStoreClient.prototype.createNotebook = function(authenticationToken, notebook, callback) {
-  if (callback === undefined) {
-    this.send_createNotebook(authenticationToken, notebook);
-    return this.recv_createNotebook();
-  } else {
-    var postData = this.send_createNotebook(authenticationToken, notebook, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_createNotebook);
-  }
-};
-
-NoteStoreClient.prototype.send_createNotebook = function(authenticationToken, notebook, callback) {
-  this.output.writeMessageBegin('createNotebook', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_createNotebook_args();
-  args.authenticationToken = authenticationToken;
-  args.notebook = notebook;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_createNotebook = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_createNotebook_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'createNotebook failed: unknown result';
-};
-NoteStoreClient.prototype.updateNotebook = function(authenticationToken, notebook, callback) {
-  if (callback === undefined) {
-    this.send_updateNotebook(authenticationToken, notebook);
-    return this.recv_updateNotebook();
-  } else {
-    var postData = this.send_updateNotebook(authenticationToken, notebook, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_updateNotebook);
-  }
-};
-
-NoteStoreClient.prototype.send_updateNotebook = function(authenticationToken, notebook, callback) {
-  this.output.writeMessageBegin('updateNotebook', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_updateNotebook_args();
-  args.authenticationToken = authenticationToken;
-  args.notebook = notebook;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_updateNotebook = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_updateNotebook_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'updateNotebook failed: unknown result';
-};
-NoteStoreClient.prototype.expungeNotebook = function(authenticationToken, guid, callback) {
-  if (callback === undefined) {
-    this.send_expungeNotebook(authenticationToken, guid);
-    return this.recv_expungeNotebook();
-  } else {
-    var postData = this.send_expungeNotebook(authenticationToken, guid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_expungeNotebook);
-  }
-};
-
-NoteStoreClient.prototype.send_expungeNotebook = function(authenticationToken, guid, callback) {
-  this.output.writeMessageBegin('expungeNotebook', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_expungeNotebook_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_expungeNotebook = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_expungeNotebook_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'expungeNotebook failed: unknown result';
-};
-NoteStoreClient.prototype.listTags = function(authenticationToken, callback) {
-  if (callback === undefined) {
-    this.send_listTags(authenticationToken);
-    return this.recv_listTags();
-  } else {
-    var postData = this.send_listTags(authenticationToken, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_listTags);
-  }
-};
-
-NoteStoreClient.prototype.send_listTags = function(authenticationToken, callback) {
-  this.output.writeMessageBegin('listTags', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_listTags_args();
-  args.authenticationToken = authenticationToken;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_listTags = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_listTags_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'listTags failed: unknown result';
-};
-NoteStoreClient.prototype.listTagsByNotebook = function(authenticationToken, notebookGuid, callback) {
-  if (callback === undefined) {
-    this.send_listTagsByNotebook(authenticationToken, notebookGuid);
-    return this.recv_listTagsByNotebook();
-  } else {
-    var postData = this.send_listTagsByNotebook(authenticationToken, notebookGuid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_listTagsByNotebook);
-  }
-};
-
-NoteStoreClient.prototype.send_listTagsByNotebook = function(authenticationToken, notebookGuid, callback) {
-  this.output.writeMessageBegin('listTagsByNotebook', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_listTagsByNotebook_args();
-  args.authenticationToken = authenticationToken;
-  args.notebookGuid = notebookGuid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_listTagsByNotebook = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_listTagsByNotebook_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'listTagsByNotebook failed: unknown result';
-};
-NoteStoreClient.prototype.getTag = function(authenticationToken, guid, callback) {
-  if (callback === undefined) {
-    this.send_getTag(authenticationToken, guid);
-    return this.recv_getTag();
-  } else {
-    var postData = this.send_getTag(authenticationToken, guid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getTag);
-  }
-};
-
-NoteStoreClient.prototype.send_getTag = function(authenticationToken, guid, callback) {
-  this.output.writeMessageBegin('getTag', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getTag_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getTag = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getTag_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getTag failed: unknown result';
-};
-NoteStoreClient.prototype.createTag = function(authenticationToken, tag, callback) {
-  if (callback === undefined) {
-    this.send_createTag(authenticationToken, tag);
-    return this.recv_createTag();
-  } else {
-    var postData = this.send_createTag(authenticationToken, tag, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_createTag);
-  }
-};
-
-NoteStoreClient.prototype.send_createTag = function(authenticationToken, tag, callback) {
-  this.output.writeMessageBegin('createTag', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_createTag_args();
-  args.authenticationToken = authenticationToken;
-  args.tag = tag;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_createTag = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_createTag_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'createTag failed: unknown result';
-};
-NoteStoreClient.prototype.updateTag = function(authenticationToken, tag, callback) {
-  if (callback === undefined) {
-    this.send_updateTag(authenticationToken, tag);
-    return this.recv_updateTag();
-  } else {
-    var postData = this.send_updateTag(authenticationToken, tag, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_updateTag);
-  }
-};
-
-NoteStoreClient.prototype.send_updateTag = function(authenticationToken, tag, callback) {
-  this.output.writeMessageBegin('updateTag', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_updateTag_args();
-  args.authenticationToken = authenticationToken;
-  args.tag = tag;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_updateTag = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_updateTag_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'updateTag failed: unknown result';
-};
-NoteStoreClient.prototype.untagAll = function(authenticationToken, guid, callback) {
-  if (callback === undefined) {
-    this.send_untagAll(authenticationToken, guid);
-    this.recv_untagAll();
-  } else {
-    var postData = this.send_untagAll(authenticationToken, guid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_untagAll);
-  }
-};
-
-NoteStoreClient.prototype.send_untagAll = function(authenticationToken, guid, callback) {
-  this.output.writeMessageBegin('untagAll', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_untagAll_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_untagAll = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_untagAll_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  return;
-};
-NoteStoreClient.prototype.expungeTag = function(authenticationToken, guid, callback) {
-  if (callback === undefined) {
-    this.send_expungeTag(authenticationToken, guid);
-    return this.recv_expungeTag();
-  } else {
-    var postData = this.send_expungeTag(authenticationToken, guid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_expungeTag);
-  }
-};
-
-NoteStoreClient.prototype.send_expungeTag = function(authenticationToken, guid, callback) {
-  this.output.writeMessageBegin('expungeTag', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_expungeTag_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_expungeTag = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_expungeTag_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'expungeTag failed: unknown result';
-};
-NoteStoreClient.prototype.listSearches = function(authenticationToken, callback) {
-  if (callback === undefined) {
-    this.send_listSearches(authenticationToken);
-    return this.recv_listSearches();
-  } else {
-    var postData = this.send_listSearches(authenticationToken, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_listSearches);
-  }
-};
-
-NoteStoreClient.prototype.send_listSearches = function(authenticationToken, callback) {
-  this.output.writeMessageBegin('listSearches', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_listSearches_args();
-  args.authenticationToken = authenticationToken;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_listSearches = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_listSearches_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'listSearches failed: unknown result';
-};
-NoteStoreClient.prototype.getSearch = function(authenticationToken, guid, callback) {
-  if (callback === undefined) {
-    this.send_getSearch(authenticationToken, guid);
-    return this.recv_getSearch();
-  } else {
-    var postData = this.send_getSearch(authenticationToken, guid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getSearch);
-  }
-};
-
-NoteStoreClient.prototype.send_getSearch = function(authenticationToken, guid, callback) {
-  this.output.writeMessageBegin('getSearch', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getSearch_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getSearch = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getSearch_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getSearch failed: unknown result';
-};
-NoteStoreClient.prototype.createSearch = function(authenticationToken, search, callback) {
-  if (callback === undefined) {
-    this.send_createSearch(authenticationToken, search);
-    return this.recv_createSearch();
-  } else {
-    var postData = this.send_createSearch(authenticationToken, search, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_createSearch);
-  }
-};
-
-NoteStoreClient.prototype.send_createSearch = function(authenticationToken, search, callback) {
-  this.output.writeMessageBegin('createSearch', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_createSearch_args();
-  args.authenticationToken = authenticationToken;
-  args.search = search;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_createSearch = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_createSearch_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'createSearch failed: unknown result';
-};
-NoteStoreClient.prototype.updateSearch = function(authenticationToken, search, callback) {
-  if (callback === undefined) {
-    this.send_updateSearch(authenticationToken, search);
-    return this.recv_updateSearch();
-  } else {
-    var postData = this.send_updateSearch(authenticationToken, search, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_updateSearch);
-  }
-};
-
-NoteStoreClient.prototype.send_updateSearch = function(authenticationToken, search, callback) {
-  this.output.writeMessageBegin('updateSearch', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_updateSearch_args();
-  args.authenticationToken = authenticationToken;
-  args.search = search;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_updateSearch = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_updateSearch_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'updateSearch failed: unknown result';
-};
-NoteStoreClient.prototype.expungeSearch = function(authenticationToken, guid, callback) {
-  if (callback === undefined) {
-    this.send_expungeSearch(authenticationToken, guid);
-    return this.recv_expungeSearch();
-  } else {
-    var postData = this.send_expungeSearch(authenticationToken, guid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_expungeSearch);
-  }
-};
-
-NoteStoreClient.prototype.send_expungeSearch = function(authenticationToken, guid, callback) {
-  this.output.writeMessageBegin('expungeSearch', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_expungeSearch_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_expungeSearch = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_expungeSearch_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'expungeSearch failed: unknown result';
-};
-NoteStoreClient.prototype.findNoteOffset = function(authenticationToken, filter, guid, callback) {
-  if (callback === undefined) {
-    this.send_findNoteOffset(authenticationToken, filter, guid);
-    return this.recv_findNoteOffset();
-  } else {
-    var postData = this.send_findNoteOffset(authenticationToken, filter, guid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_findNoteOffset);
-  }
-};
-
-NoteStoreClient.prototype.send_findNoteOffset = function(authenticationToken, filter, guid, callback) {
-  this.output.writeMessageBegin('findNoteOffset', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_findNoteOffset_args();
-  args.authenticationToken = authenticationToken;
-  args.filter = filter;
-  args.guid = guid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_findNoteOffset = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_findNoteOffset_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'findNoteOffset failed: unknown result';
-};
-NoteStoreClient.prototype.findNotesMetadata = function(authenticationToken, filter, offset, maxNotes, resultSpec, callback) {
-  if (callback === undefined) {
-    this.send_findNotesMetadata(authenticationToken, filter, offset, maxNotes, resultSpec);
-    return this.recv_findNotesMetadata();
-  } else {
-    var postData = this.send_findNotesMetadata(authenticationToken, filter, offset, maxNotes, resultSpec, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_findNotesMetadata);
-  }
-};
-
-NoteStoreClient.prototype.send_findNotesMetadata = function(authenticationToken, filter, offset, maxNotes, resultSpec, callback) {
-  this.output.writeMessageBegin('findNotesMetadata', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_findNotesMetadata_args();
-  args.authenticationToken = authenticationToken;
-  args.filter = filter;
-  args.offset = offset;
-  args.maxNotes = maxNotes;
-  args.resultSpec = resultSpec;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_findNotesMetadata = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_findNotesMetadata_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'findNotesMetadata failed: unknown result';
-};
-NoteStoreClient.prototype.findNoteCounts = function(authenticationToken, filter, withTrash, callback) {
-  if (callback === undefined) {
-    this.send_findNoteCounts(authenticationToken, filter, withTrash);
-    return this.recv_findNoteCounts();
-  } else {
-    var postData = this.send_findNoteCounts(authenticationToken, filter, withTrash, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_findNoteCounts);
-  }
-};
-
-NoteStoreClient.prototype.send_findNoteCounts = function(authenticationToken, filter, withTrash, callback) {
-  this.output.writeMessageBegin('findNoteCounts', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_findNoteCounts_args();
-  args.authenticationToken = authenticationToken;
-  args.filter = filter;
-  args.withTrash = withTrash;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_findNoteCounts = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_findNoteCounts_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'findNoteCounts failed: unknown result';
-};
-NoteStoreClient.prototype.getNoteWithResultSpec = function(authenticationToken, guid, resultSpec, callback) {
-  if (callback === undefined) {
-    this.send_getNoteWithResultSpec(authenticationToken, guid, resultSpec);
-    return this.recv_getNoteWithResultSpec();
-  } else {
-    var postData = this.send_getNoteWithResultSpec(authenticationToken, guid, resultSpec, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getNoteWithResultSpec);
-  }
-};
-
-NoteStoreClient.prototype.send_getNoteWithResultSpec = function(authenticationToken, guid, resultSpec, callback) {
-  this.output.writeMessageBegin('getNoteWithResultSpec', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getNoteWithResultSpec_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.resultSpec = resultSpec;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getNoteWithResultSpec = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getNoteWithResultSpec_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getNoteWithResultSpec failed: unknown result';
-};
-NoteStoreClient.prototype.getNote = function(authenticationToken, guid, withContent, withResourcesData, withResourcesRecognition, withResourcesAlternateData, callback) {
-  if (callback === undefined) {
-    this.send_getNote(authenticationToken, guid, withContent, withResourcesData, withResourcesRecognition, withResourcesAlternateData);
-    return this.recv_getNote();
-  } else {
-    var postData = this.send_getNote(authenticationToken, guid, withContent, withResourcesData, withResourcesRecognition, withResourcesAlternateData, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getNote);
-  }
-};
-
-NoteStoreClient.prototype.send_getNote = function(authenticationToken, guid, withContent, withResourcesData, withResourcesRecognition, withResourcesAlternateData, callback) {
-  this.output.writeMessageBegin('getNote', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getNote_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.withContent = withContent;
-  args.withResourcesData = withResourcesData;
-  args.withResourcesRecognition = withResourcesRecognition;
-  args.withResourcesAlternateData = withResourcesAlternateData;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getNote = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getNote_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getNote failed: unknown result';
-};
-NoteStoreClient.prototype.getNoteApplicationData = function(authenticationToken, guid, callback) {
-  if (callback === undefined) {
-    this.send_getNoteApplicationData(authenticationToken, guid);
-    return this.recv_getNoteApplicationData();
-  } else {
-    var postData = this.send_getNoteApplicationData(authenticationToken, guid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getNoteApplicationData);
-  }
-};
-
-NoteStoreClient.prototype.send_getNoteApplicationData = function(authenticationToken, guid, callback) {
-  this.output.writeMessageBegin('getNoteApplicationData', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getNoteApplicationData_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getNoteApplicationData = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getNoteApplicationData_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getNoteApplicationData failed: unknown result';
-};
-NoteStoreClient.prototype.getNoteApplicationDataEntry = function(authenticationToken, guid, key, callback) {
-  if (callback === undefined) {
-    this.send_getNoteApplicationDataEntry(authenticationToken, guid, key);
-    return this.recv_getNoteApplicationDataEntry();
-  } else {
-    var postData = this.send_getNoteApplicationDataEntry(authenticationToken, guid, key, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getNoteApplicationDataEntry);
-  }
-};
-
-NoteStoreClient.prototype.send_getNoteApplicationDataEntry = function(authenticationToken, guid, key, callback) {
-  this.output.writeMessageBegin('getNoteApplicationDataEntry', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getNoteApplicationDataEntry_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.key = key;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getNoteApplicationDataEntry = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getNoteApplicationDataEntry_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getNoteApplicationDataEntry failed: unknown result';
-};
-NoteStoreClient.prototype.setNoteApplicationDataEntry = function(authenticationToken, guid, key, value, callback) {
-  if (callback === undefined) {
-    this.send_setNoteApplicationDataEntry(authenticationToken, guid, key, value);
-    return this.recv_setNoteApplicationDataEntry();
-  } else {
-    var postData = this.send_setNoteApplicationDataEntry(authenticationToken, guid, key, value, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_setNoteApplicationDataEntry);
-  }
-};
-
-NoteStoreClient.prototype.send_setNoteApplicationDataEntry = function(authenticationToken, guid, key, value, callback) {
-  this.output.writeMessageBegin('setNoteApplicationDataEntry', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_setNoteApplicationDataEntry_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.key = key;
-  args.value = value;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_setNoteApplicationDataEntry = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_setNoteApplicationDataEntry_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'setNoteApplicationDataEntry failed: unknown result';
-};
-NoteStoreClient.prototype.unsetNoteApplicationDataEntry = function(authenticationToken, guid, key, callback) {
-  if (callback === undefined) {
-    this.send_unsetNoteApplicationDataEntry(authenticationToken, guid, key);
-    return this.recv_unsetNoteApplicationDataEntry();
-  } else {
-    var postData = this.send_unsetNoteApplicationDataEntry(authenticationToken, guid, key, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_unsetNoteApplicationDataEntry);
-  }
-};
-
-NoteStoreClient.prototype.send_unsetNoteApplicationDataEntry = function(authenticationToken, guid, key, callback) {
-  this.output.writeMessageBegin('unsetNoteApplicationDataEntry', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_unsetNoteApplicationDataEntry_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.key = key;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_unsetNoteApplicationDataEntry = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_unsetNoteApplicationDataEntry_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'unsetNoteApplicationDataEntry failed: unknown result';
-};
-NoteStoreClient.prototype.getNoteContent = function(authenticationToken, guid, callback) {
-  if (callback === undefined) {
-    this.send_getNoteContent(authenticationToken, guid);
-    return this.recv_getNoteContent();
-  } else {
-    var postData = this.send_getNoteContent(authenticationToken, guid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getNoteContent);
-  }
-};
-
-NoteStoreClient.prototype.send_getNoteContent = function(authenticationToken, guid, callback) {
-  this.output.writeMessageBegin('getNoteContent', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getNoteContent_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getNoteContent = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getNoteContent_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getNoteContent failed: unknown result';
-};
-NoteStoreClient.prototype.getNoteSearchText = function(authenticationToken, guid, noteOnly, tokenizeForIndexing, callback) {
-  if (callback === undefined) {
-    this.send_getNoteSearchText(authenticationToken, guid, noteOnly, tokenizeForIndexing);
-    return this.recv_getNoteSearchText();
-  } else {
-    var postData = this.send_getNoteSearchText(authenticationToken, guid, noteOnly, tokenizeForIndexing, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getNoteSearchText);
-  }
-};
-
-NoteStoreClient.prototype.send_getNoteSearchText = function(authenticationToken, guid, noteOnly, tokenizeForIndexing, callback) {
-  this.output.writeMessageBegin('getNoteSearchText', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getNoteSearchText_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.noteOnly = noteOnly;
-  args.tokenizeForIndexing = tokenizeForIndexing;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getNoteSearchText = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getNoteSearchText_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getNoteSearchText failed: unknown result';
-};
-NoteStoreClient.prototype.getResourceSearchText = function(authenticationToken, guid, callback) {
-  if (callback === undefined) {
-    this.send_getResourceSearchText(authenticationToken, guid);
-    return this.recv_getResourceSearchText();
-  } else {
-    var postData = this.send_getResourceSearchText(authenticationToken, guid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getResourceSearchText);
-  }
-};
-
-NoteStoreClient.prototype.send_getResourceSearchText = function(authenticationToken, guid, callback) {
-  this.output.writeMessageBegin('getResourceSearchText', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getResourceSearchText_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getResourceSearchText = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getResourceSearchText_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getResourceSearchText failed: unknown result';
-};
-NoteStoreClient.prototype.getNoteTagNames = function(authenticationToken, guid, callback) {
-  if (callback === undefined) {
-    this.send_getNoteTagNames(authenticationToken, guid);
-    return this.recv_getNoteTagNames();
-  } else {
-    var postData = this.send_getNoteTagNames(authenticationToken, guid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getNoteTagNames);
-  }
-};
-
-NoteStoreClient.prototype.send_getNoteTagNames = function(authenticationToken, guid, callback) {
-  this.output.writeMessageBegin('getNoteTagNames', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getNoteTagNames_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getNoteTagNames = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getNoteTagNames_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getNoteTagNames failed: unknown result';
-};
-NoteStoreClient.prototype.createNote = function(authenticationToken, note, callback) {
-  if (callback === undefined) {
-    this.send_createNote(authenticationToken, note);
-    return this.recv_createNote();
-  } else {
-    var postData = this.send_createNote(authenticationToken, note, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_createNote);
-  }
-};
-
-NoteStoreClient.prototype.send_createNote = function(authenticationToken, note, callback) {
-  this.output.writeMessageBegin('createNote', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_createNote_args();
-  args.authenticationToken = authenticationToken;
-  args.note = note;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_createNote = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_createNote_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'createNote failed: unknown result';
-};
-NoteStoreClient.prototype.updateNote = function(authenticationToken, note, callback) {
-  if (callback === undefined) {
-    this.send_updateNote(authenticationToken, note);
-    return this.recv_updateNote();
-  } else {
-    var postData = this.send_updateNote(authenticationToken, note, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_updateNote);
-  }
-};
-
-NoteStoreClient.prototype.send_updateNote = function(authenticationToken, note, callback) {
-  this.output.writeMessageBegin('updateNote', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_updateNote_args();
-  args.authenticationToken = authenticationToken;
-  args.note = note;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_updateNote = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_updateNote_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'updateNote failed: unknown result';
-};
-NoteStoreClient.prototype.deleteNote = function(authenticationToken, guid, callback) {
-  if (callback === undefined) {
-    this.send_deleteNote(authenticationToken, guid);
-    return this.recv_deleteNote();
-  } else {
-    var postData = this.send_deleteNote(authenticationToken, guid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_deleteNote);
-  }
-};
-
-NoteStoreClient.prototype.send_deleteNote = function(authenticationToken, guid, callback) {
-  this.output.writeMessageBegin('deleteNote', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_deleteNote_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_deleteNote = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_deleteNote_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'deleteNote failed: unknown result';
-};
-NoteStoreClient.prototype.expungeNote = function(authenticationToken, guid, callback) {
-  if (callback === undefined) {
-    this.send_expungeNote(authenticationToken, guid);
-    return this.recv_expungeNote();
-  } else {
-    var postData = this.send_expungeNote(authenticationToken, guid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_expungeNote);
-  }
-};
-
-NoteStoreClient.prototype.send_expungeNote = function(authenticationToken, guid, callback) {
-  this.output.writeMessageBegin('expungeNote', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_expungeNote_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_expungeNote = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_expungeNote_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'expungeNote failed: unknown result';
-};
-NoteStoreClient.prototype.copyNote = function(authenticationToken, noteGuid, toNotebookGuid, callback) {
-  if (callback === undefined) {
-    this.send_copyNote(authenticationToken, noteGuid, toNotebookGuid);
-    return this.recv_copyNote();
-  } else {
-    var postData = this.send_copyNote(authenticationToken, noteGuid, toNotebookGuid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_copyNote);
-  }
-};
-
-NoteStoreClient.prototype.send_copyNote = function(authenticationToken, noteGuid, toNotebookGuid, callback) {
-  this.output.writeMessageBegin('copyNote', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_copyNote_args();
-  args.authenticationToken = authenticationToken;
-  args.noteGuid = noteGuid;
-  args.toNotebookGuid = toNotebookGuid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_copyNote = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_copyNote_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'copyNote failed: unknown result';
-};
-NoteStoreClient.prototype.listNoteVersions = function(authenticationToken, noteGuid, callback) {
-  if (callback === undefined) {
-    this.send_listNoteVersions(authenticationToken, noteGuid);
-    return this.recv_listNoteVersions();
-  } else {
-    var postData = this.send_listNoteVersions(authenticationToken, noteGuid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_listNoteVersions);
-  }
-};
-
-NoteStoreClient.prototype.send_listNoteVersions = function(authenticationToken, noteGuid, callback) {
-  this.output.writeMessageBegin('listNoteVersions', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_listNoteVersions_args();
-  args.authenticationToken = authenticationToken;
-  args.noteGuid = noteGuid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_listNoteVersions = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_listNoteVersions_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'listNoteVersions failed: unknown result';
-};
-NoteStoreClient.prototype.getNoteVersion = function(authenticationToken, noteGuid, updateSequenceNum, withResourcesData, withResourcesRecognition, withResourcesAlternateData, callback) {
-  if (callback === undefined) {
-    this.send_getNoteVersion(authenticationToken, noteGuid, updateSequenceNum, withResourcesData, withResourcesRecognition, withResourcesAlternateData);
-    return this.recv_getNoteVersion();
-  } else {
-    var postData = this.send_getNoteVersion(authenticationToken, noteGuid, updateSequenceNum, withResourcesData, withResourcesRecognition, withResourcesAlternateData, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getNoteVersion);
-  }
-};
-
-NoteStoreClient.prototype.send_getNoteVersion = function(authenticationToken, noteGuid, updateSequenceNum, withResourcesData, withResourcesRecognition, withResourcesAlternateData, callback) {
-  this.output.writeMessageBegin('getNoteVersion', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getNoteVersion_args();
-  args.authenticationToken = authenticationToken;
-  args.noteGuid = noteGuid;
-  args.updateSequenceNum = updateSequenceNum;
-  args.withResourcesData = withResourcesData;
-  args.withResourcesRecognition = withResourcesRecognition;
-  args.withResourcesAlternateData = withResourcesAlternateData;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getNoteVersion = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getNoteVersion_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getNoteVersion failed: unknown result';
-};
-NoteStoreClient.prototype.getResource = function(authenticationToken, guid, withData, withRecognition, withAttributes, withAlternateData, callback) {
-  if (callback === undefined) {
-    this.send_getResource(authenticationToken, guid, withData, withRecognition, withAttributes, withAlternateData);
-    return this.recv_getResource();
-  } else {
-    var postData = this.send_getResource(authenticationToken, guid, withData, withRecognition, withAttributes, withAlternateData, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getResource);
-  }
-};
-
-NoteStoreClient.prototype.send_getResource = function(authenticationToken, guid, withData, withRecognition, withAttributes, withAlternateData, callback) {
-  this.output.writeMessageBegin('getResource', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getResource_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.withData = withData;
-  args.withRecognition = withRecognition;
-  args.withAttributes = withAttributes;
-  args.withAlternateData = withAlternateData;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getResource = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getResource_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getResource failed: unknown result';
-};
-NoteStoreClient.prototype.getResourceApplicationData = function(authenticationToken, guid, callback) {
-  if (callback === undefined) {
-    this.send_getResourceApplicationData(authenticationToken, guid);
-    return this.recv_getResourceApplicationData();
-  } else {
-    var postData = this.send_getResourceApplicationData(authenticationToken, guid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getResourceApplicationData);
-  }
-};
-
-NoteStoreClient.prototype.send_getResourceApplicationData = function(authenticationToken, guid, callback) {
-  this.output.writeMessageBegin('getResourceApplicationData', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getResourceApplicationData_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getResourceApplicationData = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getResourceApplicationData_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getResourceApplicationData failed: unknown result';
-};
-NoteStoreClient.prototype.getResourceApplicationDataEntry = function(authenticationToken, guid, key, callback) {
-  if (callback === undefined) {
-    this.send_getResourceApplicationDataEntry(authenticationToken, guid, key);
-    return this.recv_getResourceApplicationDataEntry();
-  } else {
-    var postData = this.send_getResourceApplicationDataEntry(authenticationToken, guid, key, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getResourceApplicationDataEntry);
-  }
-};
-
-NoteStoreClient.prototype.send_getResourceApplicationDataEntry = function(authenticationToken, guid, key, callback) {
-  this.output.writeMessageBegin('getResourceApplicationDataEntry', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getResourceApplicationDataEntry_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.key = key;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getResourceApplicationDataEntry = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getResourceApplicationDataEntry_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getResourceApplicationDataEntry failed: unknown result';
-};
-NoteStoreClient.prototype.setResourceApplicationDataEntry = function(authenticationToken, guid, key, value, callback) {
-  if (callback === undefined) {
-    this.send_setResourceApplicationDataEntry(authenticationToken, guid, key, value);
-    return this.recv_setResourceApplicationDataEntry();
-  } else {
-    var postData = this.send_setResourceApplicationDataEntry(authenticationToken, guid, key, value, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_setResourceApplicationDataEntry);
-  }
-};
-
-NoteStoreClient.prototype.send_setResourceApplicationDataEntry = function(authenticationToken, guid, key, value, callback) {
-  this.output.writeMessageBegin('setResourceApplicationDataEntry', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_setResourceApplicationDataEntry_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.key = key;
-  args.value = value;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_setResourceApplicationDataEntry = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_setResourceApplicationDataEntry_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'setResourceApplicationDataEntry failed: unknown result';
-};
-NoteStoreClient.prototype.unsetResourceApplicationDataEntry = function(authenticationToken, guid, key, callback) {
-  if (callback === undefined) {
-    this.send_unsetResourceApplicationDataEntry(authenticationToken, guid, key);
-    return this.recv_unsetResourceApplicationDataEntry();
-  } else {
-    var postData = this.send_unsetResourceApplicationDataEntry(authenticationToken, guid, key, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_unsetResourceApplicationDataEntry);
-  }
-};
-
-NoteStoreClient.prototype.send_unsetResourceApplicationDataEntry = function(authenticationToken, guid, key, callback) {
-  this.output.writeMessageBegin('unsetResourceApplicationDataEntry', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_unsetResourceApplicationDataEntry_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.key = key;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_unsetResourceApplicationDataEntry = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_unsetResourceApplicationDataEntry_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'unsetResourceApplicationDataEntry failed: unknown result';
-};
-NoteStoreClient.prototype.updateResource = function(authenticationToken, resource, callback) {
-  if (callback === undefined) {
-    this.send_updateResource(authenticationToken, resource);
-    return this.recv_updateResource();
-  } else {
-    var postData = this.send_updateResource(authenticationToken, resource, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_updateResource);
-  }
-};
-
-NoteStoreClient.prototype.send_updateResource = function(authenticationToken, resource, callback) {
-  this.output.writeMessageBegin('updateResource', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_updateResource_args();
-  args.authenticationToken = authenticationToken;
-  args.resource = resource;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_updateResource = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_updateResource_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'updateResource failed: unknown result';
-};
-NoteStoreClient.prototype.getResourceData = function(authenticationToken, guid, callback) {
-  if (callback === undefined) {
-    this.send_getResourceData(authenticationToken, guid);
-    return this.recv_getResourceData();
-  } else {
-    var postData = this.send_getResourceData(authenticationToken, guid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getResourceData);
-  }
-};
-
-NoteStoreClient.prototype.send_getResourceData = function(authenticationToken, guid, callback) {
-  this.output.writeMessageBegin('getResourceData', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getResourceData_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getResourceData = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getResourceData_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getResourceData failed: unknown result';
-};
-NoteStoreClient.prototype.getResourceByHash = function(authenticationToken, noteGuid, contentHash, withData, withRecognition, withAlternateData, callback) {
-  if (callback === undefined) {
-    this.send_getResourceByHash(authenticationToken, noteGuid, contentHash, withData, withRecognition, withAlternateData);
-    return this.recv_getResourceByHash();
-  } else {
-    var postData = this.send_getResourceByHash(authenticationToken, noteGuid, contentHash, withData, withRecognition, withAlternateData, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getResourceByHash);
-  }
-};
-
-NoteStoreClient.prototype.send_getResourceByHash = function(authenticationToken, noteGuid, contentHash, withData, withRecognition, withAlternateData, callback) {
-  this.output.writeMessageBegin('getResourceByHash', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getResourceByHash_args();
-  args.authenticationToken = authenticationToken;
-  args.noteGuid = noteGuid;
-  args.contentHash = contentHash;
-  args.withData = withData;
-  args.withRecognition = withRecognition;
-  args.withAlternateData = withAlternateData;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getResourceByHash = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getResourceByHash_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getResourceByHash failed: unknown result';
-};
-NoteStoreClient.prototype.getResourceRecognition = function(authenticationToken, guid, callback) {
-  if (callback === undefined) {
-    this.send_getResourceRecognition(authenticationToken, guid);
-    return this.recv_getResourceRecognition();
-  } else {
-    var postData = this.send_getResourceRecognition(authenticationToken, guid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getResourceRecognition);
-  }
-};
-
-NoteStoreClient.prototype.send_getResourceRecognition = function(authenticationToken, guid, callback) {
-  this.output.writeMessageBegin('getResourceRecognition', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getResourceRecognition_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getResourceRecognition = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getResourceRecognition_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getResourceRecognition failed: unknown result';
-};
-NoteStoreClient.prototype.getResourceAlternateData = function(authenticationToken, guid, callback) {
-  if (callback === undefined) {
-    this.send_getResourceAlternateData(authenticationToken, guid);
-    return this.recv_getResourceAlternateData();
-  } else {
-    var postData = this.send_getResourceAlternateData(authenticationToken, guid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getResourceAlternateData);
-  }
-};
-
-NoteStoreClient.prototype.send_getResourceAlternateData = function(authenticationToken, guid, callback) {
-  this.output.writeMessageBegin('getResourceAlternateData', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getResourceAlternateData_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getResourceAlternateData = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getResourceAlternateData_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getResourceAlternateData failed: unknown result';
-};
-NoteStoreClient.prototype.getResourceAttributes = function(authenticationToken, guid, callback) {
-  if (callback === undefined) {
-    this.send_getResourceAttributes(authenticationToken, guid);
-    return this.recv_getResourceAttributes();
-  } else {
-    var postData = this.send_getResourceAttributes(authenticationToken, guid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getResourceAttributes);
-  }
-};
-
-NoteStoreClient.prototype.send_getResourceAttributes = function(authenticationToken, guid, callback) {
-  this.output.writeMessageBegin('getResourceAttributes', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getResourceAttributes_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getResourceAttributes = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getResourceAttributes_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getResourceAttributes failed: unknown result';
-};
-NoteStoreClient.prototype.getPublicNotebook = function(userId, publicUri, callback) {
-  if (callback === undefined) {
-    this.send_getPublicNotebook(userId, publicUri);
-    return this.recv_getPublicNotebook();
-  } else {
-    var postData = this.send_getPublicNotebook(userId, publicUri, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getPublicNotebook);
-  }
-};
-
-NoteStoreClient.prototype.send_getPublicNotebook = function(userId, publicUri, callback) {
-  this.output.writeMessageBegin('getPublicNotebook', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getPublicNotebook_args();
-  args.userId = userId;
-  args.publicUri = publicUri;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getPublicNotebook = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getPublicNotebook_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getPublicNotebook failed: unknown result';
-};
-NoteStoreClient.prototype.shareNotebook = function(authenticationToken, sharedNotebook, message, callback) {
-  if (callback === undefined) {
-    this.send_shareNotebook(authenticationToken, sharedNotebook, message);
-    return this.recv_shareNotebook();
-  } else {
-    var postData = this.send_shareNotebook(authenticationToken, sharedNotebook, message, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_shareNotebook);
-  }
-};
-
-NoteStoreClient.prototype.send_shareNotebook = function(authenticationToken, sharedNotebook, message, callback) {
-  this.output.writeMessageBegin('shareNotebook', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_shareNotebook_args();
-  args.authenticationToken = authenticationToken;
-  args.sharedNotebook = sharedNotebook;
-  args.message = message;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_shareNotebook = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_shareNotebook_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'shareNotebook failed: unknown result';
-};
-NoteStoreClient.prototype.createOrUpdateNotebookShares = function(authenticationToken, shareTemplate, callback) {
-  if (callback === undefined) {
-    this.send_createOrUpdateNotebookShares(authenticationToken, shareTemplate);
-    return this.recv_createOrUpdateNotebookShares();
-  } else {
-    var postData = this.send_createOrUpdateNotebookShares(authenticationToken, shareTemplate, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_createOrUpdateNotebookShares);
-  }
-};
-
-NoteStoreClient.prototype.send_createOrUpdateNotebookShares = function(authenticationToken, shareTemplate, callback) {
-  this.output.writeMessageBegin('createOrUpdateNotebookShares', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_createOrUpdateNotebookShares_args();
-  args.authenticationToken = authenticationToken;
-  args.shareTemplate = shareTemplate;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_createOrUpdateNotebookShares = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_createOrUpdateNotebookShares_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.invalidContactsException) {
-    throw result.invalidContactsException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'createOrUpdateNotebookShares failed: unknown result';
-};
-NoteStoreClient.prototype.updateSharedNotebook = function(authenticationToken, sharedNotebook, callback) {
-  if (callback === undefined) {
-    this.send_updateSharedNotebook(authenticationToken, sharedNotebook);
-    return this.recv_updateSharedNotebook();
-  } else {
-    var postData = this.send_updateSharedNotebook(authenticationToken, sharedNotebook, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_updateSharedNotebook);
-  }
-};
-
-NoteStoreClient.prototype.send_updateSharedNotebook = function(authenticationToken, sharedNotebook, callback) {
-  this.output.writeMessageBegin('updateSharedNotebook', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_updateSharedNotebook_args();
-  args.authenticationToken = authenticationToken;
-  args.sharedNotebook = sharedNotebook;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_updateSharedNotebook = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_updateSharedNotebook_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'updateSharedNotebook failed: unknown result';
-};
-NoteStoreClient.prototype.setNotebookRecipientSettings = function(authenticationToken, notebookGuid, recipientSettings, callback) {
-  if (callback === undefined) {
-    this.send_setNotebookRecipientSettings(authenticationToken, notebookGuid, recipientSettings);
-    return this.recv_setNotebookRecipientSettings();
-  } else {
-    var postData = this.send_setNotebookRecipientSettings(authenticationToken, notebookGuid, recipientSettings, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_setNotebookRecipientSettings);
-  }
-};
-
-NoteStoreClient.prototype.send_setNotebookRecipientSettings = function(authenticationToken, notebookGuid, recipientSettings, callback) {
-  this.output.writeMessageBegin('setNotebookRecipientSettings', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_setNotebookRecipientSettings_args();
-  args.authenticationToken = authenticationToken;
-  args.notebookGuid = notebookGuid;
-  args.recipientSettings = recipientSettings;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_setNotebookRecipientSettings = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_setNotebookRecipientSettings_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'setNotebookRecipientSettings failed: unknown result';
-};
-NoteStoreClient.prototype.listSharedNotebooks = function(authenticationToken, callback) {
-  if (callback === undefined) {
-    this.send_listSharedNotebooks(authenticationToken);
-    return this.recv_listSharedNotebooks();
-  } else {
-    var postData = this.send_listSharedNotebooks(authenticationToken, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_listSharedNotebooks);
-  }
-};
-
-NoteStoreClient.prototype.send_listSharedNotebooks = function(authenticationToken, callback) {
-  this.output.writeMessageBegin('listSharedNotebooks', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_listSharedNotebooks_args();
-  args.authenticationToken = authenticationToken;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_listSharedNotebooks = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_listSharedNotebooks_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'listSharedNotebooks failed: unknown result';
-};
-NoteStoreClient.prototype.createLinkedNotebook = function(authenticationToken, linkedNotebook, callback) {
-  if (callback === undefined) {
-    this.send_createLinkedNotebook(authenticationToken, linkedNotebook);
-    return this.recv_createLinkedNotebook();
-  } else {
-    var postData = this.send_createLinkedNotebook(authenticationToken, linkedNotebook, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_createLinkedNotebook);
-  }
-};
-
-NoteStoreClient.prototype.send_createLinkedNotebook = function(authenticationToken, linkedNotebook, callback) {
-  this.output.writeMessageBegin('createLinkedNotebook', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_createLinkedNotebook_args();
-  args.authenticationToken = authenticationToken;
-  args.linkedNotebook = linkedNotebook;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_createLinkedNotebook = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_createLinkedNotebook_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'createLinkedNotebook failed: unknown result';
-};
-NoteStoreClient.prototype.updateLinkedNotebook = function(authenticationToken, linkedNotebook, callback) {
-  if (callback === undefined) {
-    this.send_updateLinkedNotebook(authenticationToken, linkedNotebook);
-    return this.recv_updateLinkedNotebook();
-  } else {
-    var postData = this.send_updateLinkedNotebook(authenticationToken, linkedNotebook, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_updateLinkedNotebook);
-  }
-};
-
-NoteStoreClient.prototype.send_updateLinkedNotebook = function(authenticationToken, linkedNotebook, callback) {
-  this.output.writeMessageBegin('updateLinkedNotebook', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_updateLinkedNotebook_args();
-  args.authenticationToken = authenticationToken;
-  args.linkedNotebook = linkedNotebook;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_updateLinkedNotebook = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_updateLinkedNotebook_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'updateLinkedNotebook failed: unknown result';
-};
-NoteStoreClient.prototype.listLinkedNotebooks = function(authenticationToken, callback) {
-  if (callback === undefined) {
-    this.send_listLinkedNotebooks(authenticationToken);
-    return this.recv_listLinkedNotebooks();
-  } else {
-    var postData = this.send_listLinkedNotebooks(authenticationToken, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_listLinkedNotebooks);
-  }
-};
-
-NoteStoreClient.prototype.send_listLinkedNotebooks = function(authenticationToken, callback) {
-  this.output.writeMessageBegin('listLinkedNotebooks', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_listLinkedNotebooks_args();
-  args.authenticationToken = authenticationToken;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_listLinkedNotebooks = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_listLinkedNotebooks_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'listLinkedNotebooks failed: unknown result';
-};
-NoteStoreClient.prototype.expungeLinkedNotebook = function(authenticationToken, guid, callback) {
-  if (callback === undefined) {
-    this.send_expungeLinkedNotebook(authenticationToken, guid);
-    return this.recv_expungeLinkedNotebook();
-  } else {
-    var postData = this.send_expungeLinkedNotebook(authenticationToken, guid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_expungeLinkedNotebook);
-  }
-};
-
-NoteStoreClient.prototype.send_expungeLinkedNotebook = function(authenticationToken, guid, callback) {
-  this.output.writeMessageBegin('expungeLinkedNotebook', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_expungeLinkedNotebook_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_expungeLinkedNotebook = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_expungeLinkedNotebook_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'expungeLinkedNotebook failed: unknown result';
-};
-NoteStoreClient.prototype.authenticateToSharedNotebook = function(shareKeyOrGlobalId, authenticationToken, callback) {
-  if (callback === undefined) {
-    this.send_authenticateToSharedNotebook(shareKeyOrGlobalId, authenticationToken);
-    return this.recv_authenticateToSharedNotebook();
-  } else {
-    var postData = this.send_authenticateToSharedNotebook(shareKeyOrGlobalId, authenticationToken, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_authenticateToSharedNotebook);
-  }
-};
-
-NoteStoreClient.prototype.send_authenticateToSharedNotebook = function(shareKeyOrGlobalId, authenticationToken, callback) {
-  this.output.writeMessageBegin('authenticateToSharedNotebook', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_authenticateToSharedNotebook_args();
-  args.shareKeyOrGlobalId = shareKeyOrGlobalId;
-  args.authenticationToken = authenticationToken;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_authenticateToSharedNotebook = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_authenticateToSharedNotebook_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'authenticateToSharedNotebook failed: unknown result';
-};
-NoteStoreClient.prototype.getSharedNotebookByAuth = function(authenticationToken, callback) {
-  if (callback === undefined) {
-    this.send_getSharedNotebookByAuth(authenticationToken);
-    return this.recv_getSharedNotebookByAuth();
-  } else {
-    var postData = this.send_getSharedNotebookByAuth(authenticationToken, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getSharedNotebookByAuth);
-  }
-};
-
-NoteStoreClient.prototype.send_getSharedNotebookByAuth = function(authenticationToken, callback) {
-  this.output.writeMessageBegin('getSharedNotebookByAuth', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getSharedNotebookByAuth_args();
-  args.authenticationToken = authenticationToken;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getSharedNotebookByAuth = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getSharedNotebookByAuth_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getSharedNotebookByAuth failed: unknown result';
-};
-NoteStoreClient.prototype.emailNote = function(authenticationToken, parameters, callback) {
-  if (callback === undefined) {
-    this.send_emailNote(authenticationToken, parameters);
-    this.recv_emailNote();
-  } else {
-    var postData = this.send_emailNote(authenticationToken, parameters, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_emailNote);
-  }
-};
-
-NoteStoreClient.prototype.send_emailNote = function(authenticationToken, parameters, callback) {
-  this.output.writeMessageBegin('emailNote', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_emailNote_args();
-  args.authenticationToken = authenticationToken;
-  args.parameters = parameters;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_emailNote = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_emailNote_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  return;
-};
-NoteStoreClient.prototype.shareNote = function(authenticationToken, guid, callback) {
-  if (callback === undefined) {
-    this.send_shareNote(authenticationToken, guid);
-    return this.recv_shareNote();
-  } else {
-    var postData = this.send_shareNote(authenticationToken, guid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_shareNote);
-  }
-};
-
-NoteStoreClient.prototype.send_shareNote = function(authenticationToken, guid, callback) {
-  this.output.writeMessageBegin('shareNote', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_shareNote_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_shareNote = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_shareNote_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'shareNote failed: unknown result';
-};
-NoteStoreClient.prototype.stopSharingNote = function(authenticationToken, guid, callback) {
-  if (callback === undefined) {
-    this.send_stopSharingNote(authenticationToken, guid);
-    this.recv_stopSharingNote();
-  } else {
-    var postData = this.send_stopSharingNote(authenticationToken, guid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_stopSharingNote);
-  }
-};
-
-NoteStoreClient.prototype.send_stopSharingNote = function(authenticationToken, guid, callback) {
-  this.output.writeMessageBegin('stopSharingNote', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_stopSharingNote_args();
-  args.authenticationToken = authenticationToken;
-  args.guid = guid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_stopSharingNote = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_stopSharingNote_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  return;
-};
-NoteStoreClient.prototype.authenticateToSharedNote = function(guid, noteKey, authenticationToken, callback) {
-  if (callback === undefined) {
-    this.send_authenticateToSharedNote(guid, noteKey, authenticationToken);
-    return this.recv_authenticateToSharedNote();
-  } else {
-    var postData = this.send_authenticateToSharedNote(guid, noteKey, authenticationToken, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_authenticateToSharedNote);
-  }
-};
-
-NoteStoreClient.prototype.send_authenticateToSharedNote = function(guid, noteKey, authenticationToken, callback) {
-  this.output.writeMessageBegin('authenticateToSharedNote', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_authenticateToSharedNote_args();
-  args.guid = guid;
-  args.noteKey = noteKey;
-  args.authenticationToken = authenticationToken;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_authenticateToSharedNote = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_authenticateToSharedNote_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'authenticateToSharedNote failed: unknown result';
-};
-NoteStoreClient.prototype.findRelated = function(authenticationToken, query, resultSpec, callback) {
-  if (callback === undefined) {
-    this.send_findRelated(authenticationToken, query, resultSpec);
-    return this.recv_findRelated();
-  } else {
-    var postData = this.send_findRelated(authenticationToken, query, resultSpec, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_findRelated);
-  }
-};
-
-NoteStoreClient.prototype.send_findRelated = function(authenticationToken, query, resultSpec, callback) {
-  this.output.writeMessageBegin('findRelated', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_findRelated_args();
-  args.authenticationToken = authenticationToken;
-  args.query = query;
-  args.resultSpec = resultSpec;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_findRelated = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_findRelated_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'findRelated failed: unknown result';
-};
-NoteStoreClient.prototype.updateNoteIfUsnMatches = function(authenticationToken, note, callback) {
-  if (callback === undefined) {
-    this.send_updateNoteIfUsnMatches(authenticationToken, note);
-    return this.recv_updateNoteIfUsnMatches();
-  } else {
-    var postData = this.send_updateNoteIfUsnMatches(authenticationToken, note, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_updateNoteIfUsnMatches);
-  }
-};
-
-NoteStoreClient.prototype.send_updateNoteIfUsnMatches = function(authenticationToken, note, callback) {
-  this.output.writeMessageBegin('updateNoteIfUsnMatches', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_updateNoteIfUsnMatches_args();
-  args.authenticationToken = authenticationToken;
-  args.note = note;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_updateNoteIfUsnMatches = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_updateNoteIfUsnMatches_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'updateNoteIfUsnMatches failed: unknown result';
-};
-NoteStoreClient.prototype.manageNotebookShares = function(authenticationToken, parameters, callback) {
-  if (callback === undefined) {
-    this.send_manageNotebookShares(authenticationToken, parameters);
-    return this.recv_manageNotebookShares();
-  } else {
-    var postData = this.send_manageNotebookShares(authenticationToken, parameters, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_manageNotebookShares);
-  }
-};
-
-NoteStoreClient.prototype.send_manageNotebookShares = function(authenticationToken, parameters, callback) {
-  this.output.writeMessageBegin('manageNotebookShares', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_manageNotebookShares_args();
-  args.authenticationToken = authenticationToken;
-  args.parameters = parameters;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_manageNotebookShares = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_manageNotebookShares_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'manageNotebookShares failed: unknown result';
-};
-NoteStoreClient.prototype.getNotebookShares = function(authenticationToken, notebookGuid, callback) {
-  if (callback === undefined) {
-    this.send_getNotebookShares(authenticationToken, notebookGuid);
-    return this.recv_getNotebookShares();
-  } else {
-    var postData = this.send_getNotebookShares(authenticationToken, notebookGuid, true);
-    return this.output.getTransport()
-      .send(this, postData, arguments, this.recv_getNotebookShares);
-  }
-};
-
-NoteStoreClient.prototype.send_getNotebookShares = function(authenticationToken, notebookGuid, callback) {
-  this.output.writeMessageBegin('getNotebookShares', Thrift.MessageType.CALL, this.seqid);
-  var args = new NoteStore_getNotebookShares_args();
-  args.authenticationToken = authenticationToken;
-  args.notebookGuid = notebookGuid;
-  args.write(this.output);
-  this.output.writeMessageEnd();
-  return this.output.getTransport().flush(callback);
-};
-
-NoteStoreClient.prototype.recv_getNotebookShares = function() {
-  var ret = this.input.readMessageBegin();
-  var fname = ret.fname;
-  var mtype = ret.mtype;
-  var rseqid = ret.rseqid;
-  if (mtype == Thrift.MessageType.EXCEPTION) {
-    var x = new Thrift.TApplicationException();
-    x.read(this.input);
-    this.input.readMessageEnd();
-    throw x;
-  }
-  var result = new NoteStore_getNotebookShares_result();
-  result.read(this.input);
-  this.input.readMessageEnd();
-
-  if (null !== result.userException) {
-    throw result.userException;
-  }
-  if (null !== result.notFoundException) {
-    throw result.notFoundException;
-  }
-  if (null !== result.systemException) {
-    throw result.systemException;
-  }
-  if (null !== result.success) {
-    return result.success;
-  }
-  throw 'getNotebookShares failed: unknown result';
-};
+
+  NoteStoreClient.prototype.getSyncState = function(authenticationToken, callback) {
+    var mdef = NoteStore.getSyncState;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getFilteredSyncChunk = function(authenticationToken, afterUSN, maxEntries, filter, callback) {
+    var mdef = NoteStore.getFilteredSyncChunk;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.afterUSN = afterUSN;
+    args.maxEntries = maxEntries;
+    args.filter = filter;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getLinkedNotebookSyncState = function(authenticationToken, linkedNotebook, callback) {
+    var mdef = NoteStore.getLinkedNotebookSyncState;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.linkedNotebook = linkedNotebook;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getLinkedNotebookSyncChunk = function(authenticationToken, linkedNotebook, afterUSN, maxEntries, fullSyncOnly, callback) {
+    var mdef = NoteStore.getLinkedNotebookSyncChunk;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.linkedNotebook = linkedNotebook;
+    args.afterUSN = afterUSN;
+    args.maxEntries = maxEntries;
+    args.fullSyncOnly = fullSyncOnly;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.listNotebooks = function(authenticationToken, callback) {
+    var mdef = NoteStore.listNotebooks;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.listAccessibleBusinessNotebooks = function(authenticationToken, callback) {
+    var mdef = NoteStore.listAccessibleBusinessNotebooks;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getNotebook = function(authenticationToken, guid, callback) {
+    var mdef = NoteStore.getNotebook;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getDefaultNotebook = function(authenticationToken, callback) {
+    var mdef = NoteStore.getDefaultNotebook;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.createNotebook = function(authenticationToken, notebook, callback) {
+    var mdef = NoteStore.createNotebook;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.notebook = notebook;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.updateNotebook = function(authenticationToken, notebook, callback) {
+    var mdef = NoteStore.updateNotebook;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.notebook = notebook;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.expungeNotebook = function(authenticationToken, guid, callback) {
+    var mdef = NoteStore.expungeNotebook;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.listTags = function(authenticationToken, callback) {
+    var mdef = NoteStore.listTags;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.listTagsByNotebook = function(authenticationToken, notebookGuid, callback) {
+    var mdef = NoteStore.listTagsByNotebook;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.notebookGuid = notebookGuid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getTag = function(authenticationToken, guid, callback) {
+    var mdef = NoteStore.getTag;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.createTag = function(authenticationToken, tag, callback) {
+    var mdef = NoteStore.createTag;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.tag = tag;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.updateTag = function(authenticationToken, tag, callback) {
+    var mdef = NoteStore.updateTag;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.tag = tag;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.untagAll = function(authenticationToken, guid, callback) {
+    var mdef = NoteStore.untagAll;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.expungeTag = function(authenticationToken, guid, callback) {
+    var mdef = NoteStore.expungeTag;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.listSearches = function(authenticationToken, callback) {
+    var mdef = NoteStore.listSearches;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getSearch = function(authenticationToken, guid, callback) {
+    var mdef = NoteStore.getSearch;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.createSearch = function(authenticationToken, search, callback) {
+    var mdef = NoteStore.createSearch;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.search = search;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.updateSearch = function(authenticationToken, search, callback) {
+    var mdef = NoteStore.updateSearch;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.search = search;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.expungeSearch = function(authenticationToken, guid, callback) {
+    var mdef = NoteStore.expungeSearch;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.findNoteOffset = function(authenticationToken, filter, guid, callback) {
+    var mdef = NoteStore.findNoteOffset;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.filter = filter;
+    args.guid = guid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.findNotesMetadata = function(authenticationToken, filter, offset, maxNotes, resultSpec, callback) {
+    var mdef = NoteStore.findNotesMetadata;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.filter = filter;
+    args.offset = offset;
+    args.maxNotes = maxNotes;
+    args.resultSpec = resultSpec;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.findNoteCounts = function(authenticationToken, filter, withTrash, callback) {
+    var mdef = NoteStore.findNoteCounts;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.filter = filter;
+    args.withTrash = withTrash;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getNoteWithResultSpec = function(authenticationToken, guid, resultSpec, callback) {
+    var mdef = NoteStore.getNoteWithResultSpec;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    args.resultSpec = resultSpec;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getNote = function(authenticationToken, guid, withContent, withResourcesData, withResourcesRecognition, withResourcesAlternateData, callback) {
+    var mdef = NoteStore.getNote;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    args.withContent = withContent;
+    args.withResourcesData = withResourcesData;
+    args.withResourcesRecognition = withResourcesRecognition;
+    args.withResourcesAlternateData = withResourcesAlternateData;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getNoteApplicationData = function(authenticationToken, guid, callback) {
+    var mdef = NoteStore.getNoteApplicationData;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getNoteApplicationDataEntry = function(authenticationToken, guid, key, callback) {
+    var mdef = NoteStore.getNoteApplicationDataEntry;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    args.key = key;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.setNoteApplicationDataEntry = function(authenticationToken, guid, key, value, callback) {
+    var mdef = NoteStore.setNoteApplicationDataEntry;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    args.key = key;
+    args.value = value;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.unsetNoteApplicationDataEntry = function(authenticationToken, guid, key, callback) {
+    var mdef = NoteStore.unsetNoteApplicationDataEntry;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    args.key = key;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getNoteContent = function(authenticationToken, guid, callback) {
+    var mdef = NoteStore.getNoteContent;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getNoteSearchText = function(authenticationToken, guid, noteOnly, tokenizeForIndexing, callback) {
+    var mdef = NoteStore.getNoteSearchText;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    args.noteOnly = noteOnly;
+    args.tokenizeForIndexing = tokenizeForIndexing;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getResourceSearchText = function(authenticationToken, guid, callback) {
+    var mdef = NoteStore.getResourceSearchText;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getNoteTagNames = function(authenticationToken, guid, callback) {
+    var mdef = NoteStore.getNoteTagNames;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.createNote = function(authenticationToken, note, callback) {
+    var mdef = NoteStore.createNote;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.note = note;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.updateNote = function(authenticationToken, note, callback) {
+    var mdef = NoteStore.updateNote;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.note = note;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.deleteNote = function(authenticationToken, guid, callback) {
+    var mdef = NoteStore.deleteNote;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.expungeNote = function(authenticationToken, guid, callback) {
+    var mdef = NoteStore.expungeNote;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.copyNote = function(authenticationToken, noteGuid, toNotebookGuid, callback) {
+    var mdef = NoteStore.copyNote;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.noteGuid = noteGuid;
+    args.toNotebookGuid = toNotebookGuid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.listNoteVersions = function(authenticationToken, noteGuid, callback) {
+    var mdef = NoteStore.listNoteVersions;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.noteGuid = noteGuid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getNoteVersion = function(authenticationToken, noteGuid, updateSequenceNum, withResourcesData, withResourcesRecognition, withResourcesAlternateData, callback) {
+    var mdef = NoteStore.getNoteVersion;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.noteGuid = noteGuid;
+    args.updateSequenceNum = updateSequenceNum;
+    args.withResourcesData = withResourcesData;
+    args.withResourcesRecognition = withResourcesRecognition;
+    args.withResourcesAlternateData = withResourcesAlternateData;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getResource = function(authenticationToken, guid, withData, withRecognition, withAttributes, withAlternateData, callback) {
+    var mdef = NoteStore.getResource;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    args.withData = withData;
+    args.withRecognition = withRecognition;
+    args.withAttributes = withAttributes;
+    args.withAlternateData = withAlternateData;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getResourceApplicationData = function(authenticationToken, guid, callback) {
+    var mdef = NoteStore.getResourceApplicationData;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getResourceApplicationDataEntry = function(authenticationToken, guid, key, callback) {
+    var mdef = NoteStore.getResourceApplicationDataEntry;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    args.key = key;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.setResourceApplicationDataEntry = function(authenticationToken, guid, key, value, callback) {
+    var mdef = NoteStore.setResourceApplicationDataEntry;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    args.key = key;
+    args.value = value;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.unsetResourceApplicationDataEntry = function(authenticationToken, guid, key, callback) {
+    var mdef = NoteStore.unsetResourceApplicationDataEntry;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    args.key = key;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.updateResource = function(authenticationToken, resource, callback) {
+    var mdef = NoteStore.updateResource;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.resource = resource;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getResourceData = function(authenticationToken, guid, callback) {
+    var mdef = NoteStore.getResourceData;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getResourceByHash = function(authenticationToken, noteGuid, contentHash, withData, withRecognition, withAlternateData, callback) {
+    var mdef = NoteStore.getResourceByHash;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.noteGuid = noteGuid;
+    args.contentHash = contentHash;
+    args.withData = withData;
+    args.withRecognition = withRecognition;
+    args.withAlternateData = withAlternateData;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getResourceRecognition = function(authenticationToken, guid, callback) {
+    var mdef = NoteStore.getResourceRecognition;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getResourceAlternateData = function(authenticationToken, guid, callback) {
+    var mdef = NoteStore.getResourceAlternateData;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getResourceAttributes = function(authenticationToken, guid, callback) {
+    var mdef = NoteStore.getResourceAttributes;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getPublicNotebook = function(userId, publicUri, callback) {
+    var mdef = NoteStore.getPublicNotebook;
+    var args = new mdef.args();
+    args.userId = userId;
+    args.publicUri = publicUri;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.shareNotebook = function(authenticationToken, sharedNotebook, message, callback) {
+    var mdef = NoteStore.shareNotebook;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.sharedNotebook = sharedNotebook;
+    args.message = message;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.createOrUpdateNotebookShares = function(authenticationToken, shareTemplate, callback) {
+    var mdef = NoteStore.createOrUpdateNotebookShares;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.shareTemplate = shareTemplate;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.updateSharedNotebook = function(authenticationToken, sharedNotebook, callback) {
+    var mdef = NoteStore.updateSharedNotebook;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.sharedNotebook = sharedNotebook;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.setNotebookRecipientSettings = function(authenticationToken, notebookGuid, recipientSettings, callback) {
+    var mdef = NoteStore.setNotebookRecipientSettings;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.notebookGuid = notebookGuid;
+    args.recipientSettings = recipientSettings;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.listSharedNotebooks = function(authenticationToken, callback) {
+    var mdef = NoteStore.listSharedNotebooks;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.createLinkedNotebook = function(authenticationToken, linkedNotebook, callback) {
+    var mdef = NoteStore.createLinkedNotebook;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.linkedNotebook = linkedNotebook;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.updateLinkedNotebook = function(authenticationToken, linkedNotebook, callback) {
+    var mdef = NoteStore.updateLinkedNotebook;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.linkedNotebook = linkedNotebook;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.listLinkedNotebooks = function(authenticationToken, callback) {
+    var mdef = NoteStore.listLinkedNotebooks;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.expungeLinkedNotebook = function(authenticationToken, guid, callback) {
+    var mdef = NoteStore.expungeLinkedNotebook;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.authenticateToSharedNotebook = function(shareKeyOrGlobalId, authenticationToken, callback) {
+    var mdef = NoteStore.authenticateToSharedNotebook;
+    var args = new mdef.args();
+    args.shareKeyOrGlobalId = shareKeyOrGlobalId;
+    args.authenticationToken = authenticationToken;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getSharedNotebookByAuth = function(authenticationToken, callback) {
+    var mdef = NoteStore.getSharedNotebookByAuth;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.emailNote = function(authenticationToken, parameters, callback) {
+    var mdef = NoteStore.emailNote;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.parameters = parameters;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.shareNote = function(authenticationToken, guid, callback) {
+    var mdef = NoteStore.shareNote;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.stopSharingNote = function(authenticationToken, guid, callback) {
+    var mdef = NoteStore.stopSharingNote;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.guid = guid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.authenticateToSharedNote = function(guid, noteKey, authenticationToken, callback) {
+    var mdef = NoteStore.authenticateToSharedNote;
+    var args = new mdef.args();
+    args.guid = guid;
+    args.noteKey = noteKey;
+    args.authenticationToken = authenticationToken;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.findRelated = function(authenticationToken, query, resultSpec, callback) {
+    var mdef = NoteStore.findRelated;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.query = query;
+    args.resultSpec = resultSpec;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.updateNoteIfUsnMatches = function(authenticationToken, note, callback) {
+    var mdef = NoteStore.updateNoteIfUsnMatches;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.note = note;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.manageNotebookShares = function(authenticationToken, parameters, callback) {
+    var mdef = NoteStore.manageNotebookShares;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.parameters = parameters;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  NoteStoreClient.prototype.getNotebookShares = function(authenticationToken, notebookGuid, callback) {
+    var mdef = NoteStore.getNotebookShares;
+    var args = new mdef.args();
+    args.authenticationToken = authenticationToken;
+    args.notebookGuid = notebookGuid;
+    mdef.sendRequest(this.output, this.seqid++, args, callback);
+  };
+
+  module.exports.NoteStore.Client = NoteStoreClient;
+
+  // Define NoteStore Server
+
+  function NoteStoreServer(service, stransport, Protocol) {
+    var methodName;
+      this.service = service;
+      this.stransport = stransport;
+      this.processor = new Thrift.Processor();
+      for (methodName in NoteStore) {
+        if (service[methodName]) {
+          this.processor.addMethod(NoteStore[methodName], service[methodName].bind(service));
+        }
+      }
+      this.stransport.process = function (input, output, noop) {
+      var inprot = new Protocol(input);
+      var outprot = new Protocol(output);
+      this.processor.process(inprot, outprot, noop);
+    }.bind(this);
+  }
+
+  NoteStoreServer.prototype.start = function () {
+    this.stransport.listen();
+  };
+  NoteStoreServer.prototype.stop = function () {
+    this.stransport.close();
+  };
+
+  module.exports.NoteStore.Server = NoteStoreServer;
+
