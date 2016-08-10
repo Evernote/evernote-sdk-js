@@ -21,7 +21,40 @@ import OAuth from 'oauth';
 import pjson from '../package.json';
 import {NoteStoreClient, UserStoreClient} from './stores';
 
-export default class Client {
+class WrappedNoteStoreClient {
+  constructor(enInfoFunc) {
+    this.enInfoFunc = enInfoFunc;
+
+    for (let key in this.clientClass.prototype) {
+      if (key.indexOf('_') === -1 && typeof this.clientClass.prototype[key] === 'function') {
+        this[key] = this.createWrapperFunction(key);
+      }
+    }
+  }
+
+  getThriftClient() {
+    return this.enInfoFunc().then(({token, url}) => {
+      // TODO extend transport with user agent?
+      // TODO cache client?
+      return new NoteStoreClient({token, url});
+    });
+  }
+
+  createWrapperFunction(name) {
+    return (...orgArgs) => {
+      return this.getThriftClient().then(client => {
+        client[name].apply(client, orgArgs);
+      });
+    };
+  }
+
+  getParamNames(func) {
+    const funStr = func.toString();
+    return funStr.slice(funStr.indexOf('(') + 1, funStr.indexOf(')')).match(/([^\s,]+)/g);
+  }
+}
+
+class Client {
   constructor(options = {}) {
     this.consumerKey = options.consumerKey;
     this.consumerSecret = options.consumerSecret;
@@ -31,11 +64,11 @@ export default class Client {
     this.secret = options.secret;
     let defaultServiceHost;
     if (this.sandbox) {
-      this.defaultServiceHost = 'sandbox.evernote.com';
+      defaultServiceHost = 'sandbox.evernote.com';
     } else if (this.china) {
-      this.defaultServiceHost = 'app.yinxiang.com';
+      defaultServiceHost = 'app.yinxiang.com';
     } else {
-      this.defaultServiceHost = 'www.evernote.com';
+      defaultServiceHost = 'www.evernote.com';
     }
     this.serviceHost = options.serviceHost || defaultServiceHost;
   }
@@ -54,9 +87,9 @@ export default class Client {
   getAccessToken(oauthToken, oauthTokenSecret, oauthVerifier, callback) {
     var oauth = this.getOAuthClient('');
     oauth.getOAuthAccessToken(oauthTokenSecret, oauthTokenSecret, oauthVerifier,
-      (err, oauthAccessToken, oauthAccessTokenSecret, results) => {
-        callback(err, oauthAccessToken, oauthAccessTokenSecret, results);
-        this.token = oauthAccessToken;
+    (err, oauthAccessToken, oauthAccessTokenSecret, results) => {
+      callback(err, oauthAccessToken, oauthAccessTokenSecret, results);
+      this.token = oauthAccessToken;
     });
   }
 
@@ -70,13 +103,62 @@ export default class Client {
     return this._userStore;
   }
 
+  getNoteStore(noteStoreUrl) {
+    if (noteStoreUrl) {
+      this.noteStoreUrl = noteStoreUrl;
+    }
+    return new WrappedNoteStoreClient(() => {
+      if (this.noteStoreUrl) {
+        return Promise.resolve({token: this.token, url: this.noteStoreUrl});
+      } else {
+        // TODO use UserUrls?
+        return this.getUserStore().getNoteStoreUrl().then(url => {
+          this.noteStoreUrl = url; // cache for later calls
+          return {token: this.token, url};
+        });
+      }
+    });
+  }
+
+  getSharedNoteStore(linkedNotebook) {
+    return new WrappedNoteStoreClient(() => {
+      const cache = this[linkedNotebook.sharedNotebookGlobalId];
+      if (cache.sharedToken) {
+        return Promise.resolve({token: cache.sharedToken, url: linkedNotebook.noteStoreUrl});
+      } else {
+        return this.getNoteStore().authenticateToSharedNotebook(linkedNotebook.sharedNotebookGlobalId)
+        .then(sharedAuth => {
+          const token = sharedAuth.authenticationToken;
+          // cache for later calls
+          this[linkedNotebook.sharedNotebookGlobalId] = {sharedToken: token};
+          return {token, url: linkedNotebook.noteStoreUrl};
+        });
+      }
+    });
+  }
+
+  getBusinessNoteStore() {
+    return new WrappedNoteStoreClient(() => {
+      if (this.bizToken && this.bizNoteStoreUrl) {
+        return Promise.resolve({token: this.bizToken, url: this.bizNoteStoreUrl});
+      } else {
+        return this.getUserStore().authenticateToBusiness().then(bizAuth => {
+          this.bizToken = bizAuth.authenticationToken;
+          this.bizNoteStoreUrl = bizAuth.noteStoreUrl;
+          this.bizUser = bizAuth.user;
+          return {token: bizAuth.authenticationToken, url: bizAuth.noteStoreUrl};
+        });
+      }
+    });
+  }
+
   getEndpoint(path) {
     let url = 'https://' + this.serviceHost;
     if (path) {
       url = `${url}/path`;
     }
     return url;
-  };
+  }
 
   getOAuthClient(callbackUrl) {
     return new OAuth.OAuth(this.getEndpoint('oauth'), this.getEndpoint('oauth'),
@@ -84,134 +166,4 @@ export default class Client {
   }
 }
 
-Client.prototype.getNoteStore = function(noteStoreUrl) {
-  var self = this;
-  if (typeof noteStoreUrl !== 'undefined') {
-    self.noteStoreUrl = noteStoreUrl;
-  }
-  return new Store(Evernote.NoteStoreClient, function(callback) {
-    if (self.noteStoreUrl) {
-      callback(null, self.token, self.noteStoreUrl);
-    } else {
-      self.getUserStore().getNoteStoreUrl(function(err, noteStoreUrl) {
-        self.noteStoreUrl = noteStoreUrl;
-        callback(err, self.token, self.noteStoreUrl);
-      });
-    }
-  });
-};
-
-Client.prototype.getSharedNoteStore = function(linkedNotebook) {
-  var self = this;
-  return new Store(Evernote.NoteStoreClient, function(callback) {
-    var thisStore = this;
-    if (thisStore.sharedToken) {
-      callback(null, thisStore.sharedToken, linkedNotebook.noteStoreUrl);
-    } else {
-      var noteStore = new Store(Evernote.NoteStoreClient, function(cb) {
-        cb(null, self.token, linkedNotebook.noteStoreUrl);
-      });
-      noteStore.authenticateToSharedNotebook(linkedNotebook.shareKey, function(err, sharedAuth) {
-        if (err) {
-          return callback(err);
-        }
-        thisStore.sharedToken = sharedAuth.authenticationToken;
-        callback(null, thisStore.sharedToken, linkedNotebook.noteStoreUrl);
-      });
-    }
-  });
-};
-
-Client.prototype.getBusinessNoteStore = function() {
-  var self = this;
-  return new Store(Evernote.NoteStoreClient, function(callback) {
-    var thisStore = this;
-    if (thisStore.bizToken && thisStore.bizNoteStoreUri) {
-      callback(null, thisStore.bizToken, thisStore.bizNoteStoreUri);
-    } else {
-      self.getUserStore().authenticateToBusiness(function(err, bizAuth) {
-        if (err) {
-          return callback(err);
-        }
-        thisStore.bizToken = bizAuth.authenticationToken;
-        thisStore.bizNoteStoreUri = bizAuth.noteStoreUrl;
-        thisStore.bizUser = bizAuth.user;
-        callback(null, thisStore.bizToken, thisStore.bizNoteStoreUri);
-      });
-    }
-  });
-};
-
-
-var Store = function(clientClass, enInfoFunc) {
-  var self = this;
-  self.clientClass = clientClass;
-  self.enInfoFunc = enInfoFunc;
-
-  for (var key in self.clientClass.prototype) {
-    if (key.indexOf('_') != -1 || typeof(self.clientClass.prototype[key]) != 'function') continue;
-    self[key] = self.createWrapperFunction(key);
-  }
-};
-
-Store.prototype.createWrapperFunction = function(name) {
-  var self = this;
-  return function() {
-    var orgArgs = arguments;
-    self.getThriftClient(function(err, client, token) {
-      if (err) {
-        callback = orgArgs[orgArgs.length - 1];
-        if (callback && typeof(callback) === "function") {
-          callback(err);
-        } else {
-          throw "Evernote SDK for Node.js doesn't support synchronous calls";
-        }
-        return;
-      }
-      var orgFunc = client[name];
-      var orgArgNames = self.getParamNames(orgFunc);
-      if (orgArgNames !== null && orgArgs.length + 1 == orgArgNames.length) {
-        try {
-          var newArgs = [];
-          for (var i in orgArgNames) {
-            if (orgArgNames[i] == 'authenticationToken') newArgs.push(token);
-            if (i < orgArgs.length) newArgs.push(orgArgs[i]);
-          }
-          orgFunc.apply(client, newArgs);
-        } catch (e) {
-          orgFunc.apply(client, orgArgs);
-        }
-      } else {
-        orgFunc.apply(client, orgArgs);
-      }
-    });
-  };
-};
-
-Store.prototype.getThriftClient = function(callback) {
-  var self = this;
-  self.enInfoFunc(function(err, token, url) {
-    if (err) {
-      return callback(err);
-    }
-    var m = token.match(/:A=([^:]+):/);
-    if (m) {
-      self.userAgentId = m[1];
-    } else {
-      self.userAgentId = '';
-    }
-    var transport = new Evernote.Thrift.NodeBinaryHttpTransport(url);
-    transport.addHeaders(
-      {'User-Agent':
-        self.userAgentId + ' / ' + pjson.version + '; Node.js / ' + process.version});
-    var protocol = new Evernote.Thrift.BinaryProtocol(transport);
-    callback(null, new self.clientClass(protocol), token);
-  });
-};
-
-Store.prototype.getParamNames = function(func) {
-  var funStr = func.toString();
-  return funStr.slice(funStr.indexOf('(')+1, funStr.indexOf(')')).match(/([^\s,]+)/g);
-};
-
-exports.Client = Client;
+export default Client;

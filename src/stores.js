@@ -17,14 +17,14 @@
  * under the License.
  */
 
-import {NoteStore as EDAMNoteStore} from './thrift/gen-js2/NoteStore'
-import {UserStore as EDAMUserStore} from './thrift/gen-js2/UserStore'
-import BinaryHttpTransport from './thrift/transport/BinaryHttpTransport'
-import BinaryProtocol from './thrift/protocol/BinaryProtocol'
+import {NoteStore as EDAMNoteStore} from './thrift/gen-js2/NoteStore';
+import {UserStore as EDAMUserStore} from './thrift/gen-js2/UserStore';
+import BinaryHttpTransport from './thrift/transport/BinaryHttpTransport';
+import BinaryProtocol from './thrift/protocol/BinaryProtocol';
 
-const AUTH_PLACEHOLDER = 'AUTH_TOKEN'
-const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm
-const ARGUMENT_NAMES = /([^\s,]+)/g
+const AUTH_PLACEHOLDER = 'AUTH_TOKEN';
+const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm;
+const ARGUMENT_NAMES = /([^\s,]+)/g;
 
 /**
  * Finds parameter names for a given function.
@@ -78,7 +78,7 @@ function makeProxyPromise(fn) {
           if (err) {
             return reject(err);
           }
-          resolve(response);
+          return resolve(response);
         });
         fn.apply(self, newArgs);
       }
@@ -95,7 +95,7 @@ function extendClientWithEdamClient(Client, EDAMClient) {
 }
 
 class UserStoreClient extends EDAMUserStore.Client {
-  constructor(opts={}) {
+  constructor(opts = {}) {
     if (opts.url) {
       const transport = new BinaryHttpTransport(opts.url);
       const protocol = new BinaryProtocol(transport);
@@ -110,13 +110,13 @@ class UserStoreClient extends EDAMUserStore.Client {
   }
 
   getAuthToken() {
-    return new Promise(resolve => resolve(this.token))
+    return new Promise(resolve => resolve(this.token));
   }
 }
 extendClientWithEdamClient(UserStoreClient, EDAMUserStore.Client);
 
 class NoteStoreClient extends EDAMNoteStore.Client {
-  constructor(opts={}) {
+  constructor(opts = {}) {
     if (opts.url) {
       const transport = new BinaryHttpTransport(opts.url);
       const protocol = new BinaryProtocol(transport);
@@ -131,10 +131,10 @@ class NoteStoreClient extends EDAMNoteStore.Client {
   }
 
   getAuthToken() {
-    return new Promise(resolve => resolve(this.token))
+    return new Promise(resolve => resolve(this.token));
   }
 }
 
-extendClientWithEdamClient(NoteStoreClient, EDAMNoteStore.Client)
+extendClientWithEdamClient(NoteStoreClient, EDAMNoteStore.Client);
 
-export {NoteStoreClient, UserStoreClient}
+export {NoteStoreClient, UserStoreClient};
