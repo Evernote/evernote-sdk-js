@@ -17,7 +17,7 @@
  * under the License.
  */
 
-var MemBuffer = require('./MemBuffer');
+var MemBuffer = require('./memBuffer');
 var http = require('http');
 var url = require('url');
 

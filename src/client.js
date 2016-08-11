@@ -34,7 +34,6 @@ class WrappedNoteStoreClient {
   getThriftClient() {
     if (!this._thriftClient) {
       this._thriftClient = this.enInfoFunc().then(({token, url}) => {
-        // TODO extend transport with user agent?
         return new NoteStoreClient({token, url});
       });
     }

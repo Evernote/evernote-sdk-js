@@ -16,11 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+/* eslint-env node */
 
 import {NoteStore as EDAMNoteStore} from './thrift/gen-js2/NoteStore';
 import {UserStore as EDAMUserStore} from './thrift/gen-js2/UserStore';
-import BinaryHttpTransport from './thrift/transport/BinaryHttpTransport';
-import BinaryProtocol from './thrift/protocol/BinaryProtocol';
+import BinaryHttpTransport from './thrift/transport/binaryHttpTransport';
+import BinaryProtocol from './thrift/protocol/binaryProtocol';
+import pjson from '../package.json';
 
 const AUTH_PLACEHOLDER = 'AUTH_TOKEN';
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/gm;
@@ -94,11 +96,20 @@ function extendClientWithEdamClient(Client, EDAMClient) {
   }
 }
 
+function getAdditionalHeaders(token) {
+  const m = token && token.match(/:A=([^:]+):/);
+  const userAgentId = m ? m[1] : '';
+  return {
+    'User-Agent': `${userAgentId}/${pjson.version}; Node.js / ${process.version}`,
+  };
+}
+
 class UserStoreClient extends EDAMUserStore.Client {
   constructor(opts = {}) {
     if (opts.url) {
       const transport = new BinaryHttpTransport(opts.url);
       const protocol = new BinaryProtocol(transport);
+      transport.addHeaders(getAdditionalHeaders(opts.token));
       super(protocol);
       this.url = opts.url;
     } else {
@@ -120,6 +131,7 @@ class NoteStoreClient extends EDAMNoteStore.Client {
     if (opts.url) {
       const transport = new BinaryHttpTransport(opts.url);
       const protocol = new BinaryProtocol(transport);
+      transport.addHeaders(getAdditionalHeaders(opts.token));
       super(protocol);
       this.url = opts.url;
     } else {
