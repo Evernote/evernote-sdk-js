@@ -18,7 +18,6 @@
  */
 
 import OAuth from 'oauth';
-import pjson from '../package.json';
 import {NoteStoreClient, UserStoreClient} from './stores';
 
 class WrappedNoteStoreClient {
@@ -33,11 +32,13 @@ class WrappedNoteStoreClient {
   }
 
   getThriftClient() {
-    return this.enInfoFunc().then(({token, url}) => {
-      // TODO extend transport with user agent?
-      // TODO cache client?
-      return new NoteStoreClient({token, url});
-    });
+    if (!this._thriftClient) {
+      this._thriftClient = this.enInfoFunc().then(({token, url}) => {
+        // TODO extend transport with user agent?
+        return new NoteStoreClient({token, url});
+      });
+    }
+    return this._thriftClient;
   }
 
   createWrapperFunction(name) {
@@ -111,10 +112,9 @@ class Client {
       if (this.noteStoreUrl) {
         return Promise.resolve({token: this.token, url: this.noteStoreUrl});
       } else {
-        // TODO use UserUrls?
-        return this.getUserStore().getNoteStoreUrl().then(url => {
-          this.noteStoreUrl = url; // cache for later calls
-          return {token: this.token, url};
+        return this.getUserStore().getUserUrls().then(userUrls => {
+          this.noteStoreUrl = userUrls.noteStoreUrl; // cache for later calls
+          return {token: this.token, url: userUrls.noteStoreUrl};
         });
       }
     });
