@@ -1,3 +1,8 @@
+TODO before releasing v2
+- verify which files are included in npm package
+- update README with new examples and Promise stuff
+- add basic unit tests (may be able to wait)
+
 Evernote SDK for JavaScript
 ==================================
 Evernote API version 2.0
@@ -222,7 +227,7 @@ FAQ
 
 ### Does the API support CORS (Cross origin resource sharing)
 
-Not yet. However, there are an increasing number of platforms(phonegap,node.js, etc) that use JavaScript as their language. This SDK works well with those platforms.
+No. However, there are an increasing number of platforms(phonegap, node.js, etc) that use JavaScript as their language. This SDK works well with those platforms.
 
 ### Can I test my code in the browser
 
