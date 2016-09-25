@@ -24,8 +24,8 @@ class WrappedNoteStoreClient {
   constructor(enInfoFunc) {
     this.enInfoFunc = enInfoFunc;
 
-    for (let key in this.clientClass.prototype) {
-      if (key.indexOf('_') === -1 && typeof this.clientClass.prototype[key] === 'function') {
+    for (let key in NoteStoreClient.prototype) {
+      if (key.indexOf('_') === -1 && typeof NoteStoreClient.prototype[key] === 'function') {
         this[key] = this.createWrapperFunction(key);
       }
     }
@@ -61,7 +61,6 @@ class Client {
     this.sandbox = options.sandbox === undefined ? true : options.sandbox;
     this.china = !!options.china;
     this.token = options.token;
-    this.secret = options.secret;
     let defaultServiceHost;
     if (this.sandbox) {
       defaultServiceHost = 'sandbox.evernote.com';
@@ -86,10 +85,10 @@ class Client {
 
   getAccessToken(oauthToken, oauthTokenSecret, oauthVerifier, callback) {
     var oauth = this.getOAuthClient('');
-    oauth.getOAuthAccessToken(oauthTokenSecret, oauthTokenSecret, oauthVerifier,
+    oauth.getOAuthAccessToken(oauthToken, oauthTokenSecret, oauthVerifier,
     (err, oauthAccessToken, oauthAccessTokenSecret, results) => {
-      callback(err, oauthAccessToken, oauthAccessTokenSecret, results);
       this.token = oauthAccessToken;
+      callback(err, oauthAccessToken, oauthAccessTokenSecret, results);
     });
   }
 
@@ -97,7 +96,7 @@ class Client {
     if (!this._userStore) {
       this._userStore = new UserStoreClient({
         token: this.token,
-        url: this._getEndpoint('/edam/user'),
+        url: this.getEndpoint('/edam/user'),
       });
     }
     return this._userStore;
@@ -154,7 +153,7 @@ class Client {
   getEndpoint(path) {
     let url = 'https://' + this.serviceHost;
     if (path) {
-      url = `${url}/path`;
+      url = `${url}/${path}`;
     }
     return url;
   }
