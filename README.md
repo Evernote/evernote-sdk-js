@@ -1,6 +1,6 @@
 Evernote SDK for JavaScript
 ==================================
-Evernote API version 1.25
+Evernote API version 2.0
 
 What is this
 --------------
@@ -13,11 +13,9 @@ Please check out the [Evernote Developers portal page](http://dev.evernote.com/d
 Installing
 ----------
 
-Get the minified version of the SDK [here](https://github.com/evernote/evernote-sdk-js/blob/master/evernote-sdk-js/production/evernote-sdk-minified.js).
+Download via npm - `npm i --save evernote`
 
 ### Use OAuth for authentication
-
-We recommend using the jsOAuth library for OAuth. It can be downloaded [here](https://github.com/bytespider/jsOAuth).
 
 Details on the OAuth process are available [here](http://dev.evernote.com/start/core/authentication.php).
 
