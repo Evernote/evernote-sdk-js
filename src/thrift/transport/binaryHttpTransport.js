@@ -29,7 +29,12 @@ function BinaryHttpTransport (serviceUrl, quiet) {
     this.url = parsedUrl.href;
     this.quiet = quiet;
     this.input = new MemBuffer();
+    this.additionalHeaders = {};
 };
+
+BinaryHttpTransport.prototype.addHeaders = function (headers) {
+    Object.assign(this.additionalHeaders, headers);
+}
 
 BinaryHttpTransport.prototype.open = function () {
 };
@@ -56,10 +61,10 @@ BinaryHttpTransport.prototype.flush = function (callback) {
         port: this.port,
         path: this.path,
         method: 'POST',
-        headers: {
+        headers: Object.assign({}, {
             'Content-Type': 'application/x-thrift',
             'Accept': 'application/x-thrift'
-        }
+        }, me.additionalHeaders)
     };
     var req = http.request(options, function (res) {
         var chunkCount = 0;
