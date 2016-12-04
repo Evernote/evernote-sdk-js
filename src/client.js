@@ -43,7 +43,7 @@ class WrappedNoteStoreClient {
   createWrapperFunction(name) {
     return (...orgArgs) => {
       return this.getThriftClient().then(client => {
-        client[name].apply(client, orgArgs);
+        return client[name].apply(client, orgArgs);
       });
     };
   }
