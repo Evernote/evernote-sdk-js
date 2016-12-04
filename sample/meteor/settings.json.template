@@ -1,7 +1,0 @@
-{
-  "apiConsumerKey" : "YOUR API CONSUMER KEY",
-  "apiConsumerSecret" : "YOUR API CONSUMER SECRET",
-  "sandbox" : true,
-  "china" : false,
-  "callbackUrl": "http://localhost:3000/callback"
-}

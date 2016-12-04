@@ -1,6 +1,6 @@
 Evernote SDK for JavaScript
-==================================
-Evernote API version 1.25
+===========================
+Evernote API version 2.0.0-beta
 
 What is this
 --------------
@@ -8,82 +8,67 @@ A JavaScript API around the Evernote Cloud API.
 
 Required reading
 ----------------
-Please check out the [Evernote Developers portal page](http://dev.evernote.com/documentation/cloud/).
+Please check out the [Evernote Developers portal page](https://dev.evernote.com/doc/).
 
 Installing
 ----------
 
-Get the minified version of the SDK [here](https://github.com/evernote/evernote-sdk-js/blob/master/evernote-sdk-js/production/evernote-sdk-minified.js).
+Download via npm - `npm i --save evernote`
 
 ### Use OAuth for authentication
 
-We recommend using the jsOAuth library for OAuth. It can be downloaded [here](https://github.com/bytespider/jsOAuth).
+Details on the OAuth process are available [here](https://dev.evernote.com/doc/articles/authentication.php).
 
-Details on the OAuth process are available [here](http://dev.evernote.com/start/core/authentication.php).
+Here are the basic steps for OAuth using the Evernote client:
+```javascript
+var callbackUrl = "http://localhost:3000/oauth_callback"; // your endpoint
 
-Here are the basic steps for OAuth using the jsOAuth library.
-
-(Change this to https://www.evernote.com, when you are ready to activate on production).
-    
-    var hostName = "https://sandbox.evernote.com"; 
-
-Step 1:
-
-````javascript
-var options,oauth;
-options = {
-    consumerKey: <your consumer key>,
-    consumerSecret: <your consumer secret>,
-    callbackUrl : <your callback url>,
-    signatureMethod : "HMAC-SHA1",
-};
-oauth = OAuth(options);
-oauth.request({'method': 'GET', 'url': hostName + '/oauth', 'success': success, 'failure': failure});
-````
-
-Step 2:
-
-   In the callback `success`, get the `oauth_token` and the `oauth_token_secret`.
-   Redirect the user for authorization to :  `evernoteHostName + '/OAuth.action?oauth_token=' + <token from step 1>`
-
-Step 3:
-
-In your callback url, get the `oauth_verifier` and the `oauth_token` from the query string.
-````javascript
-var verifier = <your verifier>;
-var oauth_token = <your oauth token>;
-var secret = <oauth secret from step 1>;
-oauth.setVerifier(verifier);
-oauth.setAccessToken([got_oauth,secret]);
-````
-
-Now get the final token.
-````javascript
-oauth.request({'method': 'GET', 'url': hostName + '/oauth',
-    'success': success, 'failure': failure});
-````
-
-Step 4:
-
-  Parse the `success` callback to get the authentication token.
-
-### Example
-
-Once you get the authentication token, note store URL and user store URL from the OAuth step,
-    
-````javascript
-var noteStoreURL = <note store url>;
-var authenticationToken = <authentication token>;
-var noteStoreTransport = new Thrift.BinaryHttpTransport(noteStoreURL);
-var noteStoreProtocol = new Thrift.BinaryProtocol(noteStoreTransport);
-var noteStore = new NoteStoreClient(noteStoreProtocol);
-
-noteStore.listNotebooks(authenticationToken, function (notebooks) {
-	console.log(notebooks);
-}, function onerror(error) {
-    console.log(error);
+// initialize OAuth
+var Evernote = require('evernote');
+var client = new Evernote.Client({
+  consumerKey: 'my-consumer-key',
+  consumerSecret: 'my-consumer-secret',
+  sandbox: true, // change to false when you are ready to switch to production
+  china: false, // change to true if you wish to connect to YXBJ - most of you won't
 });
-````
+
+client.getRequestToken(callbackUrl, function(error, oauthToken, oauthTokenSecret) {
+  if (error) {
+    // do your error handling here
+  }
+  // store your token here somewhere - for this example we use req.session
+  req.session.oauthToken = oauthToken;
+  req.session.oauthTokenSecret = oauthTokenSecret;
+  res.redirect(client.getAuthorizeUrl(oauthToken); // send the user to Evernote
+}
+
+// at callbackUrl - "http://localhost:3000/oauth_callback" in our example. User sent here after Evernote auth
+var client = new Evernote.Client({
+  consumerKey: 'my-consumer-key',
+  consumerSecret: 'my-consumer-secret',
+  sandbox: true,
+  china: false,
+});
+client.getAccessToken(req.session.oauthToken,
+  req.session.oauthTokenSecret,
+  req.query.oauth_verifier,
+function(error, oauthToken, oauthTokenSecret, results) {
+  if (error) {
+    // do your error handling
+  } else {
+    // oauthAccessToken is the token you need;
+    var authenticatedClient = new Evernote.Client({
+      token: oauthToken,
+      sandbox: true,
+      china: false,
+    });
+    var noteStore = authenticatedClient.getNoteStore();
+    noteStore.listNotebooks().then(function(notebooks) {
+      console.log(notebooks); // the user's notebooks!
+    });
+  }
+});
+```
 
 Use with Node
 -------------
@@ -94,138 +79,85 @@ You can install the module using npm.
 ```sh
 npm install evernote
 ```
-### OAuth ###
-```javascript
-var Evernote = require('evernote').Evernote;
-var client = new Evernote.Client({
-  consumerKey: 'YOUR API CONSUMER KEY',
-  consumerSecret: 'YOUR API CONSUMER SECRET',
-  sandbox: [true or false] // Optional (default: true)
-});
-client.getRequestToken('YOUR CALLBACK URL', function(error, oauthToken, oauthTokenSecret, results) {
-  // store tokens in the session
-  // and then redirect to client.getAuthorizeUrl(oauthToken)
-});
-```
-To obtain the access token
-```javascript
-client.getAccessToken(oauthToken, oauthTokenSecret, oauthVerifier, function(error, oauthAccessToken, oauthAccessTokenSecret, results) {
-  // store 'oauthAccessToken' somewhere
-});
-```
-Now you can make other API calls
-```javascript
-var client = new Evernote.Client({token: oauthAccessToken});
-var noteStore = client.getNoteStore();
-notebooks = noteStore.listNotebooks(function(err, notebooks) {
-  // run this code
-});
-```
 
-You can see the actual OAuth sample code in `sample/express`.
+You can see the actual OAuth sample code in `sample/express` - most of the relevant code is in routes/index.js.
 
 ### UserStore ###
-Once you acquire token, you can use UserStore. For example, if you want to call UserStore.getUser:
+Once you acquire a token, you can get a handle to the UserStore client, with all the methods documented in our [api](https://dev.evernote.com/doc/reference/UserStore.html). For example, if you want to call UserStore.getUser:
 ```javascript
 var client = new Evernote.Client(token: token);
 var userStore = client.getUserStore();
-userStore.getUser(function(err, user) {
-  // run this code
+userStore.getUser().then(function(user) {
+  // user is the returned User object
 });
 ```
-You can omit authenticationToken in the arguments of UserStore/NoteStore functions.
+All methods return [Promises/A+](https://promisesaplus.com/). The authentication token is injected into the method call, so you should omit the auth token argument for all UserStore API calls.
 
 ### NoteStore ###
+Once you acquire a token, you can get a handle to the NoteStore client, with all the methods documented in our [api](https://dev.evernote.com/doc/reference/NoteStore.html). For example, if you want to call NoteStore.listNotebooks:
 If you want to call NoteStore.listNotebooks:
 ```javascript
+var client = new Evernote.Client(token: token);
 var noteStore = client.getNoteStore();
-noteStore.listNotebooks(function(err, notebooks) {
-  // run this code
+noteStore.listNotebooks().then(function(notebooks) {
+  // notebooks is the list of Notebook objects
 });
 ```
 
 ### NoteStore for linked notebooks ###
-If you want to get tags for linked notebooks:
+Similar to above, you can get a handle to other NoteStores, eg a NoteStore for a linked notebook. Here's an example of getting tags for a notebook you have joined:
 ```javascript
-var linkedNotebook = noteStore.listLinkedNotebooks[0]; // any notebook
-var sharedNoteStore = client.sharedNoteStore(linkedNotebook);
-sharedNoteStore.getSharedNotebookByAuth(function(err, sharedNotebook) {
-  sharedNoteStore.listTagsByNotebook(err2, sharedNotebook.notebookGuid, function(tags) {
-    // run this code
+var linkedNotebook = noteStore.listLinkedNotebooks().then(function(linkedNotebooks) {
+  // just pick the first LinkedNotebook for this example
+  return client.getSharedNoteStore(linkedNotebooks[0]);
+}).then(function(sharedNoteStore) {
+  return sharedNoteStore.listNotebooks().then(function(notebooks) {
+    return sharedNoteStore.listTagsByNotebook(notebooks[0].guid);
+  }).then(function(tags) {
+    // tags here is a list of Tag objects
   });
 });
 ```
 
 ### NoteStore for Business ###
+Simiarl to above, you can get a handle to a NoteStore for a business, if the user is a business user
 If you want to get the list of notebooks in your business account:
 ```javascript
-userStore.getUser(function(err, user) {
-  if (user.isBusinessUser) {
-    client.getBusinessNoteStore().listNotebooks(function(err, notebooks) {
-      // run this code
-    });
-  }
+var client = new Evernote.Client(token: token);
+var noteStore = client.getBusinessNoteStore();
+noteStore.listNotebooks(function(notebooks) {
+  // notebooks here is the list of notebook objects
 });
-```
-
-Utility methods for Business
-----------------------------
-This module provides some utility methods to deal with Evernote Business.
-
-### List business notebooks ###
-To list all business notebooks the user can access
-```javascript
-var client = new Evernote.Client({token: token})
-client.listBusinessNotebooks(function(err, businessNotebooks) {
-  // run this code
-});
-```
-
-### Create a business note ###
-To create a business note in a business notebook
-```javascript
-var note = new Evernote.Note();
-client.listBusinessNotebooks(function(err, notebooks) {
-  client.createNoteInBusinessNotebook(note, businessNotebooks[0], function(err, createdNote) {
-    // run this code
-  });
-});
-```
-
-### Create a business notebook ###
-To create a business notebook
-```javascript
-var notebook = new Evernote.Notebook();
-client.createBusinessNotebook(notebook, function(err, createdNotebook) {
-  // run this code
-});
-```
-
-### Get a notebook corresponding to the given business notebook ###
-```javascript
-client.listBusinessNotebooks(function(err, businessNotebooks) {
-  client.getCorrespondingNotebook(businessNotebooks[0], function(err, notebook) {
-    // run this code
-  });
-});
-```
-
-### Determine if the user is a part of a business ###
-```javascript
-user.isBusinessUser();
 ```
 
 ### Example
 
-You can find a simple client app and a sample app with express under 'sample/express'. Please note that you have to use `NodeBinaryHttpTransport` instead of `BinaryHttpTransport`.
+You can find a sample app with express under 'sample/express'. `npm install` there, copy config.json.template to config.json and add your info in it, then `npm run start` to test the sample app.
+
+BUILDING FROM SOURCE
+--------------------
+
+
+CONTRIBUTING
+------------
+Things that we need help on:
+* Unit tests
+* Documentation
+To build from source, `npm run build` from the root. This will create a `lib` directory with the module. `npm pack` will create a tarball with the artifacts that get deployed to the npm registry, and the sample express app is helpful to verify it - just unzip the tarball into the sample/express/node_modules/evernote directory and use that for testing.
+
+
 
 FAQ
 ---
 
 ### Does the API support CORS (Cross origin resource sharing)
 
-Not yet. However, there are an increasing number of platforms(phonegap,node.js, etc) that use JavaScript as their language. This SDK works well with those platforms.
+No.
 
-### Can I test my code in the browser
+### I can't figure out how to do something
 
-Yes. You can test your code in Chrome. Open Chrome using open /Applications/Google\ Chrome.app/ --args --disable-web-security . 
+Check [stackoverflow](https://stackoverflow.com/questions/tagged/evernote) first, and if you don't find your answer there, open up an issue. Please note that a few of us devs are taking time out of our regular jobs to support this SDK - we don't currently have a dedicated SDK team.
+
+### Think you found a bug in our client?
+
+Awesome. Create an issue and submit a PR (be sure to run our linter first) and we'll take a look. If you can't figure out how to fix it, create an issue and we'll take a look when we have a moment.
