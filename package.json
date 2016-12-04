@@ -12,7 +12,8 @@
   "main": "lib/index",
   "scripts": {
     "lint": "eslint src",
-    "build": "babel src -d lib"
+    "build": "babel src -d lib",
+    "clean": "rm -rf lib"
   },
   "devDependencies": {
     "babel-cli": "^6.11.4",
