@@ -44,9 +44,10 @@ function getParamNames(fn) {
  * necessary. Will return a Promise instead of using callbacks.
  *
  * @param {Function} fn
+ * @param {String} fnName
  * @return {Promise}
  */
-function makeProxyPromise(fn) {
+function makeProxyPromise(fn, fnName) {
   return function() {
     let newArgs = [];
     let paramNames = getParamNames(fn);
@@ -63,14 +64,20 @@ function makeProxyPromise(fn) {
       }
     }
     return new Promise((resolve, reject) => {
-      const prelimPromise = requiresAuthToken ? this.getAuthToken() : Promise.resolve();
-      prelimPromise.then(authTokenMaybe => {
-        if (authTokenMaybe) {
-          newArgs[newArgs.indexOf(AUTH_PLACEHOLDER)] = authTokenMaybe;
-        }
-        newArgs.push((err, response) => err ? reject(err) : resolve(response));
-        fn.apply(this, newArgs);
-      }).catch(err => reject(err));
+      const expectedNum = requiresAuthToken ? paramNames.length - 1 : paramNames.length;
+      const actualNum = requiresAuthToken ? newArgs.length - 1 : newArgs.length;
+      if (expectedNum !== actualNum) {
+        reject(`Incorrect number of arguments passed to ${fnName}: expected ${expectedNum} but found ${actualNum}`);
+      } else {
+        const prelimPromise = requiresAuthToken ? this.getAuthToken() : Promise.resolve();
+        prelimPromise.then(authTokenMaybe => {
+          if (authTokenMaybe) {
+            newArgs[newArgs.indexOf(AUTH_PLACEHOLDER)] = authTokenMaybe;
+          }
+          newArgs.push((err, response) => err ? reject(err) : resolve(response));
+          fn.apply(this, newArgs);
+        }).catch(err => reject(err));
+      }
     });
   };
 }
@@ -78,7 +85,7 @@ function makeProxyPromise(fn) {
 function extendClientWithEdamClient(Client, EDAMClient) {
   for (let key in EDAMClient.prototype) {
     if (typeof EDAMClient.prototype[key] === 'function') {
-      Client.prototype[key] = makeProxyPromise(EDAMClient.prototype[key]);
+      Client.prototype[key] = makeProxyPromise(EDAMClient.prototype[key], key);
     }
   }
 }
