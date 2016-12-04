@@ -12,9 +12,11 @@ exports.index = function(req, res) {
       sandbox: config.SANDBOX,
       china: config.CHINA
     });
-    var noteStore = client.getNoteStore();
-    noteStore.listNotebooks(function(err, notebooks){
+    client.getNoteStore().listNotebooks().then(function(notebooks) {
       req.session.notebooks = notebooks;
+      res.render('index', {session: req.session});
+    }, function(error) {
+      req.session.error = JSON.stringify(error);
       res.render('index', {session: req.session});
     });
   } else {
