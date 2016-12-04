@@ -48,11 +48,10 @@ function getParamNames(fn) {
  */
 function makeProxyPromise(fn) {
   return function() {
-    let self = this;
     let newArgs = [];
     let paramNames = getParamNames(fn);
     let requiresAuthToken = false;
-    paramNames.pop(); // Remove the callback parameter, will use Promise instead.
+    paramNames.pop(); // remove the callback parameter, will use Promise instead.
     for (let i = 0; i < paramNames.length; i++) {
       let param = paramNames[i];
       if (param === 'authenticationToken') {
@@ -63,27 +62,15 @@ function makeProxyPromise(fn) {
         newArgs.push(arguments[i]);
       }
     }
-    return new Promise(function(resolve, reject) {
-      if (requiresAuthToken) {
-        self.getAuthToken()
-          .then((authToken) => {
-            newArgs[newArgs.indexOf(AUTH_PLACEHOLDER)] = authToken;
-            finishPromiseCreation();
-          })
-          .catch((err) => reject(err));
-      } else {
-        finishPromiseCreation();
-      }
-
-      function finishPromiseCreation() {
-        newArgs.push(function(err, response) {
-          if (err) {
-            return reject(err);
-          }
-          return resolve(response);
-        });
-        fn.apply(self, newArgs);
-      }
+    return new Promise((resolve, reject) => {
+      const prelimPromise = requiresAuthToken ? this.getAuthToken() : Promise.resolve();
+      prelimPromise.then(authTokenMaybe => {
+        if (authTokenMaybe) {
+          newArgs[newArgs.indexOf(AUTH_PLACEHOLDER)] = authTokenMaybe;
+        }
+        newArgs.push((err, response) => err ? reject(err) : resolve(response));
+        fn.apply(this, newArgs);
+      }).catch(err => reject(err));
     });
   };
 }
