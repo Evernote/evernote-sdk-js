@@ -1,11 +1,6 @@
-TODO before releasing v2
-- verify which files are included in npm package
-- update README with new examples and Promise stuff
-- add basic unit tests (may be able to wait)
-
 Evernote SDK for JavaScript
-==================================
-Evernote API version 2.0
+===========================
+Evernote API version 2.0.0-beta
 
 What is this
 --------------
@@ -137,13 +132,19 @@ noteStore.listNotebooks(function(notebooks) {
 
 ### Example
 
-You can find a simple client app and a sample app with express under 'sample/express'.
-
+You can find a sample app with express under 'sample/express'. `npm install` there, copy config.json.template to config.json and add your info in it, then `npm run start` to test the sample app.
 
 BUILDING FROM SOURCE
 --------------------
 
-To build from source, `npm run build` from the root. This will create a `lib` directory with the module. `npm pack` will create a tarball with the artifacts that get deployed to the npm registry.
+
+CONTRIBUTING
+------------
+Things that we need help on:
+* Unit tests
+* Documentation
+To build from source, `npm run build` from the root. This will create a `lib` directory with the module. `npm pack` will create a tarball with the artifacts that get deployed to the npm registry, and the sample express app is helpful to verify it - just unzip the tarball into the sample/express/node_modules/evernote directory and use that for testing.
+
 
 
 FAQ
@@ -155,8 +156,8 @@ No.
 
 ### I can't figure out how to do something
 
-Check [stackoverflow](stackoverflow.com/questions/tagged/evernote) first, and if you don't find your answer there, open up an issue. Please note that a few of us devs are taking time out of our regular jobs to support this SDK - we don't currently have a dedicated SDK team.
+Check [stackoverflow](https://stackoverflow.com/questions/tagged/evernote) first, and if you don't find your answer there, open up an issue. Please note that a few of us devs are taking time out of our regular jobs to support this SDK - we don't currently have a dedicated SDK team.
 
 ### Think you found a bug in our client?
 
-Awesome. Create an issue and submit a PR (be sure to run our linter first) and we'll take a look. If you can't figure out how to fix it, just create an issue and we'll take a look when we have a moment.
+Awesome. Create an issue and submit a PR (be sure to run our linter first) and we'll take a look. If you can't figure out how to fix it, create an issue and we'll take a look when we have a moment.
