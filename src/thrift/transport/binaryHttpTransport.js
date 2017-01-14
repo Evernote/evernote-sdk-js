@@ -68,13 +68,18 @@ BinaryHttpTransport.prototype.flush = function (callback) {
     };
     var req = http.request(options, function (res) {
         var chunkCount = 0;
+        var arr = [];
         if (res.statusCode != 200) {
             me.log('Error in Thrift HTTP response: ' + res.statusCode);
             if (callback) callback(res);
         }
         res.on('data', function (chunk) {
-            if (++chunkCount > 1) throw Error('Multiple chunks not supported in BinaryHttpTransport');
-            if (callback) callback(null, new MemBuffer(chunk));
+            arr.push(chunk);
+            
+        });
+        res.on('end', function () {
+            var buffer = Buffer.concat(arr);
+            if (callback) callback(null, new MemBuffer(buffer));
         });
     });
 
