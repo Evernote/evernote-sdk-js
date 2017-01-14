@@ -68,17 +68,17 @@ BinaryHttpTransport.prototype.flush = function (callback) {
     };
     var req = http.request(options, function (res) {
         var chunkCount = 0;
-        var arr = [];
+        var chunks = [];
         if (res.statusCode != 200) {
             me.log('Error in Thrift HTTP response: ' + res.statusCode);
             if (callback) callback(res);
         }
         res.on('data', function (chunk) {
-            arr.push(chunk);
+            chunks.push(chunk);
             
         });
         res.on('end', function () {
-            var buffer = Buffer.concat(arr);
+            var buffer = Buffer.concat(chunk);
             if (callback) callback(null, new MemBuffer(buffer));
         });
     });
