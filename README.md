@@ -39,8 +39,8 @@ client.getRequestToken(callbackUrl, function(error, oauthToken, oauthTokenSecret
   // store your token here somewhere - for this example we use req.session
   req.session.oauthToken = oauthToken;
   req.session.oauthTokenSecret = oauthTokenSecret;
-  res.redirect(client.getAuthorizeUrl(oauthToken); // send the user to Evernote
-}
+  res.redirect(client.getAuthorizeUrl(oauthToken)); // send the user to Evernote
+});
 
 // at callbackUrl - "http://localhost:3000/oauth_callback" in our example. User sent here after Evernote auth
 var client = new Evernote.Client({
