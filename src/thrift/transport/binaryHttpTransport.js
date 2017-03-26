@@ -23,6 +23,7 @@ var url = require('url');
 
 function BinaryHttpTransport (serviceUrl, quiet) {
     var parsedUrl = url.parse(serviceUrl);
+    this.protocol = parsedUrl.protocol;
     this.hostname = parsedUrl.hostname;
     this.port = parsedUrl.port;
     this.path = parsedUrl.path;
@@ -57,6 +58,7 @@ BinaryHttpTransport.prototype.clear = function () {
 BinaryHttpTransport.prototype.flush = function (callback) {
     var me = this;
     var options = {
+        protocol: this.protocol,
         hostname: this.hostname,
         port: this.port,
         path: this.path,
