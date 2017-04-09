@@ -75,10 +75,9 @@ BinaryHttpTransport.prototype.flush = function (callback) {
         }
         res.on('data', function (chunk) {
             chunks.push(chunk);
-            
         });
         res.on('end', function () {
-            var buffer = Buffer.concat(chunk);
+            var buffer = Buffer.concat(chunks);
             if (callback) callback(null, new MemBuffer(buffer));
         });
     });
