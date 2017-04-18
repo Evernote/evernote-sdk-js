@@ -57,6 +57,7 @@ BinaryHttpTransport.prototype.clear = function () {
 BinaryHttpTransport.prototype.flush = function (callback) {
     var me = this;
     var options = {
+        protocol: 'https:',
         hostname: this.hostname,
         port: this.port,
         path: this.path,
