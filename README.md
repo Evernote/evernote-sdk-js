@@ -103,6 +103,33 @@ noteStore.listNotebooks().then(function(notebooks) {
   // notebooks is the list of Notebook objects
 });
 ```
+If you want to search for notes with specific content (using NoteStore.findNotesMetadata), you must create a filter and a spec object first:
+```javascript
+var Evernote = require('evernote');
+var client = new Evernote.Client(token: token);
+var noteStore = client.getNoteStore();
+var filter = new Evernote.NoteStore.NoteFilter({
+  words: ['one', 'two', 'three'],
+  ascending: true
+});
+var spec = new Evernote.NoteStore.NotesMetadataResultSpec({
+  includeTitle: true,
+  includeContentLength: true,
+  includeCreated: true,
+  includeUpdated: true,
+  includeDeleted: true,
+  includeUpdateSequenceNum: true,
+  includeNotebookGuid: true,
+  includeTagGuids: true,
+  includeAttributes: true,
+  includeLargestResourceMime: true,
+  includeLargestResourceSize: true,
+});
+
+noteStore.findNotesMetadata(filter, 0, 500, spec).then(function(notesMetadataList) {
+  // data.notes is the list of matching notes
+});
+```
 
 ### NoteStore for linked notebooks ###
 Similar to above, you can get a handle to other NoteStores, eg a NoteStore for a linked notebook. Here's an example of getting tags for a notebook you have joined:
