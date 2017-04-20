@@ -126,7 +126,7 @@ var spec = new Evernote.NoteStore.NotesMetadataResultSpec({
   includeLargestResourceSize: true,
 });
 
-noteStore.findNotesMetadata(filter, 0, 500, spec).then(function(data) {
+noteStore.findNotesMetadata(filter, 0, 500, spec).then(function(notesMetadataList) {
   // data.notes is the list of matching notes
 });
 ```
