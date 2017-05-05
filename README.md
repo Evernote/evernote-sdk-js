@@ -164,14 +164,14 @@ You can find a sample app with express under 'sample/express'. `npm install` the
 BUILDING FROM SOURCE
 --------------------
 
+To build from source, `npm run build` from the root. This will create a `lib` directory with the module. `npm pack` will create a tarball with the artifacts that get deployed to the npm registry, and the sample express app is helpful to verify it - just unzip the tarball into the sample/express/node_modules/evernote directory and use that for testing.
+
 
 CONTRIBUTING
 ------------
 Things that we need help on:
 * Unit tests
 * Documentation
-To build from source, `npm run build` from the root. This will create a `lib` directory with the module. `npm pack` will create a tarball with the artifacts that get deployed to the npm registry, and the sample express app is helpful to verify it - just unzip the tarball into the sample/express/node_modules/evernote directory and use that for testing.
-
 
 
 FAQ
