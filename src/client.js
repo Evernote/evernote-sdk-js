@@ -121,7 +121,7 @@ class Client {
   getSharedNoteStore(linkedNotebook) {
     return new WrappedNoteStoreClient(() => {
       const cache = this[linkedNotebook.sharedNotebookGlobalId];
-      if (cache.sharedToken) {
+      if (cache && cache.sharedToken) {
         return Promise.resolve({token: cache.sharedToken, url: linkedNotebook.noteStoreUrl});
       } else {
         return this.getNoteStore().authenticateToSharedNotebook(linkedNotebook.sharedNotebookGlobalId)
