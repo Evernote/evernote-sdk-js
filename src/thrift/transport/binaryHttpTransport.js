@@ -18,7 +18,7 @@
  */
 
 var MemBuffer = require('./memBuffer');
-var http = require('http');
+var http = require('https');
 var url = require('url');
 
 function BinaryHttpTransport (serviceUrl, quiet) {
