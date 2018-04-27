@@ -182,7 +182,16 @@ Thrift.Method.prototype.processResponse = function (response, callback) {
 
     callback = callback || Thrift.Method.noop;
 
-    var header = response.readMessageBegin();
+    try {
+      header = response.readMessageBegin();
+    }
+    catch (exception) {
+      err = Error('Failed to readMessageBegin. Received [' + exception + ']');
+      response.readMessageEnd();
+      callback(err);
+      return;
+    }
+
     if (header.mtype == Thrift.MessageType.EXCEPTION) {
         err = Thrift.TApplicationException.read(response);
         response.readMessageEnd();
