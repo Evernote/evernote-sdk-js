@@ -1,6 +1,6 @@
 Evernote SDK for JavaScript
 ===========================
-Evernote API version 2.0.0-beta
+Evernote API version 2.0.5
 
 What is this
 --------------
