@@ -21,7 +21,6 @@ var Url = require('url');
 
 exports.NodeBinaryHttpTransport = function(url) {
   var self = this;
-  var http = require('http');
   var https = require('https');
 
   this.url = url;
@@ -97,9 +96,13 @@ exports.NodeBinaryHttpTransport = function(url) {
       callback("Invalid endpoint URL: " + self.url);
       return;
     }
+    if (purl.protocol !== 'https:') {
+        throw 'Only https:// protocol is supported';
+    }
+
     var port = purl.port;
     if (!port) {
-      port = purl.protocol === 'https' ? 443 : 80;
+      port = 443;
     }
     var options = {
       hostname: purl.hostname,
@@ -108,9 +111,8 @@ exports.NodeBinaryHttpTransport = function(url) {
       method: 'POST',
       headers: self.headers
     };
-    var doRequest = (purl.protocol === 'https' ? https : http).request;
 
-    var req = doRequest(options, function(res) {
+    var req = https.request(options, function(res) {
       var data = [], dataLength = 0;
       res.on('data', function(chunk) {
         data.push(chunk);
