@@ -211,7 +211,15 @@ Thrift.Method.prototype.processResponse = function (response, callback) {
         return;
     }
 
-    result = this.result.read(response);
+    try {
+      result = this.result.read(response);
+    }
+    catch (exception) {
+      err = Error('Failed to read from response. Received [' + exception + ']');
+      response.readMessageEnd();
+      callback(err);
+      return;
+    }
     response.readMessageEnd();
 
     // Exceptions are in fields
