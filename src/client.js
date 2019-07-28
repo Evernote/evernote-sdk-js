@@ -63,11 +63,17 @@ class Client {
     this.token = options.token;
     let defaultServiceHost;
     if (this.sandbox) {
-      defaultServiceHost = 'sandbox.evernote.com';
-    } else if (this.china) {
-      defaultServiceHost = 'app.yinxiang.com';
+      if (this.china) {
+        defaultServiceHost = 'sandbox.yinxiang.com';
+      } else {
+        defaultServiceHost = 'sandbox.evernote.com';
+      }
     } else {
-      defaultServiceHost = 'www.evernote.com';
+      if (this.china) {
+        defaultServiceHost = 'app.yinxiang.com';
+      } else {
+        defaultServiceHost = 'www.evernote.com';
+      }
     }
     this.serviceHost = options.serviceHost || defaultServiceHost;
   }
