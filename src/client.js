@@ -96,7 +96,7 @@ class Client {
     if (!this._userStore) {
       this._userStore = new UserStoreClient({
         token: this.token,
-        url: this.getEndpoint('/edam/user'),
+        url: this.getEndpoint('edam/user'),
       });
     }
     return this._userStore;
