@@ -124,7 +124,7 @@ class Client {
       if (cache && cache.sharedToken) {
         return Promise.resolve({token: cache.sharedToken, url: linkedNotebook.noteStoreUrl});
       } else {
-        return this.getNoteStore().authenticateToSharedNotebook(linkedNotebook.sharedNotebookGlobalId)
+        return this.getNoteStore(linkedNotebook.noteStoreUrl).authenticateToSharedNotebook(linkedNotebook.sharedNotebookGlobalId)
         .then(sharedAuth => {
           const token = sharedAuth.authenticationToken;
           // cache for later calls
